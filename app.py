@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from flask import Flask, request
+import pandas as pd
 from utils import get_chart_data_urls, get_chart_df, do_ks
 
 app = Flask(__name__)
@@ -23,7 +24,7 @@ def tmp():
             window_start,
             window_end
         )
-    print([results[c]['summary']['ks_mean'] for c in results])
+    print(pd.DataFrame([c, [results[c]['summary']['ks_mean']] for c in results]))
     return results
 
 
