@@ -29,8 +29,9 @@ def tmp():
         columns=['chart', 'score']
     )
     df_rank['rank'] = df_rank['score'].rank()
+    print(df_rank)
     for _, row in df_rank.iterrows():
-        print(row['chart'], row['rank'])
+        results[row['chart']]['rank'] = row['rank']
     return results
 
 
