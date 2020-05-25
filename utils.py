@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import numpy as np
 from scipy.stats import ks_2samp
 
 
@@ -22,10 +23,18 @@ def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: st
 def do_ks(df, baseline_start, baseline_end, window_start, window_end):
     df_baseline = df[(df['time'] >= baseline_start) & (df['time'] <= baseline_end)].drop('time', axis=1)
     df_window = df[(df['time'] >= window_start) & (df['time'] <= window_end)].drop('time', axis=1)
-    results = []
+    results = {
+        'summary': {},
+        'detail': {}
+    }
     for col in df_baseline.columns:
         res = ks_2samp(df_baseline[col], df_window[col])
-        results.append([col, round(res[0], 4), round(res[1], 4)])
-    df_results = pd.DataFrame(results, columns=['dimenson', 'ks', 'p'])
-    return df_results
+        results['detail'][col] = {"ks": round(res[0], 4), "p": round(res[1], 4)}
+    results['summary']['ks_mean'] = round(np.mean([results['detail'][res]['ks'] for res in results['detail']]), 4)
+    results['summary']['ks_min'] = round(np.min([results['detail'][res]['ks'] for res in results['detail']]), 4)
+    results['summary']['ks_max'] = round(np.max([results['detail'][res]['ks'] for res in results['detail']]), 4)
+    results['summary']['p_mean'] = round(np.mean([results['detail'][res]['p'] for res in results['detail']]), 4)
+    results['summary']['p_min'] = round(np.min([results['detail'][res]['p'] for res in results['detail']]), 4)
+    results['summary']['p_max'] = round(np.max([results['detail'][res]['p'] for res in results['detail']]), 4)
+    return results
 
