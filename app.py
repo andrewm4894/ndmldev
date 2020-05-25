@@ -28,7 +28,7 @@ def home_info():
 
 
 @app.route('/ks', methods=['GET'])
-def do_ks():
+def xdo_ks():
     now = datetime.now()
     context_chart = request.args.get('context_chart', 'system.cpu')
     window_start = request.args.get('window_start', now)
