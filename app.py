@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from flask import Flask, request
+from utils import say_hello
 
 app = Flask(__name__)
 
@@ -10,11 +11,11 @@ def home_info():
     response = dict(
         ks='/ks'
     )
-    return response
+    return say_hello()
 
 
 @app.route('/ks', methods=['GET'])
-def get_data():
+def do_ks():
     now = datetime.now()
     context_chart = request.args.get('context_chart', 'system.cpu')
     window_start = request.args.get('window_start', now)
