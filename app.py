@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/tmp')
 def tmp():
-    return get_chart_urls()
+    return get_chart_data_urls()
 
 
 @app.route('/')
