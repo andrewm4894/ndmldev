@@ -14,8 +14,15 @@ def tmp():
     window_start = window_end - 50
     baseline_end = window_start - 1
     baseline_start = baseline_end - 100
-    df = get_chart_df('system.cpu', after, before)
-    results = do_ks(df, baseline_start, baseline_end, window_start, window_end)
+    results = {}
+    for chart in ['system.cpu', 'system.load']:
+        results[chart] = do_ks(
+            get_chart_df(chart, after, before),
+            baseline_start,
+            baseline_end,
+            window_start,
+            window_end
+        )
     return results
 
 
