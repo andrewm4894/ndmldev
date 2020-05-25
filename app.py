@@ -6,3 +6,8 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!!'
 
+
+@app.route('/data', methods=['GET'])
+def get_data():
+    return 'Some data'
+
