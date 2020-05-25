@@ -1,22 +1,18 @@
 from datetime import datetime, timedelta
 
 from flask import Flask, request
-from utils import get_chart_urls
+from utils import get_chart_data_urls
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def home_info():
-    response = dict(
-        ks='/ks'
-    )
-    return response
-
-
 @app.route('/tmp')
 def tmp():
+    return get_chart_urls()
 
+
+@app.route('/')
+def home_info():
     response = dict(
         ks='/ks'
     )
