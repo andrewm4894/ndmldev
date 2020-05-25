@@ -16,7 +16,7 @@ def tmp():
     baseline_end = window_start - 1
     baseline_start = baseline_end - 100
     results = {}
-    for chart in ['system.cpu', 'system.load']:
+    for chart in ['system.cpu', 'system.load', 'system.io']:
         results[chart] = do_ks(
             get_chart_df(chart, after, before),
             baseline_start,
@@ -32,7 +32,6 @@ def tmp():
     print(df_rank)
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = row['rank']
-    results = {k: v for k, v in sorted(results.items(), key=lambda x: x[2])}
     return results
 
 
