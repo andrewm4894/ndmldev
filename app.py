@@ -1,14 +1,18 @@
 from datetime import datetime, timedelta
 
 from flask import Flask, request
-from utils import get_chart_data_urls
+from utils import get_chart_data_urls, get_chart_df
 
 app = Flask(__name__)
 
 
 @app.route('/tmp')
 def tmp():
-    return get_chart_data_urls()
+    before = int(datetime.now().timestamp())
+    after = before - 5
+    df = get_chart_df('system.cpu', after, before)
+    print(df)
+    return 'ok'
 
 
 @app.route('/')
