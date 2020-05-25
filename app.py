@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from flask import Flask, request
-from utils import get_chart_data_urls, get_chart_df
+from utils import get_chart_data_urls, get_chart_df, do_ks
 
 app = Flask(__name__)
 
@@ -9,10 +9,14 @@ app = Flask(__name__)
 @app.route('/tmp')
 def tmp():
     before = int(datetime.now().timestamp())
-    after = before - 5
+    after = before - 500
+    window_end = before - 10
+    window_start = window_end - 50
+    baseline_end = window_start - 1
+    baseline_start = baseline_end - 100
     df = get_chart_df('system.cpu', after, before)
-    print(df)
-    return 'ok'
+    df_results = do_ks(df, baseline_start, baseline_end, window_start, window_end)
+    return df_results.to_dict(orient='index')
 
 
 @app.route('/')
