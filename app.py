@@ -6,8 +6,11 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!!'
+def home_info():
+    response = dict(
+        ks='/ks'
+    )
+    return response
 
 
 @app.route('/ks', methods=['GET'])
