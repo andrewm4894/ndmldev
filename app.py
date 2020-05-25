@@ -14,8 +14,8 @@ def hello_world():
 def get_data():
     now = datetime.now()
     context_chart = request.args.get('context_chart', 'system.cpu')
-    window_start = request.args.get('context_chart', now)
-    window_end = request.args.get('context_chart', now - timedelta(minutes=1))
+    window_start = request.args.get('window_start', now)
+    window_end = request.args.get('window_end', now - timedelta(minutes=1))
     response = {
         "info": dict(
             context_chart=context_chart,
