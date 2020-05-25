@@ -29,7 +29,7 @@ def tmp():
         columns=['chart', 'score']
     )
     df_rank['rank'] = df_rank['score'].rank()
-    for row in df_rank.iterrows():
+    for _, row in df_rank.iterrows():
         print(row['chart'], row['rank'])
     return results
 
