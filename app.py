@@ -23,6 +23,7 @@ def tmp():
             window_start,
             window_end
         )
+    print([results[c]['summary']['ks_mean'] for c in results])
     return results
 
 
