@@ -15,8 +15,8 @@ def tmp():
     baseline_end = window_start - 1
     baseline_start = baseline_end - 100
     df = get_chart_df('system.cpu', after, before)
-    df_results = do_ks(df, baseline_start, baseline_end, window_start, window_end)
-    return df_results.to_dict(orient='index')
+    results = do_ks(df, baseline_start, baseline_end, window_start, window_end)
+    return results
 
 
 @app.route('/')
