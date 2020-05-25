@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from flask import Flask, request
-from utils import say_hello
+from utils import get_chart_urls
 
 app = Flask(__name__)
 
@@ -11,7 +11,16 @@ def home_info():
     response = dict(
         ks='/ks'
     )
-    return say_hello()
+    return response
+
+
+@app.route('/tmp')
+def tmp():
+
+    response = dict(
+        ks='/ks'
+    )
+    return response
 
 
 @app.route('/ks', methods=['GET'])
