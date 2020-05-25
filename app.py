@@ -24,7 +24,12 @@ def tmp():
             window_start,
             window_end
         )
-    print(pd.DataFrame([[c, results[c]['summary']['ks_mean']] for c in results]))
+    df_rank = pd.DataFrame(
+        data=[[c, results[c]['summary']['ks_mean']] for c in results],
+        columns=['chart', 'score']
+    )
+    df_rank['rank'] = df_rank['score'].rank()
+    print(df_rank)
     return results
 
 
