@@ -9,25 +9,24 @@ app = Flask(__name__)
 
 @app.route('/ks')
 def ks():
-    before = int(datetime.now().timestamp())
-    after = before - 500
-    window_end = before - 10
-    window_start = window_end - 50
-    baseline_end = window_start - 1
-    baseline_start = baseline_end - 100
+    params = parse_params(request)
+    highlight_before = params['highlight_before']
+    highlight_after = params['highlight_after']
+    baseline_before = params['baseline_before']
+    baseline_after = params['baseline_after']
     results = {}
     for chart in get_chart_list():
         print(chart)
-        df = get_chart_df(chart, after, before)
+        df = get_chart_df(chart, baseline_after, highlight_before)
         print(df.shape)
         print(df.head())
         if len(df) > 0:
             ks_results = do_ks(
                 df,
-                baseline_start,
-                baseline_end,
-                window_start,
-                window_end
+                baseline_after,
+                baseline_before,
+                highlight_after,
+                highlight_before
             )
             if ks_results:
                 results[chart] = ks_results
