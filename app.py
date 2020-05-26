@@ -81,10 +81,10 @@ def tmp():
     url = request.args.get('url', None)
     if url:
         url_parts = url.split(';')
-        default_after = [x.split('=')[1] for x in url_parts if x.startswith('after=')][0]
-        default_before = [x.split('=')[1] for x in url_parts if x.startswith('before=')][0]
-        default_highlight_after = [x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0]
-        default_highlight_before = [x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0]
+        default_after = int([x.split('=')[1] for x in url_parts if x.startswith('after=')][0])
+        default_before = int([x.split('=')[1] for x in url_parts if x.startswith('before=')][0])
+        default_highlight_after = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0])
+        default_highlight_before = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0])
     before = request.args.get('before', default_before)
     after = request.args.get('after', default_after)
     highlight_before = request.args.get('highlight_before', default_highlight_before)
