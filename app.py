@@ -55,7 +55,7 @@ def home():
 def dash():
     dash_template = open('templates/dash-example.html', 'r', encoding='utf-8')
     dash_template_html = dash_template.read()
-    dash_file_out = open("/usr/share/netdata/web/dash/dash2.html", "w+")
+    dash_file_out = open("/usr/share/netdata/web/dash2.html", "w+")
     dash_file_out.write(dash_template_html)
     dash_file_out.close()
     response = dict(
