@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <script type="text/javascript" src="http://localhost:19999/dashboard.js"></script>
+    <script type="text/javascript" src="http://http://34.75.216.243/:19999/dashboard.js"></script>
     <script>var netdataTheme = 'slate';</script>
 
 </head>
@@ -21,10 +21,10 @@
     <div style="font-size: 7vw;">Results</div>
     <br/>
     <div style="font-size: 2vw; color: white;">blah blah...</div>
-    <div data-netdata="system.cpu" data-host="http://localhost:19999/" data-width="1600" data-height="200"></div>
+    <div data-netdata="system.cpu" data-host="http://34.75.216.243:19999/" data-width="1600" data-height="200"></div>
     {% for chart in render_info %}
     <div data-netdata="{{chart.chart_id}}"
-         data-host="http://127.0.0.1:19999/"
+         data-host="http://34.75.216.243:19999/"
          data-title="{{chart.title}}"
          data-after="{{chart.after}}"
          data-before="{{chart.before}}"
