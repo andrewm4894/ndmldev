@@ -74,15 +74,21 @@ def tmp():
     default_window_size = 60
     default_baseline_window_multiplier = 1
     now = int(datetime.now().timestamp())
+    default_before = now
+    default_after = now - default_window_size
+    default_highlight_before = default_before
+    default_highlight_after = default_after
     url = request.args.get('url', None)
     if url:
         url_parts = url.split(';')
-        after = [x.split('=')[1] for x in url_parts if x.startswith('after=')][0]
-        print(after)
-    before = request.args.get('before', now)
-    after = request.args.get('after', now - default_window_size)
-    highlight_before = request.args.get('highlight_before', now)
-    highlight_after = request.args.get('highlight_after', now - default_window_size)
+        default_after = [x.split('=')[1] for x in url_parts if x.startswith('after=')][0]
+        default_before = [x.split('=')[1] for x in url_parts if x.startswith('before=')][0]
+        default_highlight_after = [x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0]
+        default_highlight_before = [x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0]
+    before = request.args.get('before', default_before)
+    after = request.args.get('after', default_after)
+    highlight_before = request.args.get('highlight_before', default_highlight_before)
+    highlight_after = request.args.get('highlight_after', default_highlight_after)
     window_multiplier = request.args.get('window_multiplier', default_baseline_window_multiplier)
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
