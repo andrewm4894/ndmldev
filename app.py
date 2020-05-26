@@ -37,10 +37,19 @@ def ks():
     if response_format == 'json':
         return json.dumps([results])
     elif response_format == 'html':
-        charts = []
-        for chart in results[0:5]:
-            charts.append({"id": chart.key, "title": chart[chart.key]['score']})
-        return render_template('results_dashboard.html', charts=charts)
+        max_rank = 5
+        render_info = []
+        for chart in results[0]:
+            rank = results[0][chart]['rank']
+            if rank >= max_rank:
+                break
+            else:
+                score = results[0][chart]['score']
+                render_info.append({
+                    "chart_id": chart,
+                    "title": f"{rank} - {chart} - {score}"
+                })
+        return render_template('results_dashboard.html', render_info=render_info)
     else:
         return None
 
