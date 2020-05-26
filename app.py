@@ -34,6 +34,7 @@ def ks():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
+    print(results)
     if response_format == 'json':
         return json.dumps([results])
     elif response_format == 'html':
