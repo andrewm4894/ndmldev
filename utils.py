@@ -12,6 +12,14 @@ def get_chart_data_urls():
     return chart_data_urls
 
 
+def get_chart_list():
+    url = "http://127.0.0.1:19999/api/v1/charts"
+    r = requests.get(url)
+    charts = r.json().get('charts')
+    chart_list = [chart for chart in charts]
+    return chart_list
+
+
 def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json'):
     url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
     r = requests.get(url)

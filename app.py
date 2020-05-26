@@ -2,15 +2,9 @@ from datetime import datetime, timedelta
 
 from flask import Flask, request
 import pandas as pd
-from utils import get_chart_data_urls, get_chart_df, do_ks
+from utils import get_chart_data_urls, get_chart_df, do_ks, get_chart_list
 
 app = Flask(__name__)
-
-
-@app.route('/tmp2')
-def tmp2():
-    print([chart for chart in get_chart_data_urls()])
-    return get_chart_data_urls()
 
 
 @app.route('/tmp')
@@ -22,7 +16,7 @@ def tmp():
     baseline_end = window_start - 1
     baseline_start = baseline_end - 100
     results = {}
-    for chart in get_chart_data_urls().keys():
+    for chart in get_chart_list():
         results[chart] = do_ks(
             get_chart_df(chart, after, before),
             baseline_start,
