@@ -10,6 +10,8 @@ from ks import do_ks
 
 app = Flask(__name__)
 
+app.secret_key = b'xxx'
+
 
 @app.route('/ks')
 def ks():
