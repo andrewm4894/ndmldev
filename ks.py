@@ -1,4 +1,5 @@
 from scipy.stats import ks_2samp
+import numpy as np
 
 from utils import filter_useless_cols
 
