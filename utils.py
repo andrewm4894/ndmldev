@@ -20,12 +20,14 @@ def get_chart_list():
     return chart_list
 
 
-def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json'):
+def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json', numeric_only: bool = True):
     url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
     r = requests.get(url)
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=r_json['labels'])
-    print(df.dtypes)
+    if numeric_only:
+        df = df._get_numeric_data()
+    df = df.set_index('time')
     return df
 
 
@@ -49,9 +51,9 @@ def do_ks(df, baseline_start, baseline_end, window_start, window_end):
 
     if len(df.columns) > 0:
 
-        df_baseline = df[(df['time'] >= baseline_start) & (df['time'] <= baseline_end)].drop('time', axis=1)
+        df_baseline = df[(df.index >= baseline_start) & (df.index <= baseline_end)]
         print(df_baseline.shape)
-        df_window = df[(df['time'] >= window_start) & (df['time'] <= window_end)].drop('time', axis=1)
+        df_window = df[(df.index >= window_start) & (df.index <= window_end)]
         print(df_window.shape)
 
         results = {
