@@ -39,6 +39,7 @@ def tmp():
     print(df_rank)
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = row['rank']
+    print(results)
     return results
 
 
