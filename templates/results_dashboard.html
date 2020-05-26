@@ -29,7 +29,7 @@
     <div style="font-size: 7vw;">Results</div>
     <br/>
     <div style="font-size: 2vw; color: white;">blah blah...</div>
-    <div data-netdata="system.cpu" data-host="http://0.0.0.0:19999/" data-width="1600" data-height="200"></div>
+    <div data-netdata="system.cpu" data-host="http://localhost:19999/" data-width="1600" data-height="200"></div>
     {% for chart in render_info %}
     <div data-netdata="{{chart.chart_id}}"
          data-host="http://127.0.0.1:19999/"
