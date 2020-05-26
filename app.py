@@ -27,7 +27,7 @@ def ks():
             if ks_results:
                 results[chart] = ks_results
     df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
-    df_rank['rank'] = df_rank['score'].rank()
+    df_rank['rank'] = df_rank['score'].rank(method='first')
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
