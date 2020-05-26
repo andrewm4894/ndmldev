@@ -1,3 +1,4 @@
+import json
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
@@ -32,7 +33,7 @@ def ks():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
-    return results
+    return json.dumps([results])
 
 
 @app.route('/')
