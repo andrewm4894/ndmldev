@@ -47,7 +47,9 @@ def ks():
                 score = results[chart]['score']
                 render_info.append({
                     "chart_id": chart,
-                    "title": f"{rank} - {chart} - {score}"
+                    "title": f"{rank} - {chart} - {score}",
+                    "before": baseline_after,
+                    "after": highlight_before,
                 })
         return render_template('results_dashboard.html', render_info=render_info)
     else:

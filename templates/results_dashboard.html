@@ -33,6 +33,8 @@
     {% for chart in render_info %}
     <div data-netdata="{{chart.chart_id}}"
          data-title="{{chart.title}}"
+         data-after="{{chart.after}}"
+         data-before="{{chart.before}}"
     ></div>
     {% endfor %}
 </div>
