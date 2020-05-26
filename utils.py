@@ -37,12 +37,21 @@ def filter_useless_cols(df):
 
 def do_ks(df, baseline_start, baseline_end, window_start, window_end):
 
+    print(df.shape)
+    print(df.head())
+
     df = filter_useless_cols(df)
+
+    print(df.shape)
+    print(df.head())
 
     if len(df.columns) > 0:
 
         df_baseline = df[(df['time'] >= baseline_start) & (df['time'] <= baseline_end)].drop('time', axis=1)
+        print(df_baseline.shape)
         df_window = df[(df['time'] >= window_start) & (df['time'] <= window_end)].drop('time', axis=1)
+        print(df_window.shape)
+
         results = {
             'summary': {},
             'detail': {}
