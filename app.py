@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from flask import Flask, request, render_template
 import pandas as pd
-from utils import get_chart_data_urls, get_chart_df, do_ks, get_chart_list
+from utils import get_chart_data_urls, get_chart_df, do_ks, get_chart_list, parse_params
 
 app = Flask(__name__)
 
@@ -71,38 +71,9 @@ def dash():
 
 @app.route('/tmp', methods=['GET'])
 def tmp():
-    default_window_size = 60
-    default_baseline_window_multiplier = 1
-    now = int(datetime.now().timestamp())
-    default_before = now
-    default_after = now - default_window_size
-    default_highlight_before = default_before
-    default_highlight_after = default_after
-    url = request.args.get('url', None)
-    if url:
-        url_parts = url.split(';')
-        default_after = int([x.split('=')[1] for x in url_parts if x.startswith('after=')][0])
-        default_before = int([x.split('=')[1] for x in url_parts if x.startswith('before=')][0])
-        default_highlight_after = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0])
-        default_highlight_before = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0])
-    before = request.args.get('before', default_before)
-    after = request.args.get('after', default_after)
-    highlight_before = request.args.get('highlight_before', default_highlight_before)
-    highlight_after = request.args.get('highlight_after', default_highlight_after)
-    window_multiplier = request.args.get('window_multiplier', default_baseline_window_multiplier)
-    window_size = highlight_before - highlight_after
-    baseline_before = highlight_after - 1
-    baseline_after = baseline_before - (window_size * window_multiplier)
+    params = parse_params(request)
     response = {
-        "info": dict(
-            url=url,
-            before=before,
-            after=after,
-            highlight_before=highlight_before,
-            highlight_after=highlight_after,
-            baseline_before=baseline_before,
-            baseline_after=baseline_after
-        ),
+        "params": params,
         "results": {
         }
     }
