@@ -7,6 +7,11 @@ from utils import get_chart_data_urls, get_chart_df, do_ks
 app = Flask(__name__)
 
 
+@app.route('/tmp2')
+def tmp2():
+    return get_chart_data_urls()
+
+
 @app.route('/tmp')
 def tmp():
     before = int(datetime.now().timestamp())
