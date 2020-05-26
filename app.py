@@ -2,7 +2,7 @@ import json
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 import pandas as pd
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks
@@ -33,6 +33,7 @@ def ks():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
+    session['results'] = results
     return json.dumps([results])
 
 
@@ -46,6 +47,8 @@ def home():
 
 @app.route('/dash')
 def dash():
+    results = session.get('results', None)
+    print(results)
     dash_template = open('templates/results_dashboard.html', 'r', encoding='utf-8')
     dash_template_html = dash_template.read()
     dash_file_out = open("/usr/share/netdata/web/results_dashboard.html", "w+")
