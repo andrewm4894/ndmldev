@@ -22,20 +22,22 @@
     <meta property="og:description" content="Stunning real-time dashboards, blazingly fast and extremely interactive. Zero configuration, zero dependencies, zero maintenance." />
 </head>
 <script>var netdataTheme = 'slate';</script>
-<!-- <script type="text/javascript" src="https://my-netdata.io/dashboard.js?v20190902-0"></script> -->
-<script type="text/javascript" src="http://127.0.0.1:19999/dashboard.js"></script>
+<script type="text/javascript" src="https://my-netdata.io/dashboard.js?v20190902-0"></script>
 <body>
 
 <div class="container" style="width: 90%; padding-top: 10px; text-align: center; color: #AAA">
     <div style="font-size: 7vw;">Results</div>
     <br/>
     <div style="font-size: 2vw; color: white;">blah blah...</div>
-    <div data-netdata="system.cpu" data-width="1600" data-height="200"></div>
+    <div data-netdata="system.cpu" data-host="http://127.0.0.1:19999/" data-width="1600" data-height="200"></div>
     {% for chart in render_info %}
     <div data-netdata="{{chart.chart_id}}"
+         data-host="http://127.0.0.1:19999/"
          data-title="{{chart.title}}"
          data-after="{{chart.after}}"
          data-before="{{chart.before}}"
+         data-width="1600"
+         data-height="200"
     ></div>
     {% endfor %}
 </div>
