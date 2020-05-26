@@ -40,6 +40,7 @@ def do_ks(df, baseline_start, baseline_end, window_start, window_end):
     print(df.shape)
     print(df.head())
 
+    df = df._get_numeric_data()
     df = filter_useless_cols(df)
 
     print(df.shape)
