@@ -9,9 +9,7 @@ def do_ks(df, baseline_start, baseline_end, window_start, window_end):
     df = filter_useless_cols(df)
     if len(df.columns) > 0:
         df_baseline = df[(df.index >= baseline_start) & (df.index <= baseline_end)]
-        print(df_baseline.shape)
         df_window = df[(df.index >= window_start) & (df.index <= window_end)]
-        print(df_window.shape)
         results = {
             'summary': {},
             'detail': {}

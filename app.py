@@ -29,7 +29,7 @@ def ks():
     df_rank['rank'] = df_rank['score'].rank()
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = int(row['rank'])
-        results[row['chart']]['score'] = int(row['score'])
+        results[row['chart']]['score'] = float(row['score'])
     return results
 
 
