@@ -29,7 +29,9 @@
     <div style="font-size: 7vw;">Results</div>
     <br/>
     <div style="font-size: 2vw; color: white;">blah blah...</div>
-    <div data-netdata="system.cpu"></div>
+    {% for chart in charts %}
+    <div data-netdata="{{chart}}"></div>
+    {% endfor %}
 </div>
 </body>
 </html>
