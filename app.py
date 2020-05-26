@@ -22,13 +22,15 @@ def tmp():
         print(df.shape)
         print(df.head())
         if len(df) > 0:
-            results[chart] = do_ks(
+            ks_results = do_ks(
                 df,
                 baseline_start,
                 baseline_end,
                 window_start,
                 window_end
             )
+            if ks_results:
+                results[chart] = ks_results
     df_rank = pd.DataFrame(
         data=[[c, results[c]['summary']['ks_mean']] for c in results],
         columns=['chart', 'score']
