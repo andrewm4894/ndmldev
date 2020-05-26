@@ -28,21 +28,41 @@ def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: st
     return df
 
 
+def filter_useless_cols(df):
+    s = (df.min() == df.max())
+    useless_cols = list(s.where(s == True).dropna().index)
+    df = df.drop(useless_cols, axis=1)
+    return df
+
+
 def do_ks(df, baseline_start, baseline_end, window_start, window_end):
-    df_baseline = df[(df['time'] >= baseline_start) & (df['time'] <= baseline_end)].drop('time', axis=1)
-    df_window = df[(df['time'] >= window_start) & (df['time'] <= window_end)].drop('time', axis=1)
-    results = {
-        'summary': {},
-        'detail': {}
-    }
-    for col in df_baseline.columns:
-        res = ks_2samp(df_baseline[col], df_window[col])
-        results['detail'][col] = {"ks": round(res[0], 4), "p": round(res[1], 4)}
-    results['summary']['ks_mean'] = round(np.mean([results['detail'][res]['ks'] for res in results['detail']]), 4)
-    results['summary']['ks_min'] = round(np.min([results['detail'][res]['ks'] for res in results['detail']]), 4)
-    results['summary']['ks_max'] = round(np.max([results['detail'][res]['ks'] for res in results['detail']]), 4)
-    results['summary']['p_mean'] = round(np.mean([results['detail'][res]['p'] for res in results['detail']]), 4)
-    results['summary']['p_min'] = round(np.min([results['detail'][res]['p'] for res in results['detail']]), 4)
-    results['summary']['p_max'] = round(np.max([results['detail'][res]['p'] for res in results['detail']]), 4)
-    return results
+
+    df = filter_useless_cols(df)
+
+    if len(df.columns) > 0:
+
+        df_baseline = df[(df['time'] >= baseline_start) & (df['time'] <= baseline_end)].drop('time', axis=1)
+        df_window = df[(df['time'] >= window_start) & (df['time'] <= window_end)].drop('time', axis=1)
+        results = {
+            'summary': {},
+            'detail': {}
+        }
+
+        for col in df_baseline.columns:
+
+            res = ks_2samp(df_baseline[col], df_window[col])
+            results['detail'][col] = {"ks": round(res[0], 4), "p": round(res[1], 4)}
+
+        results['summary']['ks_mean'] = round(np.mean([results['detail'][res]['ks'] for res in results['detail']]), 4)
+        results['summary']['ks_min'] = round(np.min([results['detail'][res]['ks'] for res in results['detail']]), 4)
+        results['summary']['ks_max'] = round(np.max([results['detail'][res]['ks'] for res in results['detail']]), 4)
+        results['summary']['p_mean'] = round(np.mean([results['detail'][res]['p'] for res in results['detail']]), 4)
+        results['summary']['p_min'] = round(np.min([results['detail'][res]['p'] for res in results['detail']]), 4)
+        results['summary']['p_max'] = round(np.max([results['detail'][res]['p'] for res in results['detail']]), 4)
+
+        return results
+
+    else:
+
+        return None
 
