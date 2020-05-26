@@ -59,7 +59,7 @@ def dash():
     dash_file_out.write(dash_template_html)
     dash_file_out.close()
     response = dict(
-        message='xxx'
+        message='done'
     )
     return response
 
