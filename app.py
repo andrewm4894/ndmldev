@@ -17,13 +17,15 @@ def tmp():
     baseline_start = baseline_end - 100
     results = {}
     for chart in get_chart_list():
-        results[chart] = do_ks(
-            get_chart_df(chart, after, before),
-            baseline_start,
-            baseline_end,
-            window_start,
-            window_end
-        )
+        df = get_chart_df(chart, after, before)
+        if len(df) > 0:
+            results[chart] = do_ks(
+                df,
+                baseline_start,
+                baseline_end,
+                window_start,
+                window_end
+            )
     df_rank = pd.DataFrame(
         data=[[c, results[c]['summary']['ks_mean']] for c in results],
         columns=['chart', 'score']
