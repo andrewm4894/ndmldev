@@ -53,6 +53,8 @@ def home():
 
 @app.route('/tmp', methods=['GET'])
 def xdo_ks():
+    raw_query_string = request.query_string.decode()
+    print(raw_query_string)
     now = datetime.now()
     before = request.args.get('before', now)
     after = request.args.get('after', now-timedelta(seconds=100))
