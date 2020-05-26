@@ -25,7 +25,7 @@ def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: st
     r = requests.get(url)
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=r_json['labels'])
-    df = df.rename(columns={df.columns[1]: "time_idx"})
+    df = df.rename(columns={df.columns[0]: "time_idx"})
     print(df.shape)
     print(df.head())
     if numeric_only:
