@@ -14,11 +14,13 @@ def get_chart_data_urls():
     return chart_data_urls
 
 
-def get_chart_list():
+def get_chart_list(starts_with: str = None):
     url = "http://127.0.0.1:19999/api/v1/charts"
     r = requests.get(url)
     charts = r.json().get('charts')
     chart_list = [chart for chart in charts]
+    if starts_with:
+        chart_list = [chart for chart in chart_list if chart.startswith(starts_with)]
     return chart_list
 
 

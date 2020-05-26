@@ -15,11 +15,8 @@ def ks():
     baseline_before = params['baseline_before']
     baseline_after = params['baseline_after']
     results = {}
-    for chart in get_chart_list():
-        print(chart)
+    for chart in get_chart_list(starts_with='system.'):
         df = get_chart_df(chart, baseline_after, highlight_before)
-        print(df.shape)
-        print(df.head())
         if len(df) > 0:
             ks_results = do_ks(
                 df,
@@ -35,10 +32,8 @@ def ks():
         columns=['chart', 'score']
     )
     df_rank['rank'] = df_rank['score'].rank()
-    print(df_rank)
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = int(row['rank'])
-    print(results)
     return results
 
 
