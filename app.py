@@ -75,6 +75,8 @@ def tmp():
     default_baseline_window_multiplier = 1
     now = int(datetime.now().timestamp())
     url = request.args.get('url', None)
+    if url:
+        print(url.split(';'))
     before = request.args.get('before', now)
     after = request.args.get('after', now - default_window_size)
     highlight_before = request.args.get('highlight_before', now)
