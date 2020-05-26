@@ -30,7 +30,9 @@
     <br/>
     <div style="font-size: 2vw; color: white;">blah blah...</div>
     {% for chart in charts %}
-    <div data-netdata="{{chart}}"></div>
+    <div data-netdata="{{chart.id}}"
+         data-title="{{chart.title}}"
+    ></div>
     {% endfor %}
 </div>
 </body>
