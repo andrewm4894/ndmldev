@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from datetime import datetime, timedelta
 
 from flask import Flask, request, render_template
@@ -30,6 +31,7 @@ def ks():
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
+    results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
     return results
 
 
