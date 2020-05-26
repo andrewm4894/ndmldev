@@ -39,12 +39,12 @@ def ks():
     elif response_format == 'html':
         max_rank = 5
         render_info = []
-        for chart in results[0]:
-            rank = results[0][chart]['rank']
+        for chart in results:
+            rank = results[chart]['rank']
             if rank >= max_rank:
                 break
             else:
-                score = results[0][chart]['score']
+                score = results[chart]['score']
                 render_info.append({
                     "chart_id": chart,
                     "title": f"{rank} - {chart} - {score}"
