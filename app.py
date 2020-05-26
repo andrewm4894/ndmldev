@@ -38,7 +38,7 @@ def tmp():
     df_rank['rank'] = df_rank['score'].rank()
     print(df_rank)
     for _, row in df_rank.iterrows():
-        results[row['chart']]['rank'] = row['rank']
+        results[row['chart']]['rank'] = int(row['rank'])
     print(results)
     return results
 
