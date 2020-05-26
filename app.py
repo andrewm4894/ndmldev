@@ -70,20 +70,26 @@ def dash():
 
 
 @app.route('/tmp', methods=['GET'])
-def xdo_ks():
-    raw_query_string = request.query_string.decode()
-    print(raw_query_string)
-    now = datetime.now()
-    before = request.args.get('before', int(now.timestamp()))
-    after = request.args.get('after', int((now-timedelta(seconds=100)).timestamp()))
-    highlight_before = request.args.get('highlight_before', int(now.timestamp()))
-    highlight_after = request.args.get('highlight_after', int((now-timedelta(seconds=100)).timestamp()))
+def tmp():
+    default_window_size = 60
+    default_baseline_window_multiplier = 1
+    now = int(datetime.now().timestamp())
+    before = request.args.get('before', now)
+    after = request.args.get('after', now - default_window_size)
+    highlight_before = request.args.get('highlight_before', now)
+    highlight_after = request.args.get('highlight_after', now - default_window_size)
+    window_multiplier = request.args.get('window_multiplier', default_baseline_window_multiplier)
+    window_size = highlight_before - highlight_after
+    baseline_before = highlight_after - 1
+    baseline_after = baseline_before - (window_size * window_multiplier)
     response = {
         "info": dict(
             before=before,
             after=after,
             highlight_before=highlight_before,
-            highlight_after=highlight_after
+            highlight_after=highlight_after,
+            baseline_before=baseline_before,
+            baseline_after=baseline_after
         ),
         "results": {
         }
