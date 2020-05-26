@@ -57,10 +57,10 @@ def xdo_ks():
     raw_query_string = request.query_string.decode()
     print(raw_query_string)
     now = datetime.now()
-    before = request.args.get('before', now)
-    after = request.args.get('after', now-timedelta(seconds=100))
-    highlight_before = request.args.get('highlight_before', now)
-    highlight_after = request.args.get('highlight_after', now-timedelta(seconds=100))
+    before = request.args.get('before', now.timestamp())
+    after = request.args.get('after', (now-timedelta(seconds=100)).timestamp())
+    highlight_before = request.args.get('highlight_before', now.timestamp())
+    highlight_after = request.args.get('highlight_after', (now-timedelta(seconds=100)).timestamp())
     response = {
         "info": dict(
             before=before,
