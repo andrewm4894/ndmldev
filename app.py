@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from urllib.parse import urlparse, parse_qs
 
 from flask import Flask, request
 import pandas as pd
