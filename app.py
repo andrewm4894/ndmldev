@@ -76,7 +76,9 @@ def tmp():
     now = int(datetime.now().timestamp())
     url = request.args.get('url', None)
     if url:
-        print(url.split(';'))
+        url_parts = url.split(';')
+        after = [x.split('=')[1] for x in url_parts if x.startswith('after=')][0]
+        print(after)
     before = request.args.get('before', now)
     after = request.args.get('after', now - default_window_size)
     highlight_before = request.args.get('highlight_before', now)
