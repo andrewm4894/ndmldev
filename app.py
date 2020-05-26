@@ -61,7 +61,7 @@ def dash():
     response = dict(
         message='done'
     )
-    return render_template('results_dashboard.html', charts=['system.cpu'])
+    return render_template('results_dashboard.html', charts=['system.cpu', 'system.load'])
 
 
 @app.route('/tmp', methods=['GET'])
