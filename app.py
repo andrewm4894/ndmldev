@@ -17,7 +17,10 @@ def tmp():
     baseline_start = baseline_end - 100
     results = {}
     for chart in get_chart_list():
+        print(chart)
         df = get_chart_df(chart, after, before)
+        print(df.shape)
+        print(df.head())
         if len(df) > 0:
             results[chart] = do_ks(
                 df,
