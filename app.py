@@ -22,6 +22,7 @@ def ks():
     baseline_after = params['baseline_after']
     rank_by = params['rank_by']
     starts_with = params['starts_with']
+    response_format = params['format']
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
         df = get_chart_df(chart, baseline_after, highlight_before)
@@ -36,7 +37,18 @@ def ks():
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
     session['results'] = results
-    return json.dumps([results])
+    if response_format == 'json':
+        return json.dumps([results])
+    elif response_format == 'html':
+        charts = [
+            {"id": "system.cpu", "title": "cpu"},
+            {"id": "system.load", "title": "load"},
+            {"id": "system.io", "title": "io"},
+        ]
+        return render_template('results_dashboard.html', charts=charts)
+    else:
+        return None
+
 
 
 @app.route('/')

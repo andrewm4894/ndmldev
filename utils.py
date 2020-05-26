@@ -59,6 +59,7 @@ def parse_params(request):
         default_highlight_before = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0])
     rank_by = request.args.get('rank_by', 'ks_mean')
     starts_with = request.args.get('rank_by', None)
+    format = request.args.get('format', 'json')
     before = request.args.get('before', default_before)
     after = request.args.get('after', default_after)
     highlight_before = request.args.get('highlight_before', default_highlight_before)
@@ -75,7 +76,8 @@ def parse_params(request):
         "baseline_before": baseline_before,
         "baseline_after": baseline_after,
         "rank_by": rank_by,
-        "starts_with": starts_with
+        "starts_with": starts_with,
+        "format": format
     }
     return params
 
