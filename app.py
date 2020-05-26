@@ -74,6 +74,7 @@ def tmp():
     default_window_size = 60
     default_baseline_window_multiplier = 1
     now = int(datetime.now().timestamp())
+    url = request.args.get('url', None)
     before = request.args.get('before', now)
     after = request.args.get('after', now - default_window_size)
     highlight_before = request.args.get('highlight_before', now)
@@ -84,6 +85,7 @@ def tmp():
     baseline_after = baseline_before - (window_size * window_multiplier)
     response = {
         "info": dict(
+            url=url,
             before=before,
             after=after,
             highlight_before=highlight_before,
