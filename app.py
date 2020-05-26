@@ -10,8 +10,6 @@ from ks import do_ks
 
 app = Flask(__name__)
 
-app.secret_key = b'xxx'
-
 
 @app.route('/ks')
 def ks():
@@ -36,15 +34,12 @@ def ks():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
-    session['results'] = results
     if response_format == 'json':
         return json.dumps([results])
     elif response_format == 'html':
-        charts = [
-            {"id": "system.cpu", "title": "cpu"},
-            {"id": "system.load", "title": "load"},
-            {"id": "system.io", "title": "io"},
-        ]
+        charts = []
+        for chart in results[0:5]:
+            charts.append({"id": chart.key, "title": chart[chart.key]['score']})
         return render_template('results_dashboard.html', charts=charts)
     else:
         return None
