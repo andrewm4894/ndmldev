@@ -37,7 +37,7 @@ def ks():
     if response_format == 'json':
         return json.dumps([results])
     elif response_format == 'html':
-        max_rank = 20
+        max_rank = 50
         render_info = []
         for chart in results:
             rank = results[chart]['rank']

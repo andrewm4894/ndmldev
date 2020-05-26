@@ -43,8 +43,8 @@ def filter_useless_cols(df):
 
 
 def parse_params(request):
-    default_window_size = 60
-    default_baseline_window_multiplier = 1
+    default_window_size = 60*2
+    default_baseline_window_multiplier = 2
     now = int(datetime.now().timestamp())
     default_before = now
     default_after = now - default_window_size
