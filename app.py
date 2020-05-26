@@ -55,9 +55,9 @@ def home():
 def xdo_ks():
     now = datetime.now()
     before = request.args.get('before', now)
-    after = request.args.get('after', now-100)
+    after = request.args.get('after', now-timedelta(seconds=100))
     highlight_before = request.args.get('highlight_before', now)
-    highlight_after = request.args.get('highlight_after', now-100)
+    highlight_after = request.args.get('highlight_after', now-timedelta(seconds=100))
     response = {
         "info": dict(
             before=before,
