@@ -2,7 +2,9 @@ from datetime import datetime, timedelta
 
 from flask import Flask, request, render_template
 import pandas as pd
-from utils import get_chart_data_urls, get_chart_df, do_ks, get_chart_list, parse_params
+from utils import get_chart_df, get_chart_list, parse_params
+from ks import do_ks
+
 
 app = Flask(__name__)
 
@@ -14,26 +16,20 @@ def ks():
     highlight_after = params['highlight_after']
     baseline_before = params['baseline_before']
     baseline_after = params['baseline_after']
+    rank_by = params['rank_by']
+    starts_with = params['starts_with']
     results = {}
-    for chart in get_chart_list(starts_with='system.'):
+    for chart in get_chart_list(starts_with=starts_with):
         df = get_chart_df(chart, baseline_after, highlight_before)
         if len(df) > 0:
-            ks_results = do_ks(
-                df,
-                baseline_after,
-                baseline_before,
-                highlight_after,
-                highlight_before
-            )
+            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
-    df_rank = pd.DataFrame(
-        data=[[c, results[c]['summary']['ks_mean']] for c in results],
-        columns=['chart', 'score']
-    )
+    df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
     df_rank['rank'] = df_rank['score'].rank()
     for _, row in df_rank.iterrows():
         results[row['chart']]['rank'] = int(row['rank'])
+        results[row['chart']]['score'] = int(row['score'])
     return results
 
 

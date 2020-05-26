@@ -46,48 +46,6 @@ def filter_useless_cols(df):
     return df
 
 
-def do_ks(df, baseline_start, baseline_end, window_start, window_end):
-
-    print(df.shape)
-    print(df.head())
-
-    df = df._get_numeric_data()
-    df = filter_useless_cols(df)
-
-    print(df.shape)
-    print(df.head())
-
-    if len(df.columns) > 0:
-
-        df_baseline = df[(df.index >= baseline_start) & (df.index <= baseline_end)]
-        print(df_baseline.shape)
-        df_window = df[(df.index >= window_start) & (df.index <= window_end)]
-        print(df_window.shape)
-
-        results = {
-            'summary': {},
-            'detail': {}
-        }
-
-        for col in df_baseline.columns:
-
-            res = ks_2samp(df_baseline[col], df_window[col])
-            results['detail'][col] = {"ks": float(round(res[0], 4)), "p": float(round(res[1], 4))}
-
-        results['summary']['ks_mean'] = float(round(np.mean([results['detail'][res]['ks'] for res in results['detail']]), 4))
-        results['summary']['ks_min'] = float(round(np.min([results['detail'][res]['ks'] for res in results['detail']]), 4))
-        results['summary']['ks_max'] = float(round(np.max([results['detail'][res]['ks'] for res in results['detail']]), 4))
-        results['summary']['p_mean'] = float(round(np.mean([results['detail'][res]['p'] for res in results['detail']]), 4))
-        results['summary']['p_min'] = float(round(np.min([results['detail'][res]['p'] for res in results['detail']]), 4))
-        results['summary']['p_max'] = float(round(np.max([results['detail'][res]['p'] for res in results['detail']]), 4))
-
-        return results
-
-    else:
-
-        return None
-
-
 def parse_params(request):
     default_window_size = 60
     default_baseline_window_multiplier = 1
@@ -103,6 +61,8 @@ def parse_params(request):
         default_before = int([x.split('=')[1] for x in url_parts if x.startswith('before=')][0])
         default_highlight_after = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0])
         default_highlight_before = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0])
+    rank_by = request.args.get('rank_by', 'ks_mean')
+    starts_with = request.args.get('rank_by', None)
     before = request.args.get('before', default_before)
     after = request.args.get('after', default_after)
     highlight_before = request.args.get('highlight_before', default_highlight_before)
@@ -118,6 +78,8 @@ def parse_params(request):
         "highlight_after": highlight_after,
         "baseline_before": baseline_before,
         "baseline_after": baseline_after,
+        "rank_by": rank_by,
+        "starts_with": starts_with
     }
     return params
 
