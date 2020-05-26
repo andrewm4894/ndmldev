@@ -24,8 +24,7 @@ def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: st
     url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
     r = requests.get(url)
     r_json = r.json()
-    df = pd.DataFrame(r_json['data'], columns=r_json['labels'])
-    df = df.rename(columns={df.columns[0]: "time_idx"})
+    df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
     print(df.shape)
     print(df.head())
     if numeric_only:
