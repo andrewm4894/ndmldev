@@ -16,7 +16,7 @@ def tmp():
     baseline_end = window_start - 1
     baseline_start = baseline_end - 100
     results = {}
-    for chart in ['system.cpu', 'system.load', 'system.io']:
+    for chart in get_chart_data_urls().keys():
         results[chart] = do_ks(
             get_chart_df(chart, after, before),
             baseline_start,
