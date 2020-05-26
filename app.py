@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 import pandas as pd
 from utils import get_chart_data_urls, get_chart_df, do_ks, get_chart_list
 
@@ -61,7 +61,7 @@ def dash():
     response = dict(
         message='done'
     )
-    return response
+    return render_template('results_dashboard.html')
 
 
 @app.route('/tmp', methods=['GET'])
