@@ -60,10 +60,7 @@ def ks():
 
 @app.route('/')
 def home():
-    response = dict(
-        ks='/ks'
-    )
-    return response
+    return render_template('home.html')
 
 
 @app.route('/dash')
