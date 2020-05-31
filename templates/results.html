@@ -8,9 +8,8 @@
     </div>
     <div data-netdata="system.cpu"></div>
     {% for chart in charts %}
-        <h2>{{ chart.id }}</h2>
         <div data-netdata="{{ chart.id }}"
-         data-width="1600"
+         data-width="1200"
          data-height="200"
         ></div>
     {% endfor %}
