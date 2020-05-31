@@ -5,7 +5,7 @@
     <div style="font-size: 7vw;">Results</div>
     <br/>
     <div style="font-size: 2vw; color: white;">blah blah...</div>
-    {% for chart in render_info %}
+    {% for chart in charts %}
     <div data-netdata="{{chart.chart_id}}"
          data-host="http://34.75.216.243:19999/"
          data-title="{{chart.title}}"
