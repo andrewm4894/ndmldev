@@ -63,8 +63,8 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/ks-results')
-def ks_results():
+@app.route('/results')
+def results():
     netdata_url = request.args.get('url')
     domain = urlparse(netdata_url).netloc
     return jsonify([netdata_url, domain])
