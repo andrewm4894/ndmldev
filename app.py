@@ -66,8 +66,8 @@ def home():
 @app.route('/results')
 def results():
     netdata_url = request.args.get('url')
-    domain = urlparse(netdata_url).netloc
-    return jsonify([netdata_url, domain])
+    netdata_host = urlparse(netdata_url).netloc
+    return jsonify([netdata_url, netdata_host, urlparse(netdata_url).params])
 
 
 @app.route('/dash')
