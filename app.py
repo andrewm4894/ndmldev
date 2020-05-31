@@ -53,7 +53,7 @@ def ks():
                     "before": baseline_after,
                     "after": highlight_before,
                 })
-        return render_template('results_dashboard.html', render_info=render_info)
+        return render_template('results.html', render_info=render_info)
     else:
         return None
 
@@ -67,14 +67,24 @@ def home():
 def results():
     netdata_url = request.args.get('url')
     netdata_host = urlparse(netdata_url).netloc
-    return jsonify([netdata_url, netdata_host, parse_qs(netdata_url)])
+    netdata_params = parse_qs(netdata_url)
+    after = netdata_params.get('after')
+    before = netdata_params.get('before')
+    highlight_after = netdata_params.get('highlight_after')
+    highlight_before = netdata_params.get('highlight_before')
+    charts = [
+        {"id": "system.cpu", "title": "cpu"},
+        {"id": "system.load", "title": "load"},
+        {"id": "system.io", "title": "io"},
+    ]
+    return render_template('results.html', charts=charts)
 
 
 @app.route('/dash')
 def dash():
     results = session.get('results', None)
     print(results)
-    dash_template = open('templates/results_dashboard.html', 'r', encoding='utf-8')
+    dash_template = open('templates/results.html', 'r', encoding='utf-8')
     dash_template_html = dash_template.read()
     dash_file_out = open("/usr/share/netdata/web/results_dashboard.html", "w+")
     dash_file_out.write(dash_template_html)
@@ -87,7 +97,7 @@ def dash():
         {"id": "system.load", "title": "load"},
         {"id": "system.io", "title": "io"},
     ]
-    return render_template('results_dashboard.html', charts=charts)
+    return render_template('results.html', charts=charts)
 
 
 @app.route('/tmp', methods=['GET'])
