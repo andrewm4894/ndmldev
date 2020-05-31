@@ -10,9 +10,6 @@
     {% for chart in charts %}
         <h2>{{ chart.id }}</h2>
         <div data-netdata="{{ chart.id }}"
-         data-title="{{ chart.title }}"
-         data-after="{{ chart.after }}"
-         data-before="{{ chart.before }}"
          data-width="1600"
          data-height="200"
         ></div>
