@@ -73,9 +73,9 @@ def results():
     highlight_after = netdata_params.get('highlight_after')
     highlight_before = netdata_params.get('highlight_before')
     charts = [
-        {"id": "system.cpu", "title": "cpu"},
-        {"id": "system.load", "title": "load"},
-        {"id": "system.io", "title": "io"},
+        {"id": "system.cpu", "title": "cpu", "after": after, "before": before},
+        {"id": "system.load", "title": "load", "after": after, "before": before},
+        {"id": "system.io", "title": "io", "after": after, "before": before},
     ]
     return render_template('results.html', charts=charts)
 
