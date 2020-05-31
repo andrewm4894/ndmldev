@@ -64,7 +64,7 @@ def home():
 
 @app.route('/results')
 def results():
-    return jsonify(['hello'])
+    return jsonify(request.args.get('url'))
 
 
 @app.route('/dash')
