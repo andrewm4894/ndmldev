@@ -7,14 +7,15 @@
 <div style="font-size: 2vw; color: white;">blah blah...</div>
 <div data-netdata="system.cpu"></div>
 {% for chart in charts %}
-<div data-netdata="{{chart.id}}"
+    <h2>{{ chart }}</h2>
+    <div data-netdata="{{ chart.id }}"
      data-host="http://34.75.216.243:19999/"
-     data-title="{{chart.title}}"
-     data-after="{{chart.after}}"
-     data-before="{{chart.before}}"
+     data-title="{{ chart.title }}"
+     data-after="{{ chart.after }}"
+     data-before="{{ chart.before }}"
      data-width="1600"
      data-height="200"
-></div>
+    ></div>
 {% endfor %}
 </div>
 
