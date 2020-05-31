@@ -1,6 +1,7 @@
 import json
 from collections import OrderedDict
 from datetime import datetime, timedelta
+from urllib.parse import urlparse
 
 from flask import Flask, request, render_template, session, jsonify
 import pandas as pd
@@ -62,9 +63,11 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/results')
-def results():
-    return jsonify(request.args.get('url'))
+@app.route('/ks-results')
+def ks_results():
+    netdata_url = request.args.get('url')
+    domain = urlparse(netdata_url).netloc
+    return jsonify([netdata_url, domain])
 
 
 @app.route('/dash')
