@@ -2,7 +2,7 @@ import json
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, jsonify
 import pandas as pd
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks
@@ -57,10 +57,14 @@ def ks():
         return None
 
 
-
 @app.route('/')
 def home():
     return render_template('home.html')
+
+
+@app.route('/results')
+def results():
+    return jsonify(['hello'])
 
 
 @app.route('/dash')
