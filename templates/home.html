@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="header">
-  <img src="/static/green_logotype.png" alt="logo" />
-  <h1>Netdata ML Plugin (experimental)</h1>
-</div>
 
-<form action="results">
-    <label for="url">Netdata URL</label>
-    <input type="url" name="url" value="" required>
-    <br><br>
-    <input type="submit" value="ks test" >
-</form>
+    <br>
+    <div class="header">
+      <img src="/static/green_logotype.png" alt="logo" />
+      <h1>Netdata ML Plugin (experimental)</h1>
+    </div>
+
+    <form action="results">
+        <label for="url">Netdata URL</label>
+        <input type="url" name="url" value="" required>
+        <br><br>
+        <input type="submit" value="ks test" >
+    </form>
 
 {% endblock %}
