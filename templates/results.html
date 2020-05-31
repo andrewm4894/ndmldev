@@ -3,14 +3,9 @@
 
     <div class="header">
         <img src="/static/green_logotype.png" alt="logo" />
-        <h1>Netdata ML Plugin (experimental)</h1>
+        <h1>Netdata ML Plugin (experimental) - Results</h1>
     </div>
-
-<div class="container" style="width: 90%; padding-top: 10px; text-align: center; color: #AAA">
-<div style="font-size: 7vw;">Results</div>
-<br/>
-<div style="font-size: 2vw; color: white;">blah blah...</div>
-<div data-netdata="system.cpu"></div>
+    <div data-netdata="system.cpu"></div>
 {% for chart in charts %}
     <h2>{{ chart.id }}</h2>
     <div data-netdata="{{ chart.id }}"
