@@ -1,5 +1,5 @@
 from datetime import datetime
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlparse
 
 import requests
 import pandas as pd
@@ -47,8 +47,10 @@ def parse_params(request):
     default_window_size = 60 * 2
     baseline_window_multiplier = 2
 
+    url_parse = urlparse(request.args.get('url'))
     url_params = parse_qs(request.args.get('url'))
-    print(request.args.get('url'))
+    print(url_parse.netloc)
+    print(url_parse.port)
     print(url_params)
     XXX
     if 'after' in url_params:
