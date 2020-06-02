@@ -41,11 +41,7 @@ def results():
     results = rank_results(results, rank_by)
 
     if response_format == 'html':
-        charts = [
-            {"id": "system.cpu", "title": "cpu", "after": baseline_after, "before": highlight_before},
-            {"id": "system.load", "title": "load", "after": baseline_after, "before": highlight_before},
-            {"id": "system.io", "title": "io", "after": baseline_after, "before": highlight_before},
-        ]
+        charts = [{"id": result, "title": f"{results[result]['rank']} - {result} (score={results[result]['rank']})"} for result in results]
         return render_template('results.html', charts=charts)
     else:
         return jsonify(results)

@@ -13,8 +13,13 @@ results = rank_results(results, rank_by, ascending=False)
 print(results)
 
 #%%
+charts =
+for result in results:
+    print(result)
 
 #%%
+
+[{"id": result, "title": f"{results[result]['rank']} - {result} (score={results[result]['rank']})" } for result in results]
 
 
 #%%
