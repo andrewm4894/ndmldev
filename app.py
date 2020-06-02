@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 @app.route('/tmp')
 def tmp():
+    print(request.host)
     charts = [
         {
             "id": "system.cpu",
