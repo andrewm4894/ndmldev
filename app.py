@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('home.html', netdata_host=netdata_host)
+    return render_template('home.html', netdata_host=request.host)
 
 
 @app.route('/results')
@@ -42,9 +42,11 @@ def results():
                 "title": f"{results[result]['rank']} - {result} (ks={results[result]['summary']['ks_max']}, p={results[result]['summary']['p_min']})",
                 "after": baseline_after,
                 "before": highlight_before,
-                "data_points": data_points
+                "data_points": data_points,
+                "data_host": f"http://{netdata_host}/"
+
             } for result in results
         ]
-        return render_template('results.html', charts=charts, netdata_host=netdata_host)
+        return render_template('results.html', charts=charts, netdata_host=request.host)
     else:
         return jsonify(results)

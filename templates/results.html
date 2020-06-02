@@ -8,11 +8,11 @@
     </div>
     {% for chart in charts %}
         <div data-netdata="{{ chart.id }}"
+             data-host="{{ chart.data_host }}"
              data-title="{{ chart.title }}"
              data-after="{{ chart.after }}"
              data-before="{{ chart.before }}"
              data-points="{{ chart.data_points }}"
-             data-pixels-per-point="1"
              data-width="1200"
              data-height="200"
         ></div>
