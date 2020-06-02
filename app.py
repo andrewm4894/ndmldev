@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 @app.route('/tmp')
 def tmp():
-    print(request.host)
     charts = [
         {
             "id": "system.cpu",
@@ -17,7 +16,7 @@ def tmp():
             "data_host": f"http://london3.my-netdata.io/"
         }
     ]
-    return render_template('results.html', charts=charts, netdata_host=request.host)
+    return render_template('results.html', charts=charts, netdata_host=f"{request.host.split(':')[0]}:19999")
 
 
 @app.route('/')
