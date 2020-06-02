@@ -23,7 +23,7 @@ def tmp():
 
 @app.route('/')
 def home():
-    return render_template('home.html', netdata_host=request.host)
+    return render_template('home.html', netdata_host=f"{request.host.split(':')[0]}:19999")
 
 
 @app.route('/results')
