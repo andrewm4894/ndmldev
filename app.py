@@ -41,7 +41,7 @@ def results():
         charts = [
             {
                 "id": result,
-                "title": f"{results[result]['rank']} - {result} (score={results[result]['rank']})",
+                "title": f"{results[result]['rank']} - {result} (score={results[result]['score']})",
                 "after": baseline_after,
                 "before": highlight_before
             } for result in results
