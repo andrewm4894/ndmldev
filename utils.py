@@ -62,10 +62,6 @@ def parse_params(request):
     else:
         highlight_before = request.args.get('highlight_before', before)
 
-    rank_by = request.args.get('rank_by', 'ks_max')
-    starts_with = request.args.get('starts_with', None)
-    format = request.args.get('format', 'html')
-
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
     baseline_after = baseline_before - (window_size * baseline_window_multiplier)
@@ -76,11 +72,12 @@ def parse_params(request):
         "highlight_after": highlight_after,
         "baseline_before": baseline_before,
         "baseline_after": baseline_after,
-        "rank_by": rank_by,
-        "starts_with": starts_with,
-        "format": format,
+        "rank_by": request.args.get('rank_by', 'ks_max'),
+        "starts_with": request.args.get('starts_with', None),
+        "format": request.args.get('format', 'html'),
         "remote_host": remote_host,
-        "local_host": local_host
+        "local_host": local_host,
+        "method": request.args.get('method', 'ks')
     }
     return params
 
