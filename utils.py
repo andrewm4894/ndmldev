@@ -64,7 +64,7 @@ def parse_params(request):
         highlight_before = request.args.get('highlight_before', before)
 
     rank_by = request.args.get('rank_by', 'ks_max')
-    starts_with = request.args.get('starts_with', None)
+    starts_with = request.args.get('starts_with', 'system.')
     format = request.args.get('format', 'html')
 
     window_size = highlight_before - highlight_after
