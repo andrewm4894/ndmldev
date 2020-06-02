@@ -3,7 +3,7 @@ from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
 
 app = Flask(__name__)
-
+app.config["JSON_SORT_KEYS"] = False
 
 @app.route('/')
 def home():
