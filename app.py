@@ -13,8 +13,8 @@ def tmp():
         {
             "id": "system.cpu",
             "title": "tmp",
-            "after": "1591109317000",
-            "before": "1591109736000",
+            "after": "1591109317",
+            "before": "1591109736",
             "data_host": "http://london.my-netdata.io/"
         }
     ]
