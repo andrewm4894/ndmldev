@@ -39,7 +39,7 @@ def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end, diff
         return None
 
 
-def rank_results(results, rank_by, ascending: bool = True):
+def rank_results(results, rank_by, ascending: bool = False):
     df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
     df_rank['rank'] = df_rank['score'].rank(method='first', ascending=ascending)
     for _, row in df_rank.iterrows():
