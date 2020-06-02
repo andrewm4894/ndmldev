@@ -25,7 +25,7 @@ def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end, diff
             if len(data_baseline) > 0 and len(data_highlight) > 0:
                 res = ks_2samp(data_baseline, data_highlight)
                 results['detail'][col] = {"ks": float(round(res[0], 4)), "p": float(round(res[1], 4))}
-        if len(results['detail'][col]) > 0:
+        if len(results['detail']) > 0:
             results['summary']['ks_mean'] = float(round(np.mean([results['detail'][res]['ks'] for res in results['detail']]), 4))
             results['summary']['ks_min'] = float(round(np.min([results['detail'][res]['ks'] for res in results['detail']]), 4))
             results['summary']['ks_max'] = float(round(np.max([results['detail'][res]['ks'] for res in results['detail']]), 4))
