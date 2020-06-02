@@ -8,6 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     print(request.remote_addr)
+    print(request.host)
     return render_template('home.html')
 
 
