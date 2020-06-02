@@ -5,16 +5,8 @@ import requests
 import pandas as pd
 
 
-def get_chart_data_urls():
-    url = "http://127.0.0.1:19999/api/v1/charts"
-    r = requests.get(url)
-    charts = r.json().get('charts')
-    chart_data_urls = {chart: charts[chart].get('data_url') for chart in charts}
-    return chart_data_urls
-
-
-def get_chart_list(starts_with: str = None):
-    url = "http://127.0.0.1:19999/api/v1/charts"
+def get_chart_list(starts_with: str = None, host: str = '127.0.0.1:19999'):
+    url = f"http://{host}/api/v1/charts"
     r = requests.get(url)
     charts = r.json().get('charts')
     chart_list = [chart for chart in charts]
