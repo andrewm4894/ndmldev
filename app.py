@@ -13,7 +13,7 @@ def tmp():
             "title": "tmp",
             "after": "1591109317000",
             "before": "1591109736000",
-            "data_host": f"http://london3.my-netdata.io/"
+            "data_host": f"http://london.my-netdata.io/"
         }
     ]
     return render_template('results.html', charts=charts, netdata_host=f"{request.host.split(':')[0]}:19999")
