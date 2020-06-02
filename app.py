@@ -58,7 +58,7 @@ def results():
                 "title": f"{results[result]['rank']} - {result} (ks={results[result]['summary']['ks_max']}, p={results[result]['summary']['p_min']})",
                 "after": baseline_after,
                 "before": highlight_before,
-                "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}:19999"
+                "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}/"
 
             } for result in results
         ]
