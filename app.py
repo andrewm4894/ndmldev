@@ -7,8 +7,7 @@ from urllib.parse import urlparse, parse_qs
 from flask import Flask, request, render_template, session, jsonify
 import pandas as pd
 from utils import get_chart_df, get_chart_list, parse_params
-from ks import do_ks
-
+from ks import do_ks, rank_results
 
 app = Flask(__name__)
 
@@ -39,16 +38,8 @@ def results():
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
-    print(results)
-    XXX
+    results = rank_results(results, rank_by)
 
-
-    df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
-    df_rank['rank'] = df_rank['score'].rank(method='first')
-    for _, row in df_rank.iterrows():
-        results[row['chart']]['rank'] = int(row['rank'])
-        results[row['chart']]['score'] = float(row['score'])
-    results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
     if response_format == 'html':
         charts = [
             {"id": "system.cpu", "title": "cpu", "after": baseline_after, "before": highlight_before},

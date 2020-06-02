@@ -1,5 +1,8 @@
+from collections import OrderedDict
+
 from scipy.stats import ks_2samp
 import numpy as np
+import pandas as pd
 
 from utils import filter_useless_cols
 
@@ -36,3 +39,12 @@ def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end):
 
         return None
 
+
+def rank_results(results, rank_by, ascending: bool = True):
+    df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
+    df_rank['rank'] = df_rank['score'].rank(method='first', ascending=ascending)
+    for _, row in df_rank.iterrows():
+        results[row['chart']]['rank'] = int(row['rank'])
+        results[row['chart']]['score'] = float(row['score'])
+    results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
+    return results
