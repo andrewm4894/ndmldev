@@ -92,10 +92,11 @@ def results():
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
         df = get_chart_df(chart, baseline_after, highlight_before)
-        if len(df) > 0:
-            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
-            if ks_results:
-                results[chart] = ks_results
+        if df:
+            if len(df) > 0:
+                ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+                if ks_results:
+                    results[chart] = ks_results
     df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
     df_rank['rank'] = df_rank['score'].rank(method='first')
     for _, row in df_rank.iterrows():
