@@ -68,18 +68,6 @@ def home():
 @app.route('/results')
 def results():
 
-    # params
-    #now_ts = int(datetime.now().timestamp())
-    #netdata_url = request.args.get('url')
-    #netdata_host = urlparse(netdata_url).netloc
-    #netdata_params = parse_qs(netdata_url)
-    #after = int(netdata_params.get('after')[0])
-    #before = int(netdata_params.get('before')[0])
-    #highlight_after = int(netdata_params.get('highlight_after')[0])
-    #highlight_before = int(netdata_params.get('highlight_before')[0])
-    #after_secs = str(after / 1000)
-    #before_secs = str(before / 1000)
-
     # get params
     params = parse_params(request)
     highlight_before = params['highlight_before']
@@ -89,17 +77,15 @@ def results():
     rank_by = params['rank_by']
     starts_with = params['starts_with']
     response_format = params['format']
-    print(params)
 
     # get results
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
         df = get_chart_df(chart, after=baseline_after, before=highlight_before)
-        if df:
-            if len(df) > 0:
-                ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
-                if ks_results:
-                    results[chart] = ks_results
+        if len(df) > 0:
+            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+            if ks_results:
+                results[chart] = ks_results
     df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
     df_rank['rank'] = df_rank['score'].rank(method='first')
     for _, row in df_rank.iterrows():
