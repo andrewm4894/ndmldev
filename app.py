@@ -81,7 +81,6 @@ def results():
     #before_secs = str(before / 1000)
 
     # get params
-    print(request.args.get('url'))
     params = parse_params(request)
     highlight_before = params['highlight_before']
     highlight_after = params['highlight_after']
