@@ -69,8 +69,8 @@ def results():
     netdata_url = request.args.get('url')
     netdata_host = urlparse(netdata_url).netloc
     netdata_params = parse_qs(netdata_url)
-    after = netdata_params.get('after')
-    before = netdata_params.get('before')
+    after = netdata_params.get('after')[0]
+    before = netdata_params.get('before')[0]
     print(after)
     highlight_after = netdata_params.get('highlight_after')
     highlight_before = netdata_params.get('highlight_before')
