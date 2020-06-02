@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session, jsonify
+from flask import Flask, request, render_template, jsonify
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
 
