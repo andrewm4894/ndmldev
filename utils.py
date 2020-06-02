@@ -48,6 +48,8 @@ def parse_params(request):
     baseline_window_multiplier = 2
 
     url_params = parse_qs(request.args.get('url'))
+    print(url_params)
+    XXX
     if 'after' in url_params:
         after = int(url_params.get('after')[0]) / 1000
     else:
@@ -81,7 +83,8 @@ def parse_params(request):
         "baseline_after": baseline_after,
         "rank_by": rank_by,
         "starts_with": starts_with,
-        "format": format
+        "format": format,
+        "netdata_host": netdata_host
     }
     return params
 
