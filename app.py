@@ -71,6 +71,7 @@ def results():
     netdata_params = parse_qs(netdata_url)
     after = netdata_params.get('after')
     before = netdata_params.get('before')
+    print(after)
     highlight_after = netdata_params.get('highlight_after')
     highlight_before = netdata_params.get('highlight_before')
     after_secs = str(now_ts - (after / 1000))
