@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/tmp')
 def tmp():
     netdata_host = f"{request.host.split(':')[0]}:19999"
-    netdata_host = "http://london.my-netdata.io/"
+    #netdata_host = "http://london.my-netdata.io/"
     charts = [
         {
             "id": "system.cpu",
