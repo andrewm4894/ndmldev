@@ -69,11 +69,10 @@ def results():
     netdata_url = request.args.get('url')
     netdata_host = urlparse(netdata_url).netloc
     netdata_params = parse_qs(netdata_url)
-    after = netdata_params.get('after')[0]
-    before = netdata_params.get('before')[0]
-    print(after)
-    highlight_after = netdata_params.get('highlight_after')
-    highlight_before = netdata_params.get('highlight_before')
+    after = int(netdata_params.get('after')[0])
+    before = int(netdata_params.get('before')[0])
+    highlight_after = int(netdata_params.get('highlight_after')['0'])
+    highlight_before = int(netdata_params.get('highlight_before')['0'])
     after_secs = str(now_ts - (after / 1000))
     before_secs = str(now_ts - (before / 1000))
     charts = [
