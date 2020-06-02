@@ -89,11 +89,12 @@ def results():
     rank_by = params['rank_by']
     starts_with = params['starts_with']
     response_format = params['format']
+    print(params)
 
     # get results
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
-        df = get_chart_df(chart, baseline_after, highlight_before, host='34.75.216.243:19999')
+        df = get_chart_df(chart, baseline_after, highlight_before)
         if df:
             if len(df) > 0:
                 ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
