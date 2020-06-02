@@ -33,14 +33,12 @@ def results():
     # get results
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
-        print(chart)
         df = get_chart_df(chart, after=baseline_after, before=highlight_before)
-        print(df.head())
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
-    results = rank_results(results, rank_by)
+    results = rank_results(results, rank_by, ascending=False)
 
     if response_format == 'html':
         charts = [
