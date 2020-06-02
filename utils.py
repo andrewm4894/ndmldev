@@ -66,7 +66,7 @@ def parse_params(request):
     default_highlight_after = url_highlight_after if url_highlight_after else default_after
 
     rank_by = request.args.get('rank_by', 'ks_mean')
-    starts_with = request.args.get('rank_by', 'system.cpu')
+    starts_with = request.args.get('rank_by', 'system.')
     format = request.args.get('format', 'json')
     before = request.args.get('before', default_before)
     after = request.args.get('after', default_after)
