@@ -26,7 +26,7 @@ def get_chart_list(starts_with: str = None):
     return chart_list
 
 
-def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'html', numeric_only: bool = True):
+def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json', numeric_only: bool = True):
     url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
     print(url)
     r = requests.get(url)
@@ -72,7 +72,7 @@ def parse_params(request):
 
     rank_by = request.args.get('rank_by', 'ks_mean')
     starts_with = request.args.get('rank_by', 'system.')
-    format = request.args.get('format', 'json')
+    format = request.args.get('format', 'html')
 
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
