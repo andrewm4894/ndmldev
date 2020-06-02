@@ -1,4 +1,5 @@
 import json
+import logging
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from urllib.parse import urlparse, parse_qs
@@ -10,6 +11,7 @@ from ks import do_ks
 
 
 app = Flask(__name__)
+app.logger.setLevel(logging.INFO)
 
 
 @app.route('/ks')
