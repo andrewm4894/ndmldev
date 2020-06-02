@@ -51,25 +51,25 @@ def filter_useless_cols(df):
 
 def parse_params(request):
 
+    now = int(datetime.now().timestamp())
     default_window_size = 60 * 2
     baseline_window_multiplier = 2
-    now = int(datetime.now().timestamp())
 
     url_params = parse_qs(request.args.get('url'))
     if 'after' in url_params:
-        after = int(url_params.get('after')[0])
+        after = int(url_params.get('after')[0]) / 1000
     else:
         after = int(request.args.get('after', now - default_window_size))
     if 'before' in url_params:
-        before = int(url_params.get('before')[0])
+        before = int(url_params.get('before')[0]) / 1000
     else:
         before = int(request.args.get('before', now))
     if 'highlight_after' in url_params:
-        highlight_after = int(url_params.get('highlight_after')[0])
+        highlight_after = int(url_params.get('highlight_after')[0]) / 1000
     else:
         highlight_after = request.args.get('highlight_after', after)
     if 'highlight_before' in url_params:
-        highlight_before = int(url_params.get('highlight_before')[0])
+        highlight_before = int(url_params.get('highlight_before')[0]) / 1000
     else:
         highlight_before = request.args.get('highlight_before', before)
 
@@ -78,7 +78,7 @@ def parse_params(request):
     format = request.args.get('format', 'json')
 
     window_size = highlight_before - highlight_after
-    baseline_before = highlight_after - 1000
+    baseline_before = highlight_after - 1
     baseline_after = baseline_before - (window_size * baseline_window_multiplier)
     params = {
         "before": before,
