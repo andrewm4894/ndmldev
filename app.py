@@ -94,6 +94,7 @@ def results():
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
         df = get_chart_df(chart, baseline_after, highlight_before)
+        app.logger.info(df)
         if df:
             if len(df) > 0:
                 ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
