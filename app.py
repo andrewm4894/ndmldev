@@ -23,6 +23,7 @@ def results():
     starts_with = params['starts_with']
     response_format = params['format']
     netdata_host = params['netdata_host']
+    data_points = highlight_before - baseline_after
 
     # get results
     results = {}
@@ -40,7 +41,8 @@ def results():
                 "id": result,
                 "title": f"{results[result]['rank']} - {result} (ks={results[result]['summary']['ks_max']}, p={results[result]['summary']['p_min']})",
                 "after": baseline_after,
-                "before": highlight_before
+                "before": highlight_before,
+                "data_points": data_points
             } for result in results
         ]
         return render_template('results.html', charts=charts, netdata_host=netdata_host)
