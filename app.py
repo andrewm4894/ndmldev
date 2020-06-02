@@ -92,45 +92,12 @@ def results():
         results[row['chart']]['rank'] = int(row['rank'])
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
-    if response_format == 'json':
+    if response_format == 'html':
+        charts = [
+            {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},
+            {"id": "system.load", "title": "load", "after": after_secs, "before": before_secs},
+            {"id": "system.io", "title": "io", "after": after_secs, "before": before_secs},
+        ]
+        return render_template('results.html', charts=charts)
+    else:
         return jsonify(results)
-    XXX
-
-    charts = [
-        {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},
-        {"id": "system.load", "title": "load", "after": after_secs, "before": before_secs},
-        {"id": "system.io", "title": "io", "after": after_secs, "before": before_secs},
-    ]
-    return render_template('results.html', charts=charts)
-
-
-@app.route('/dash')
-def dash():
-    results = session.get('results', None)
-    print(results)
-    dash_template = open('templates/results.html', 'r', encoding='utf-8')
-    dash_template_html = dash_template.read()
-    dash_file_out = open("/usr/share/netdata/web/results_dashboard.html", "w+")
-    dash_file_out.write(dash_template_html)
-    dash_file_out.close()
-    response = dict(
-        message='done'
-    )
-    charts = [
-        {"id": "system.cpu", "title": "cpu"},
-        {"id": "system.load", "title": "load"},
-        {"id": "system.io", "title": "io"},
-    ]
-    return render_template('results.html', charts=charts)
-
-
-@app.route('/tmp', methods=['GET'])
-def tmp():
-    params = parse_params(request)
-    response = {
-        "params": params,
-        "results": {
-        }
-    }
-    return response
-
