@@ -23,7 +23,7 @@ def tmp():
 
 @app.route('/')
 def home():
-    return render_template('home.html', netdata_host=f"{request.host.split(':')[0]}:19999")
+    return render_template('home.html')
 
 
 @app.route('/results')
@@ -38,13 +38,13 @@ def results():
     rank_by = params['rank_by']
     starts_with = params['starts_with']
     response_format = params['format']
-    netdata_host = params['netdata_host']
-    data_points = highlight_before - baseline_after
+    remote_host = params['remote_host']
+    local_host = params['local_host']
 
     # get results
     results = {}
-    for chart in get_chart_list(starts_with=starts_with, host=netdata_host):
-        df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=netdata_host)
+    for chart in get_chart_list(starts_with=starts_with, host=remote_host):
+        df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=remote_host)
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
@@ -58,11 +58,10 @@ def results():
                 "title": f"{results[result]['rank']} - {result} (ks={results[result]['summary']['ks_max']}, p={results[result]['summary']['p_min']})",
                 "after": baseline_after,
                 "before": highlight_before,
-                "data_points": data_points,
-                "data_host": f"http://{request.host.split(':')[0]}:19999"
+                "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}:19999"
 
             } for result in results
         ]
-        return render_template('results.html', charts=charts, netdata_host=f"{request.host.split(':')[0]}:19999")
+        return render_template('results.html', charts=charts)
     else:
         return jsonify(results)

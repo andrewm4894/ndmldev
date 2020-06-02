@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <script>var netdataTheme = 'slate';</script>
-    <script type="text/javascript" src="http://{{ netdata_host }}/dashboard.js"></script>
+    <script type="text/javascript" src="http://{{ request.host.split(':')[0] }}:19999/dashboard.js"></script>
 
 </head>
 
