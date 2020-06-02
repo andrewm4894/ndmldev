@@ -65,6 +65,8 @@ def home():
 
 @app.route('/results')
 def results():
+
+    # params
     now_ts = int(datetime.now().timestamp())
     netdata_url = request.args.get('url')
     netdata_host = urlparse(netdata_url).netloc
@@ -75,6 +77,33 @@ def results():
     highlight_before = int(netdata_params.get('highlight_before')[0])
     after_secs = str(after / 1000)
     before_secs = str(before / 1000)
+
+    params = parse_params(request)
+    print(params)
+    XXX
+    highlight_before = params['highlight_before']
+    highlight_after = params['highlight_after']
+    baseline_before = params['baseline_before']
+    baseline_after = params['baseline_after']
+    rank_by = params['rank_by']
+    starts_with = params['starts_with']
+    response_format = params['format']
+
+    # get results
+    for chart in get_chart_list():
+        df = get_chart_df(chart, baseline_after, highlight_before)
+        if len(df) > 0:
+            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+            if ks_results:
+                results[chart] = ks_results
+    df_rank = pd.DataFrame(data=[[c, results[c]['summary'][rank_by]] for c in results], columns=['chart', 'score'])
+    df_rank['rank'] = df_rank['score'].rank(method='first')
+    for _, row in df_rank.iterrows():
+        results[row['chart']]['rank'] = int(row['rank'])
+        results[row['chart']]['score'] = float(row['score'])
+    results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
+    print(results)
+
     charts = [
         {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},
         {"id": "system.load", "title": "load", "after": after_secs, "before": before_secs},
