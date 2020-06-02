@@ -59,7 +59,7 @@ def results():
                 "after": baseline_after,
                 "before": highlight_before,
                 "data_points": data_points,
-                "data_host": f"http://{netdata_host}/"
+                "data_host": f"http://{netdata_host}:19999/"
 
             } for result in results
         ]
