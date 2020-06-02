@@ -8,6 +8,7 @@
     </div>
     {% for chart in charts %}
         <div data-netdata="{{ chart.id }}"
+             data-title="{{ chart.title }}"
              data-after="{{ chart.after }}"
              data-before="{{ chart.before }}"
              data-width="1200"

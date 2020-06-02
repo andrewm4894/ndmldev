@@ -13,9 +13,7 @@ results = rank_results(results, rank_by, ascending=False)
 print(results)
 
 #%%
-charts =
-for result in results:
-    print(result)
+
 
 #%%
 
