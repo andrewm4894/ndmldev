@@ -27,7 +27,6 @@ def get_chart_list(starts_with: str = None):
 
 def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json', numeric_only: bool = True):
     url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
-    logging.info(f'getting data from {url}')
     r = requests.get(url)
     r_json = r.json()
     if len(r_json['data']) > 0:
