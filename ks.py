@@ -7,10 +7,13 @@ import pandas as pd
 from utils import filter_useless_cols
 
 
-def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end):
+def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end, diff: bool = True):
 
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
+
+    if diff:
+        df = df.diff().dropna()
 
     if len(df.columns) > 0:
 
