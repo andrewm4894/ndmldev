@@ -22,11 +22,12 @@ def results():
     rank_by = params['rank_by']
     starts_with = params['starts_with']
     response_format = params['format']
+    netdata_host = params['netdata_host']
 
     # get results
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
-        df = get_chart_df(chart, after=baseline_after, before=highlight_before)
+        df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=netdata_host)
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:

@@ -49,10 +49,10 @@ def parse_params(request):
 
     url_parse = urlparse(request.args.get('url'))
     url_params = parse_qs(request.args.get('url'))
-    print(url_parse.netloc)
-    print(url_parse.port)
-    print(url_params)
-    XXX
+    netdata_host = url_parse.netloc.split(':')[0]
+    if netdata_host == request.host.split(':')[0]:
+        netdata_host = '127.0.0.1:19999'
+
     if 'after' in url_params:
         after = int(url_params.get('after')[0]) / 1000
     else:
