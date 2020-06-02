@@ -63,6 +63,6 @@ def results():
 
             } for result in results
         ]
-        return render_template('results.html', charts=charts, netdata_host=request.host)
+        return render_template('results.html', charts=charts, netdata_host=f"{request.host.split(':')[0]}")
     else:
         return jsonify(results)
