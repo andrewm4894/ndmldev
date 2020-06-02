@@ -67,20 +67,19 @@ def home():
 def results():
 
     # params
-    now_ts = int(datetime.now().timestamp())
-    netdata_url = request.args.get('url')
-    netdata_host = urlparse(netdata_url).netloc
-    netdata_params = parse_qs(netdata_url)
-    after = int(netdata_params.get('after')[0])
-    before = int(netdata_params.get('before')[0])
-    highlight_after = int(netdata_params.get('highlight_after')[0])
-    highlight_before = int(netdata_params.get('highlight_before')[0])
-    after_secs = str(after / 1000)
-    before_secs = str(before / 1000)
+    #now_ts = int(datetime.now().timestamp())
+    #netdata_url = request.args.get('url')
+    #netdata_host = urlparse(netdata_url).netloc
+    #netdata_params = parse_qs(netdata_url)
+    #after = int(netdata_params.get('after')[0])
+    #before = int(netdata_params.get('before')[0])
+    #highlight_after = int(netdata_params.get('highlight_after')[0])
+    #highlight_before = int(netdata_params.get('highlight_before')[0])
+    #after_secs = str(after / 1000)
+    #before_secs = str(before / 1000)
 
+    # get params
     params = parse_params(request)
-    print(params)
-    XXX
     highlight_before = params['highlight_before']
     highlight_after = params['highlight_after']
     baseline_before = params['baseline_before']
@@ -90,7 +89,8 @@ def results():
     response_format = params['format']
 
     # get results
-    for chart in get_chart_list():
+    results = {}
+    for chart in get_chart_list(starts_with=starts_with):
         df = get_chart_df(chart, baseline_after, highlight_before)
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
@@ -103,6 +103,7 @@ def results():
         results[row['chart']]['score'] = float(row['score'])
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
     print(results)
+    XXX
 
     charts = [
         {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},

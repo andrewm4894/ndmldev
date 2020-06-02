@@ -58,7 +58,7 @@ def parse_params(request):
         default_highlight_after = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0])
         default_highlight_before = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0])
     rank_by = request.args.get('rank_by', 'ks_mean')
-    starts_with = request.args.get('rank_by', None)
+    starts_with = request.args.get('rank_by', 'system.cpu')
     format = request.args.get('format', 'json')
     before = request.args.get('before', default_before)
     after = request.args.get('after', default_after)
