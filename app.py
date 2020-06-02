@@ -93,7 +93,7 @@ def results():
     # get results
     results = {}
     for chart in get_chart_list(starts_with=starts_with):
-        df = get_chart_df(host='34.75.216.243:19999', chart, baseline_after, highlight_before)
+        df = get_chart_df(chart, baseline_after, highlight_before, host='34.75.216.243:19999')
         if df:
             if len(df) > 0:
                 ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
