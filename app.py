@@ -72,8 +72,8 @@ def results():
     print(netdata_params)
     after = int(netdata_params.get('after')[0])
     before = int(netdata_params.get('before')[0])
-    highlight_after = int(netdata_params.get('highlight_after'))
-    highlight_before = int(netdata_params.get('highlight_before'))
+    highlight_after = int(netdata_params.get('highlight_after')[0])
+    highlight_before = int(netdata_params.get('highlight_before')[0])
     after_secs = str(now_ts - (after / 1000))
     before_secs = str(now_ts - (before / 1000))
     charts = [
