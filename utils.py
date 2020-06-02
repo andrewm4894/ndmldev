@@ -51,31 +51,29 @@ def filter_useless_cols(df):
 
 def parse_params(request):
 
-    url_params = parse_qs(request.args.get('url'))
-    url_after = int(url_params.get('after')[0])
-    url_before = int(url_params.get('before')[0])
-    url_highlight_after = int(url_params.get('highlight_after')[0])
-    url_highlight_before = int(url_params.get('highlight_before')[0])
-
-    default_window_size = 60*2
-    default_baseline_window_multiplier = 2
+    default_window_size = 60 * 2
+    baseline_window_multiplier = 2
     now = int(datetime.now().timestamp())
-    default_before = url_before if url_before else now
-    default_after = url_after if url_after else (now - default_window_size)
-    default_highlight_before = url_highlight_before if url_highlight_before else default_before
-    default_highlight_after = url_highlight_after if url_highlight_after else default_after
+
+    if 'url' in request.args.keys():
+        url_params = parse_qs(request.args.get('url'))
+        after = int(url_params.get('after')[0])
+        before = int(url_params.get('before')[0])
+        highlight_after = int(url_params.get('highlight_after')[0])
+        highlight_before = int(url_params.get('highlight_before')[0])
+    else:
+        after = request.args.get('after', now - default_window_size)
+        before = request.args.get('before', now)
+        highlight_after = request.args.get('highlight_after', after)
+        highlight_before = request.args.get('highlight_before', before)
 
     rank_by = request.args.get('rank_by', 'ks_mean')
     starts_with = request.args.get('rank_by', 'system.')
     format = request.args.get('format', 'json')
-    before = request.args.get('before', default_before)
-    after = request.args.get('after', default_after)
-    highlight_before = request.args.get('highlight_before', default_highlight_before)
-    highlight_after = request.args.get('highlight_after', default_highlight_after)
-    window_multiplier = request.args.get('window_multiplier', default_baseline_window_multiplier)
+
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
-    baseline_after = baseline_before - (window_size * window_multiplier)
+    baseline_after = baseline_before - (window_size * baseline_window_multiplier)
     params = {
         "before": before,
         "after": after,
