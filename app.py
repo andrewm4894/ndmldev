@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', netdata_host=netdata_host)
 
 
 @app.route('/results')
@@ -43,6 +43,6 @@ def results():
                 "before": highlight_before
             } for result in results
         ]
-        return render_template('results.html', charts=charts)
+        return render_template('results.html', charts=charts, netdata_host=netdata_host)
     else:
         return jsonify(results)
