@@ -8,8 +8,10 @@
     </div>
     {% for chart in charts %}
         <div data-netdata="{{ chart.id }}"
-         data-width="1200"
-         data-height="200"
+             data-after="{{ chart.after }}"
+             data-before="{{ chart.before }}"
+             data-width="1200"
+             data-height="200"
         ></div>
     {% endfor %}
 
