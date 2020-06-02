@@ -78,7 +78,7 @@ def parse_params(request):
     format = request.args.get('format', 'json')
 
     window_size = highlight_before - highlight_after
-    baseline_before = highlight_after - 1
+    baseline_before = highlight_after - 1000
     baseline_after = baseline_before - (window_size * baseline_window_multiplier)
     params = {
         "before": before,
