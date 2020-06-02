@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+from urllib.parse import parse_qs
 
 import requests
 import pandas as pd
@@ -49,20 +50,21 @@ def filter_useless_cols(df):
 
 
 def parse_params(request):
+
+    url_params = parse_qs(request.args.get('url'))
+    url_after = int(url_params.get('after')[0])
+    url_before = int(url_params.get('before')[0])
+    url_highlight_after = int(url_params.get('highlight_after')[0])
+    url_highlight_before = int(url_params.get('highlight_before')[0])
+
     default_window_size = 60*2
     default_baseline_window_multiplier = 2
     now = int(datetime.now().timestamp())
-    default_before = now
-    default_after = now - default_window_size
-    default_highlight_before = default_before
-    default_highlight_after = default_after
-    url = request.args.get('url', None)
-    if url:
-        url_parts = url.split(';')
-        default_after = int([x.split('=')[1] for x in url_parts if x.startswith('after=')][0])
-        default_before = int([x.split('=')[1] for x in url_parts if x.startswith('before=')][0])
-        default_highlight_after = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_after=')][0])
-        default_highlight_before = int([x.split('=')[1] for x in url_parts if x.startswith('highlight_before=')][0])
+    default_before = url_before if url_before else now
+    default_after = url_after if url_after else (now - default_window_size)
+    default_highlight_before = url_highlight_before if url_highlight_before else default_before
+    default_highlight_after = url_highlight_after if url_highlight_after else default_after
+
     rank_by = request.args.get('rank_by', 'ks_mean')
     starts_with = request.args.get('rank_by', 'system.cpu')
     format = request.args.get('format', 'json')
