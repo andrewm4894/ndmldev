@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, request, render_template, jsonify
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
@@ -12,6 +14,7 @@ def home():
 
 @app.route('/results')
 def results():
+    t_start = time.time()
 
     # get params
     params = parse_params(request)
@@ -34,6 +37,7 @@ def results():
             if ks_results:
                 results[chart] = ks_results
     results = rank_results(results, rank_by, ascending=False)
+    print(f"time taken = {time.time()-t_start}")
 
     # build response
     if response_format == 'html':
