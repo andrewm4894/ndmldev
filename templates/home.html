@@ -7,11 +7,17 @@
       <h1>Netdata ML Plugin (experimental)</h1>
     </div>
 
-    <form action="results">
+    <form action="results" id="inputs">
         <label for="url">Netdata URL</label>
         <input type="url" name="url" value="" required>
         <br><br>
         <input type="submit" value="ks test" >
     </form>
+
+    <label for="cars">Choose a car:</label>
+    <select id="cars" name="carlist" form="inputs">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+    </select>
 
 {% endblock %}
