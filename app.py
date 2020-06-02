@@ -65,6 +65,7 @@ def home():
 
 @app.route('/results')
 def results():
+    now_ts = int(datetime.now().timestamp())
     netdata_url = request.args.get('url')
     netdata_host = urlparse(netdata_url).netloc
     netdata_params = parse_qs(netdata_url)
@@ -72,10 +73,12 @@ def results():
     before = netdata_params.get('before')
     highlight_after = netdata_params.get('highlight_after')
     highlight_before = netdata_params.get('highlight_before')
+    after_secs = now_ts - (after / 1000)
+    before_secs = now_ts - (before / 1000)
     charts = [
-        {"id": "system.cpu", "title": "cpu", "after": after, "before": before},
-        {"id": "system.load", "title": "load", "after": after, "before": before},
-        {"id": "system.io", "title": "io", "after": after, "before": before},
+        {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},
+        {"id": "system.load", "title": "load", "after": after_secs, "before": before_secs},
+        {"id": "system.io", "title": "io", "after": after_secs, "before": before_secs},
     ]
     return render_template('results.html', charts=charts)
 
