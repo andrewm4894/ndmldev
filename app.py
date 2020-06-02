@@ -28,6 +28,7 @@ def home():
 
 @app.route('/results')
 def results():
+    print(request.args)
 
     # get params
     params = parse_params(request)
