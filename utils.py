@@ -48,6 +48,7 @@ def parse_params(request):
     baseline_window_multiplier = 2
 
     url_params = parse_qs(request.args.get('url'))
+    print(request.args.get('url'))
     print(url_params)
     XXX
     if 'after' in url_params:
