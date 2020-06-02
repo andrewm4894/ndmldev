@@ -73,8 +73,8 @@ def results():
     before = int(netdata_params.get('before')[0])
     highlight_after = int(netdata_params.get('highlight_after')[0])
     highlight_before = int(netdata_params.get('highlight_before')[0])
-    after_secs = str(now_ts - (after))
-    before_secs = str(now_ts - (before))
+    after_secs = str(after / 1000)
+    before_secs = str(before / 1000)
     charts = [
         {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},
         {"id": "system.load", "title": "load", "after": after_secs, "before": before_secs},
