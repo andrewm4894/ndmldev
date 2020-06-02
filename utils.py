@@ -1,11 +1,8 @@
 from datetime import datetime
-import logging
 from urllib.parse import parse_qs
 
 import requests
 import pandas as pd
-import numpy as np
-from scipy.stats import ks_2samp
 
 
 def get_chart_data_urls():

@@ -1,11 +1,4 @@
-import json
-import logging
-from collections import OrderedDict
-from datetime import datetime, timedelta
-from urllib.parse import urlparse, parse_qs
-
 from flask import Flask, request, render_template, session, jsonify
-import pandas as pd
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
 
@@ -14,6 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
+    print(request.remote_addr)
     return render_template('home.html')
 
 
