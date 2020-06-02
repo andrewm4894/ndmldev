@@ -1,3 +1,4 @@
+import logging
 import time
 
 from flask import Flask, request, render_template, jsonify
@@ -6,6 +7,7 @@ from ks import do_ks, rank_results
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
+logging.basicConfig(level=logging.INFO)
 
 @app.route('/')
 def home():
@@ -14,7 +16,8 @@ def home():
 
 @app.route('/results')
 def results():
-    t_start = time.time()
+
+    start_time = time.time()
 
     # get params
     params = parse_params(request)
@@ -37,7 +40,8 @@ def results():
             if ks_results:
                 results[chart] = ks_results
     results = rank_results(results, rank_by, ascending=False)
-    print(f"time taken = {time.time()-t_start}")
+
+    app.logger.info(f"time taken = {time.time()-start_time}")
 
     # build response
     if response_format == 'html':
