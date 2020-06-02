@@ -5,22 +5,6 @@ from ks import do_ks, rank_results
 app = Flask(__name__)
 
 
-@app.route('/tmp')
-def tmp():
-    netdata_host = f"{request.host.split(':')[0]}:19999"
-    #netdata_host = "http://london.my-netdata.io/"
-    charts = [
-        {
-            "id": "system.cpu",
-            "title": "tmp",
-            "after": "1591111609",
-            "before": "1591111991",
-            "data_host": "http://london.my-netdata.io/"
-        }
-    ]
-    return render_template('results.html', charts=charts, netdata_host=netdata_host)
-
-
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -28,7 +12,6 @@ def home():
 
 @app.route('/results')
 def results():
-    print(request.args)
 
     # get params
     params = parse_params(request)
@@ -52,6 +35,7 @@ def results():
                 results[chart] = ks_results
     results = rank_results(results, rank_by, ascending=False)
 
+    # build response
     if response_format == 'html':
         charts = [
             {
