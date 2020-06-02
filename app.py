@@ -5,6 +5,20 @@ from ks import do_ks, rank_results
 app = Flask(__name__)
 
 
+@app.route('/tmp')
+def tmp():
+    charts = [
+        {
+            "id": "system.cpu",
+            "title": "tmp",
+            "after": "1591109317000",
+            "before": "1591109736000",
+            "data_host": f"http://london3.my-netdata.io/"
+        }
+    ]
+    return render_template('results.html', charts=charts, netdata_host=request.host)
+
+
 @app.route('/')
 def home():
     return render_template('home.html', netdata_host=request.host)
