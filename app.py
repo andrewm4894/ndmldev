@@ -94,9 +94,9 @@ def results():
     results = OrderedDict(sorted(results.items(), key=lambda t: t[1]["rank"]))
     if response_format == 'html':
         charts = [
-            {"id": "system.cpu", "title": "cpu", "after": after_secs, "before": before_secs},
-            {"id": "system.load", "title": "load", "after": after_secs, "before": before_secs},
-            {"id": "system.io", "title": "io", "after": after_secs, "before": before_secs},
+            {"id": "system.cpu", "title": "cpu", "after": baseline_after, "before": highlight_before},
+            {"id": "system.load", "title": "load", "after": baseline_after, "before": highlight_before},
+            {"id": "system.io", "title": "io", "after": baseline_after, "before": highlight_before},
         ]
         return render_template('results.html', charts=charts)
     else:
