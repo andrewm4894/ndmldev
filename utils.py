@@ -55,16 +55,22 @@ def parse_params(request):
     baseline_window_multiplier = 2
     now = int(datetime.now().timestamp())
 
-    if 'url' in request.args.keys():
-        url_params = parse_qs(request.args.get('url'))
+    url_params = parse_qs(request.args.get('url'))
+    if 'after' in url_params:
         after = int(url_params.get('after')[0])
+    else:
+        after = int(request.args.get('after', now - default_window_size))
+    if 'before' in url_params:
         before = int(url_params.get('before')[0])
+    else:
+        before = int(request.args.get('before', now))
+    if 'highlight_after' in url_params:
         highlight_after = int(url_params.get('highlight_after')[0])
+    else:
+        highlight_after = request.args.get('highlight_after', after)
+    if 'highlight_before' in url_params:
         highlight_before = int(url_params.get('highlight_before')[0])
     else:
-        after = request.args.get('after', now - default_window_size)
-        before = request.args.get('before', now)
-        highlight_after = request.args.get('highlight_after', after)
         highlight_before = request.args.get('highlight_before', before)
 
     rank_by = request.args.get('rank_by', 'ks_mean')
