@@ -1,44 +1,47 @@
 import logging
 import time
-import asyncio
-import async_timeout
+from io import BytesIO
 
-import aiohttp
+import trio
+import asks
 from flask import Flask, request, render_template, jsonify
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
+import pandas as pd
 
 
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
+
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
 logging.basicConfig(level=logging.INFO)
 
 
-async def fetch(url):
-    async with aiohttp.ClientSession() as session, async_timeout.timeout(10):
-        async with session.get(url) as response:
-            return await response.text()
+async def fetch(api_call, results):
+    url, chart = api_call
+    response = await asks.get(url)
+    df = pd.read_csv(BytesIO(response.content)).set_index('time').add_prefix('{}.'.format(chart))
+    results[chart] = df
 
 
-def fight(responses):
-    print(responses)
-    return 'hello'
+async def fetch_all(api_calls):
+    results = {}
+    with trio.move_on_after(5):
+        async with trio.open_nursery() as nursery:
+            for api_call in api_calls:
+                nursery.start_soon(fetch, api_call, results)
+    df = pd.concat(results, join='outer', axis=1, sort=True)
+    print(df.shape)
+    print(df.head())
 
 
 @app.route("/tmp")
 def tmp():
-    # perform multiple async requests concurrently
-    responses = loop.run_until_complete(asyncio.gather(
-        fetch("https://google.com/"),
-        fetch("https://bing.com/"),
-        fetch("https://duckduckgo.com"),
-        fetch("http://www.dogpile.com"),
-    ))
-
-    # do something with the results
-    return fight(responses)
+    api_calls = [
+        ("http://london.my-netdata.io/api/v1/data?chart=system.cpu&format=csv", "system.cpu"),
+        ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=csv", "system.load")
+    ]
+    trio.run(fetch_all(), api_calls)
+    return 'hello'
 
 
 @app.route('/')
