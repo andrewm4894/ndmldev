@@ -6,7 +6,7 @@ import trio
 import asks
 from flask import Flask, request, render_template, jsonify
 
-from get_data import get_charts_df_async
+from get_data import get_charts_df_async, get_chart_df
 from utils import get_chart_list, parse_params
 from ks import do_ks, rank_results
 import pandas as pd
@@ -48,32 +48,32 @@ def results():
     response_format = params['format']
     remote_host = params['remote_host']
     local_host = params['local_host']
+    run_mode = params['run_mode']
 
-    # get charts to pull data for
-    charts = get_chart_list(starts_with=starts_with, host=remote_host)
-    api_calls = [
-        (f'http://{remote_host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
-        for chart in charts
-    ]
-    df = trio.run(get_charts_df_async, api_calls)
-
-    # get results
     results = {}
-    for chart in charts:
-        chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
-        df_chart = df[chart_cols]
-        ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
-        if ks_results:
-            results[chart] = ks_results
-    print(results)
-    XXX
 
-    for chart in get_chart_list(starts_with=starts_with, host=remote_host):
-        df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=remote_host)
-        if len(df) > 0:
-            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+    if run_mode == 'async':
+        # get charts to pull data for
+        charts = get_chart_list(starts_with=starts_with, host=remote_host)
+        api_calls = [
+            (f'http://{remote_host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
+            for chart in charts
+        ]
+        df = trio.run(get_charts_df_async, api_calls)
+        for chart in charts:
+            chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
+            df_chart = df[chart_cols]
+            ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
+    else:
+        for chart in get_chart_list(starts_with=starts_with, host=remote_host):
+            df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=remote_host)
+            if len(df) > 0:
+                ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+                if ks_results:
+                    results[chart] = ks_results
+
     results = rank_results(results, rank_by, ascending=False)
 
     app.logger.info(f"time taken = {time.time()-start_time}")

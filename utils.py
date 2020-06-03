@@ -66,7 +66,8 @@ def parse_params(request):
         "format": request.args.get('format', 'html'),
         "remote_host": remote_host,
         "local_host": local_host,
-        "method": request.args.get('method', 'ks')
+        "method": request.args.get('method', 'ks'),
+        "run_mode": request.args.get('run_mode', 'default')
     }
     return params
 
