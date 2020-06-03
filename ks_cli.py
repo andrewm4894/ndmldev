@@ -14,11 +14,15 @@ parser.add_argument(
 parser.add_argument(
     '--remote', type=str, nargs='?', default='no'
 )
+parser.add_argument(
+    '--run_mode', type=str, nargs='?', default='default'
+)
 args = parser.parse_args()
 
 # parse args
 url = args.url
 remote = args.remote
+run_mode = args.run_mode
 
 baseline_window_multiplier = 2
 
@@ -28,7 +32,7 @@ url_parse = urlparse(url)
 if remote == "yes":
     host = url_parse.netloc
 else:
-    host = 'http://127.0.0.1:19999'
+    host = '127.0.0.1:19999'
 
 after = int(int(url_params.get('after')[0]) / 1000)
 before = int(int(url_params.get('before')[0]) / 1000)
