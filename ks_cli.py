@@ -76,6 +76,7 @@ if run_mode == 'async':
     print(data_baseline.shape)
     print(data_highlight.shape)
     print(data_baseline['time_idx'])
+    print(data_baseline.dtype)
     XXX
 
     if ks_mode == 'vec':
