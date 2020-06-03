@@ -84,7 +84,7 @@ if run_mode == 'async':
 
         for chart in charts:
             chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
-            df_chart = df[chart_cols]
+            df_chart = df[chart_cols].copy()
             ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
