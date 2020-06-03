@@ -106,7 +106,7 @@ elif run_mode == 'multi':
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 #results[chart] = ks_results
-                return ks_results
+                return {chart: ks_results}
             else:
                 return None
         else:
