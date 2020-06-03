@@ -85,7 +85,12 @@ if run_mode == 'async':
 
         results = []
         for col in df.columns:
-            results.append(ks_2samp(df[col], df[col]))
+            results.append(
+                ks_2samp(
+                    df[(df.index >= baseline_after) & (df.index <= baseline_before)][col],
+                    df[(df.index >= highlight_after) & (df.index <= highlight_before)][col]
+                )
+            )
 
         #for chart in charts:
         #    chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
