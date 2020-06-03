@@ -116,6 +116,7 @@ elif run_mode == 'multi':
     stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
     results = p.map(do_it, stuff)
     results = [result for result in results if result]
+    results = {d.keys()[0]: d[d.keys()[0]] for d in results}
     print(results)
     print(len(results))
     print(type(results))
