@@ -73,11 +73,6 @@ if run_mode == 'async':
     data_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').to_records()
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
-    print(data_baseline.shape)
-    print(data_highlight.shape)
-    print(data_baseline['time_idx'])
-    print(data_baseline.dtype)
-    XXX
 
     if ks_mode == 'vec':
 
@@ -88,13 +83,11 @@ if run_mode == 'async':
     elif ks_mode == 'default':
 
         results = []
-        for n in range(data_baseline.shape[1]):
-            print(data_baseline[n])
-            print(data_highlight[n])
+        for col in data_baseline.dtype.names:
             results.append(
                 ks_2samp(
-                    data_baseline[n],
-                    data_highlight[n]
+                    data_baseline[col],
+                    data_highlight[col]
                 )
             )
 
