@@ -86,8 +86,8 @@ if run_mode == 'async':
         #df_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]
         #df_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]
 
-        df_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').copy()
-        df_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').copy()
+        #df_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').copy()
+        #df_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').copy()
 
         #df_baseline = df.iloc[baseline_after:baseline_before]
         #print(df_baseline.shape)
@@ -98,8 +98,8 @@ if run_mode == 'async':
         for col in df.columns:
             results.append(
                 ks_2samp(
-                    df_baseline[col],
-                    df_highlight[col]
+                    df[col].sample(frac=0.5),
+                    df[col].sample(frac=0.5)
                 )
             )
 
