@@ -11,16 +11,25 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--url', type=str, nargs='?', help='url', default='http://127.0.0.1:19999/'
 )
+parser.add_argument(
+    '--remote', type=bool, nargs='?', default=False
+)
 args = parser.parse_args()
 
 # parse args
 url = args.url
+remote = args.remote
 
 baseline_window_multiplier = 2
 
 url_params = parse_qs(url)
 url_parse = urlparse(url)
-host = url_parse.netloc
+
+if remote:
+    host = url_parse.netloc
+else:
+    host = 'http://127.0.0.1:19999'
+
 after = int(int(url_params.get('after')[0]) / 1000)
 before = int(int(url_params.get('before')[0]) / 1000)
 highlight_after = int(int(url_params.get('highlight_after')[0]) / 1000)
