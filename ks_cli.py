@@ -1,4 +1,5 @@
 import argparse
+import multiprocessing
 import time
 from multiprocessing import Pool
 from urllib.parse import parse_qs, urlparse
@@ -112,7 +113,7 @@ elif run_mode == 'multi':
         else:
             return None
 
-    p = Pool(processes=10)
+    p = Pool(processes=multiprocessing.cpu_count())
     stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
     results = p.map(do_it, stuff)
     results = [result for result in results if result]
