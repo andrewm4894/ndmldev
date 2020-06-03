@@ -106,6 +106,7 @@ elif run_mode == 'multi':
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
+        return results
 
     p = Pool(processes=5)
     stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
