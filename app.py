@@ -1,13 +1,43 @@
 import logging
 import time
+import asyncio
+import async_timeout
 
+import aiohttp
 from flask import Flask, request, render_template, jsonify
 from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
 
+
+loop = asyncio.get_event_loop()
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
 logging.basicConfig(level=logging.INFO)
+
+
+async def fetch(url):
+    async with aiohttp.ClientSession() as session, async_timeout.timeout(10):
+        async with session.get(url) as response:
+            return await response.text()
+
+
+def fight(responses):
+    return responses
+
+
+@app.route("/tmp")
+def tmp():
+    # perform multiple async requests concurrently
+    responses = loop.run_until_complete(asyncio.gather(
+        fetch("https://google.com/"),
+        fetch("https://bing.com/"),
+        fetch("https://duckduckgo.com"),
+        fetch("http://www.dogpile.com"),
+    ))
+
+    # do something with the results
+    return fight(responses)
+
 
 @app.route('/')
 def home():
