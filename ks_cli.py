@@ -50,7 +50,7 @@ rank_by = 'ks_max'
 results = {}
 charts = get_chart_list(starts_with=starts_with, host=host)
 
-if run_mode == 'aysnc':
+if run_mode == 'async':
     api_calls = [
         (f'http://{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
         for chart in charts
