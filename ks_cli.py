@@ -5,6 +5,7 @@ from multiprocessing import Pool
 from threading import Thread
 from urllib.parse import parse_qs, urlparse
 
+from numba import jit
 import trio
 import numpy as np
 from scipy import stats
@@ -82,13 +83,15 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
+        @jit
+        def do_ks_numba(x, y):
+            ks_2samp(x, y)
+
         results = []
         for col in data_baseline.dtype.names:
-            results.append(
-                ks_2samp(
-                    data_baseline[col],
-                    data_highlight[col]
-                )
+            do_ks_numba(
+                data_baseline[col],
+                data_highlight[col]
             )
 
         #for chart in charts:
