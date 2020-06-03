@@ -69,6 +69,8 @@ if run_mode == 'async':
     df = trio.run(get_charts_df_async, api_calls)
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
+    df_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').copy()
+    df_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').copy()
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
 
@@ -95,11 +97,11 @@ if run_mode == 'async':
         #xxx
 
         results = []
-        for col in df.columns:
+        for col in df_baseline.columns:
             results.append(
                 ks_2samp(
-                    df[col].sample(frac=0.5),
-                    df[col].sample(frac=0.5)
+                    df_baseline[col],
+                    df_highlight[col]
                 )
             )
 
