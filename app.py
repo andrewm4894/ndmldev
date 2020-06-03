@@ -23,7 +23,8 @@ async def fetch(url):
 
 
 def fight(responses):
-    return responses
+    print(responses)
+    return 'hello'
 
 
 @app.route("/tmp")
