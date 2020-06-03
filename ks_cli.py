@@ -69,15 +69,12 @@ if run_mode == 'async':
     df = trio.run(get_charts_df_async, api_calls)
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
-    df_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').copy()
-    df_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').copy()
+    data_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
+    data_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
 
     if ks_mode == 'vec':
-
-        data_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]._get_numeric_data().transpose().values
-        data_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]._get_numeric_data().transpose().values
 
         ks_2samp_vec = np.vectorize(stats.ks_2samp, signature='(n),(m)->(),()')
         results_vec = ks_2samp_vec(data_baseline, data_highlight)
@@ -85,23 +82,12 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
-        #df_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]
-        #df_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]
-
-        #df_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').copy()
-        #df_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').copy()
-
-        #df_baseline = df.iloc[baseline_after:baseline_before]
-        #print(df_baseline.shape)
-        #print(df_baseline.head())
-        #xxx
-
         results = []
-        for col in df_baseline.columns:
+        for n in range(data_baseline.shape[1]):
             results.append(
                 ks_2samp(
-                    df_baseline[col],
-                    df_highlight[col]
+                    data_baseline[n],
+                    data_highlight[n]
                 )
             )
 
