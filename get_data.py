@@ -31,8 +31,6 @@ async def get_chart_df_async(api_call, data):
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
     df = df.set_index('time_idx').add_prefix(f'{chart}__')
-    df = df._get_numeric_data()
-    df = filter_useless_cols(df)
     #print(df.shape)
     data[chart] = df
 
@@ -45,5 +43,7 @@ async def get_charts_df_async(api_calls):
                 nursery.start_soon(get_chart_df_async, api_call, data)
     df = pd.concat(data, join='outer', axis=1, sort=True)
     df.columns = df.columns.droplevel()
+    df = df._get_numeric_data()
+    df = filter_useless_cols(df)
     return df
 
