@@ -75,7 +75,7 @@ if run_mode == 'async':
     print(f'... time start to data = {time_got_data - time_start}')
     print(data_baseline.shape)
     print(data_highlight.shape)
-    print(data_baseline[0])
+    print(data_baseline['time_idx'])
     XXX
 
     if ks_mode == 'vec':
