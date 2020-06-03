@@ -32,6 +32,7 @@ async def fetch_all(api_calls):
     df = pd.concat(results, join='outer', axis=1, sort=True)
     print(df.shape)
     print(df.head())
+    return df
 
 
 @app.route("/tmp")
@@ -40,7 +41,8 @@ def tmp():
         ("http://london.my-netdata.io/api/v1/data?chart=system.cpu&format=csv", "system.cpu"),
         ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=csv", "system.load")
     ]
-    trio.run(fetch_all, api_calls)
+    df = trio.run(fetch_all, api_calls)
+    print(df.dtypes)
     return 'hello'
 
 
