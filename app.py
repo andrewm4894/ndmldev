@@ -40,7 +40,7 @@ def tmp():
         ("http://london.my-netdata.io/api/v1/data?chart=system.cpu&format=csv", "system.cpu"),
         ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=csv", "system.load")
     ]
-    trio.run(fetch_all(), api_calls)
+    trio.run(fetch_all, api_calls)
     return 'hello'
 
 
