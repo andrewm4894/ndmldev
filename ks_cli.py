@@ -83,15 +83,15 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
-        df_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]
-        df_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]
+        #df_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]
+        #df_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]
 
         results = []
-        for col in df_baseline.columns:
+        for col in df.columns:
             results.append(
                 ks_2samp(
-                    df_baseline[col],
-                    df_highlight[col]
+                    df[col].sample(0.5),
+                    df[col].sample(0.5)
                 )
             )
 
