@@ -1,5 +1,6 @@
 import argparse
 import time
+from multiprocessing import Pool
 from urllib.parse import parse_qs, urlparse
 
 import trio
@@ -95,6 +96,23 @@ elif run_mode == 'default':
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
+
+elif run_mode == 'multi':
+
+    def do_it(stuff):
+        chart, baseline_after, baseline_before, highlight_after, highlight_before = stuff
+        df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=host)
+        if len(df) > 0:
+            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+            if ks_results:
+                results[chart] = ks_results
+
+    p = Pool(processes=5)
+    stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
+    data = p.map(do_it, stuff)
+    print(data)
+    p.close()
+    XXX
 
 results = rank_results(results, rank_by, ascending=False)
 #print(results)
