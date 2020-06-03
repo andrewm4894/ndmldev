@@ -4,7 +4,7 @@ from urllib.parse import parse_qs, urlparse
 
 import trio
 
-from get_data import get_charts_df_async, get_chart_df
+from get_data import get_charts_df_async, get_chart_df, do_it_all
 from ks import do_ks, rank_results
 from utils import get_chart_list
 
@@ -51,17 +51,7 @@ results = {}
 charts = get_chart_list(starts_with=starts_with, host=host)
 
 if run_mode == 'async':
-    api_calls = [
-        (f'http://{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
-        for chart in charts
-    ]
-    df = trio.run(get_charts_df_async, api_calls)
-    for chart in charts:
-        chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
-        df_chart = df[chart_cols]
-        ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
-        if ks_results:
-            results[chart] = ks_results
+    trio.run(do_it_all, starts_with, host, rank_by, baseline_after, baseline_before, highlight_after, highlight_before)
 elif run_mode == 'default':
     for chart in charts:
         df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=host)
@@ -69,10 +59,8 @@ elif run_mode == 'default':
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
                 results[chart] = ks_results
-
-results = rank_results(results, rank_by, ascending=False)
-
-print(results)
+    results = rank_results(results, rank_by, ascending=False)
+    print(results)
 
 time_done = time.time()
 print('... total time = {}'.format(time_done - time_start))
