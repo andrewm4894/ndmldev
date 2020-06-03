@@ -105,12 +105,21 @@ elif run_mode == 'multi':
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
-                results[chart] = ks_results
-        return results
+                #results[chart] = ks_results
+                return ks_results
+            else:
+                return None
+        else:
+            return None
 
     p = Pool(processes=10)
     stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
     results = p.map(do_it, stuff)
+    print(results)
+    print(len(results))
+    print(type(results))
+    xxx
+
 
 results = rank_results(results, rank_by, ascending=False)
 print(results)
