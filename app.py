@@ -50,12 +50,15 @@ def results():
     local_host = params['local_host']
 
     # get charts to pull data for
-    api_list = get_chart_list(starts_with=starts_with, host=remote_host)
-    api_list = [
+    api_calls = get_chart_list(starts_with=starts_with, host=remote_host)
+    api_calls = [
         (f'http://{remote_host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
-        for chart in api_list
+        for chart in api_calls
     ]
-    print(api_list)
+    print(api_calls)
+    df = trio.run(get_charts_df_async, api_calls)
+    print(df.shape)
+    print(df.head())
     xxx
 
     # get results
