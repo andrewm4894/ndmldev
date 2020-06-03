@@ -83,13 +83,9 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
-        @njit
-        def do_ks_numba(x, y):
-            ks_2samp(x, y)
-
         results = []
         for col in data_baseline.dtype.names:
-            do_ks_numba(
+            ks_2samp(
                 data_baseline[col],
                 data_highlight[col]
             )
