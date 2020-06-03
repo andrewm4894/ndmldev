@@ -56,13 +56,11 @@ def results():
         for chart in charts
     ]
     df = trio.run(get_charts_df_async, api_calls)
-    print(df.columns)
-    XXX
 
     # get results
     results = {}
     for chart in charts:
-        chart_cols = [col for col in list(df.columns) if col.startswith(f'{chart}__')]
+        chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
         df_chart = df[chart_cols]
         ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
         if ks_results:
