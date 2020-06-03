@@ -2,6 +2,7 @@ import argparse
 import multiprocessing
 import time
 from multiprocessing import Pool
+from threading import Thread
 from urllib.parse import parse_qs, urlparse
 
 import trio
@@ -117,6 +118,31 @@ elif run_mode == 'multi':
     results = p.map(do_multi, params_list)
     results = [result for result in results if result]
     results = {list(d)[0]: d[list(d)[0]] for d in results}
+
+elif run_mode == 'thread':
+
+    results = {}
+
+    def do_thread(params):
+        chart, baseline_after, baseline_before, highlight_after, highlight_before = params
+        df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=host)
+        if len(df) > 0:
+            ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
+            if ks_results:
+                results[chart] = ks_results
+
+    threads = []
+    params_list = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
+    for param in params_list:
+        process = Thread(target=do_thread, args=param)
+        process.start()
+        threads.append(process)
+
+    for process in threads:
+        process.join()
+
+    print(len(results))
+    XXX
 
 results = rank_results(results, rank_by, ascending=False)
 print(results)
