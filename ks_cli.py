@@ -108,10 +108,10 @@ elif run_mode == 'multi':
                 results[chart] = ks_results
         return results
 
-    p = Pool(processes=5)
+    p = Pool(processes=10)
     stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
     data = p.map(do_it, stuff)
-    print(data)
+    print(len(data))
     p.close()
     XXX
 
