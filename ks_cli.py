@@ -117,11 +117,6 @@ elif run_mode == 'multi':
     results = p.map(do_it, stuff)
     results = [result for result in results if result]
     results = {list(d)[0]: d[list(d)[0]] for d in results}
-    print(results)
-    print(len(results))
-    print(type(results))
-    xxx
-
 
 results = rank_results(results, rank_by, ascending=False)
 print(results)
