@@ -73,6 +73,9 @@ if run_mode == 'async':
     data_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
+    print(data_baseline.shape)
+    print(data_highlight.shape)
+    XXX
 
     if ks_mode == 'vec':
 
