@@ -86,6 +86,12 @@ if run_mode == 'async':
         #df_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]
         #df_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]
 
+        df_baseline = df.iloc[baseline_after:baseline_before]
+        print(df_baseline.shape)
+        print(df_baseline.head())
+        xxx
+
+
         results = []
         for col in df.columns:
             results.append(
