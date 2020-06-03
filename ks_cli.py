@@ -5,7 +5,7 @@ from multiprocessing import Pool
 from threading import Thread
 from urllib.parse import parse_qs, urlparse
 
-from numba import jit
+from numba import njit
 import trio
 import numpy as np
 from scipy import stats
@@ -83,7 +83,7 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
-        @jit
+        @njit
         def do_ks_numba(x, y):
             ks_2samp(x, y)
 
