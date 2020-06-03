@@ -8,6 +8,7 @@ from urllib.parse import parse_qs, urlparse
 import trio
 import numpy as np
 from scipy import stats
+from scipy.stats import ks_2samp
 
 from get_data import get_charts_df_async, get_chart_df
 from ks import do_ks, rank_results
@@ -82,14 +83,18 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
-        for chart in charts:
-            chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
-            ks_results = do_ks(df[chart_cols], baseline_after, baseline_before, highlight_after, highlight_before)
-            if ks_results:
-                results[chart] = ks_results
+        for col in df.columns:
+            ks_2samp(df[col], df[col])
+
+        #for chart in charts:
+        #    chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
+        #    ks_results = do_ks(df[chart_cols], baseline_after, baseline_before, highlight_after, highlight_before)
+        #    if ks_results:
+        #        results[chart] = ks_results
 
     time_got_ks = time.time()
     print(f'... time data to ks = {time_got_ks - time_got_data}')
+    XXX
 
 elif run_mode == 'default':
 
