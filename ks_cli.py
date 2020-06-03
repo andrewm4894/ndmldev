@@ -141,9 +141,6 @@ elif run_mode == 'thread':
     for process in threads:
         process.join()
 
-    print(len(results))
-    XXX
-
 results = rank_results(results, rank_by, ascending=False)
 print(results)
 
