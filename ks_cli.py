@@ -120,7 +120,7 @@ elif run_mode == 'multi':
     results = {list(d)[0]: d[list(d)[0]] for d in results}
 
 results = rank_results(results, rank_by, ascending=False)
-print(results)
+#print(results)
 
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
