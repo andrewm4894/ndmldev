@@ -56,6 +56,8 @@ if run_mode == 'async':
         for chart in charts
     ]
     df = trio.run(get_charts_df_async, api_calls)
+    time_got_data = time.time()
+    print(f'... total to data = {time_got_data - time_start}')
     for chart in charts:
         chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
         df_chart = df[chart_cols]
@@ -75,4 +77,4 @@ results = rank_results(results, rank_by, ascending=False)
 print(results)
 
 time_done = time.time()
-print('... total time = {}'.format(time_done - time_start))
+print(f'... total time = {time_done - time_start}')
