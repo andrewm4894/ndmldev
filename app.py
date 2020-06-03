@@ -41,8 +41,8 @@ async def get_charts_df_async(api_calls):
 @app.route("/tmp")
 def tmp():
     api_calls = [
-        ("http://london.my-netdata.io/api/v1/data?chart=system.cpu&format=csv", "system.cpu"),
-        ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=csv", "system.load")
+        ("http://london.my-netdata.io/api/v1/data?chart=system.cpu&format=json", "system.cpu"),
+        ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=json", "system.load")
     ]
     df = trio.run(get_charts_df_async, api_calls)
     print(df.dtypes)
