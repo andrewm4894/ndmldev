@@ -10,25 +10,28 @@ from ks import do_ks, rank_results
 import pandas as pd
 
 
-
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
 logging.basicConfig(level=logging.INFO)
 
 
-async def fetch(api_call, results):
+async def get_chart_df_async(api_call, results):
     url, chart = api_call
-    response = await asks.get(url)
-    df = pd.read_csv(BytesIO(response.content)).set_index('time').add_prefix('{}.'.format(chart))
+    r = await asks.get(url)
+    r_json = r.json()
+    df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
+    df = df.set_index('time_idx')
+    #df = pd.read_csv(BytesIO(response.content))
+    #df = df.set_index('time').add_prefix('{}.'.format(chart))
     results[chart] = df
 
 
-async def fetch_all(api_calls):
+async def get_charts_df_async(api_calls):
     results = {}
     with trio.move_on_after(5):
         async with trio.open_nursery() as nursery:
             for api_call in api_calls:
-                nursery.start_soon(fetch, api_call, results)
+                nursery.start_soon(get_chart_df_async, api_call, results)
     df = pd.concat(results, join='outer', axis=1, sort=True)
     print(df.shape)
     print(df.head())
@@ -41,7 +44,7 @@ def tmp():
         ("http://london.my-netdata.io/api/v1/data?chart=system.cpu&format=csv", "system.cpu"),
         ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=csv", "system.load")
     ]
-    df = trio.run(fetch_all, api_calls)
+    df = trio.run(get_charts_df_async, api_calls)
     print(df.dtypes)
     return 'hello'
 
