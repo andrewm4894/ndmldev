@@ -1,4 +1,5 @@
 import argparse
+import time
 from urllib.parse import parse_qs, urlparse
 
 import trio
@@ -6,6 +7,8 @@ import trio
 from get_data import get_charts_df_async
 from ks import do_ks, rank_results
 from utils import get_chart_list
+
+time_start = time.time()
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -58,4 +61,8 @@ for chart in charts:
     if ks_results:
         results[chart] = ks_results
 results = rank_results(results, rank_by, ascending=False)
+
 print(results)
+
+time_done = time.time()
+print('... total time = {}'.format(time_done - time_start))
