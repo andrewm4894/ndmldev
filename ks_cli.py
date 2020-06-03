@@ -11,7 +11,7 @@ from scipy import stats
 
 from get_data import get_charts_df_async, get_chart_df
 from ks import do_ks, rank_results
-from utils import get_chart_list
+from utils import get_chart_list, filter_useless_cols
 
 time_start = time.time()
 
@@ -66,6 +66,8 @@ if run_mode == 'async':
         for chart in charts
     ]
     df = trio.run(get_charts_df_async, api_calls)
+    df = df._get_numeric_data()
+    df = filter_useless_cols(df)
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
 
@@ -142,7 +144,7 @@ elif run_mode == 'thread':
         process.join()
 
 results = rank_results(results, rank_by, ascending=False)
-print(results)
+#print(results)
 
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
