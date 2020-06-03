@@ -30,7 +30,7 @@ async def get_charts_df_async(api_calls):
         async with trio.open_nursery() as nursery:
             for api_call in api_calls:
                 nursery.start_soon(get_chart_df_async, api_call, data)
-    df = pd.concat(results, join='outer', axis=1, sort=True)
+    df = pd.concat(data, join='outer', axis=1, sort=True)
     return df
 
 
