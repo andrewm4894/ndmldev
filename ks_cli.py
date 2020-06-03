@@ -83,8 +83,9 @@ if run_mode == 'async':
 
     elif ks_mode == 'default':
 
+        results = []
         for col in df.columns:
-            ks_2samp(df[col], df[col])
+            results.append(ks_2samp(df[col], df[col]))
 
         #for chart in charts:
         #    chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
@@ -94,6 +95,7 @@ if run_mode == 'async':
 
     time_got_ks = time.time()
     print(f'... time data to ks = {time_got_ks - time_got_data}')
+    print(results)
     XXX
 
 elif run_mode == 'default':
