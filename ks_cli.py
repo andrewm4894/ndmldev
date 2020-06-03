@@ -100,27 +100,26 @@ elif run_mode == 'default':
 
 elif run_mode == 'multi':
 
-    def do_it(stuff):
-        chart, baseline_after, baseline_before, highlight_after, highlight_before = stuff
+    def do_multi(params):
+        chart, baseline_after, baseline_before, highlight_after, highlight_before = params
         df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=host)
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:
-                #results[chart] = ks_results
                 return {chart: ks_results}
             else:
                 return None
         else:
             return None
 
-    p = Pool(processes=multiprocessing.cpu_count())
-    stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
-    results = p.map(do_it, stuff)
+    p = Pool(processes=(multiprocessing.cpu_count()-1))
+    params_list = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
+    results = p.map(do_multi, params_list)
     results = [result for result in results if result]
     results = {list(d)[0]: d[list(d)[0]] for d in results}
 
 results = rank_results(results, rank_by, ascending=False)
-#print(results)
+print(results)
 
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
