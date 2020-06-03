@@ -96,6 +96,7 @@ elif run_mode == 'default':
 
     for chart in charts:
         df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=host)
+        df = filter_useless_cols(df)
         if len(df) > 0:
             ks_results = do_ks(df, baseline_after, baseline_before, highlight_after, highlight_before)
             if ks_results:

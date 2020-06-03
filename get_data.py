@@ -5,7 +5,7 @@ import pandas as pd
 import trio
 
 from ks import rank_results
-from utils import get_chart_list
+from utils import get_chart_list, filter_useless_cols
 
 
 def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json', numeric_only: bool = True):
@@ -31,6 +31,8 @@ async def get_chart_df_async(api_call, data):
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
     df = df.set_index('time_idx').add_prefix(f'{chart}__')
+    df = df._get_numeric_data()
+    df = filter_useless_cols(df)
     #print(df.shape)
     data[chart] = df
 
