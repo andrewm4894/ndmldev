@@ -10,6 +10,7 @@ def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: st
     print(url)
     r = requests.get(url)
     r_json = r.json()
+    print(r_json)
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
     if numeric_only:
         df = df._get_numeric_data()
