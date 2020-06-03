@@ -50,7 +50,12 @@ def results():
     local_host = params['local_host']
 
     # get charts to pull data for
-    print(get_chart_list(starts_with=starts_with, host=remote_host))
+    api_list = get_chart_list(starts_with=starts_with, host=remote_host)
+    api_list = [
+        (f'http://{remote_host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
+        for chart in api_list
+    ]
+    print(api_list)
     xxx
 
     # get results
