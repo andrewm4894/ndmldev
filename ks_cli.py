@@ -3,6 +3,8 @@ import time
 from urllib.parse import parse_qs, urlparse
 
 import trio
+import numpy as np
+from scipy import stats
 
 from get_data import get_charts_df_async, get_chart_df
 from ks import do_ks, rank_results
@@ -57,7 +59,22 @@ if run_mode == 'async':
     ]
     df = trio.run(get_charts_df_async, api_calls)
     time_got_data = time.time()
-    print(f'... total to data = {time_got_data - time_start}')
+    print(f'... time start to data = {time_got_data - time_start}')
+
+    data_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]._get_numeric_data().transpose().values
+    data_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]._get_numeric_data().transpose().values
+
+    #base = df[df['window'] == 'base']._get_numeric_data().transpose().values
+    #focus = df[df['window'] == 'focus']._get_numeric_data().transpose().values
+
+    ks_2samp_vec = np.vectorize(stats.ks_2samp, signature='(n),(m)->(),()')
+    results_vec = ks_2samp_vec(data_baseline, data_highlight)
+    results_vec = list(zip(results_vec[0], results_vec[1]))
+
+    time_got_ks = time.time()
+    print(f'... time data to ks = {time_got_ks - time_got_data}')
+    XXX
+
     for chart in charts:
         chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
         df_chart = df[chart_cols]
@@ -77,4 +94,4 @@ results = rank_results(results, rank_by, ascending=False)
 print(results)
 
 time_done = time.time()
-print(f'... total time = {time_done - time_start}')
+print(f'... time total = {time_done - time_start}')
