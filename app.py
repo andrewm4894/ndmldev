@@ -9,7 +9,8 @@ from utils import get_chart_df, get_chart_list, parse_params
 from ks import do_ks, rank_results
 
 
-loop = asyncio.get_event_loop()
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
 logging.basicConfig(level=logging.INFO)
