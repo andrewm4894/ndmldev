@@ -86,18 +86,20 @@ if run_mode == 'async':
         #df_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]
         #df_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]
 
-        df_baseline = df.iloc[baseline_after:baseline_before]
-        print(df_baseline.shape)
-        print(df_baseline.head())
-        xxx
+        df_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}')
+        df_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}')
 
+        #df_baseline = df.iloc[baseline_after:baseline_before]
+        #print(df_baseline.shape)
+        #print(df_baseline.head())
+        #xxx
 
         results = []
         for col in df.columns:
             results.append(
                 ks_2samp(
-                    df[col].head(500),
-                    df[col].tail(500)
+                    df_baseline[col],
+                    df_highlight[col]
                 )
             )
 
