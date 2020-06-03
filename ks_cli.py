@@ -22,12 +22,16 @@ parser.add_argument(
 parser.add_argument(
     '--run_mode', type=str, nargs='?', default='default'
 )
+parser.add_argument(
+    '--ks_mode', type=str, nargs='?', default='default'
+)
 args = parser.parse_args()
 
 # parse args
 url = args.url
 remote = args.remote
 run_mode = args.run_mode
+ks_mode = args.ks_mode
 
 baseline_window_multiplier = 2
 
@@ -53,6 +57,7 @@ results = {}
 charts = get_chart_list(starts_with=starts_with, host=host)
 
 if run_mode == 'async':
+
     api_calls = [
         (f'http://{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
         for chart in charts
@@ -61,27 +66,29 @@ if run_mode == 'async':
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
 
-    data_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]._get_numeric_data().transpose().values
-    data_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]._get_numeric_data().transpose().values
+    if ks_mode == 'vec':
 
-    #base = df[df['window'] == 'base']._get_numeric_data().transpose().values
-    #focus = df[df['window'] == 'focus']._get_numeric_data().transpose().values
+        data_baseline = df[(df.index >= baseline_after) & (df.index <= baseline_before)]._get_numeric_data().transpose().values
+        data_highlight = df[(df.index >= highlight_after) & (df.index <= highlight_before)]._get_numeric_data().transpose().values
 
-    ks_2samp_vec = np.vectorize(stats.ks_2samp, signature='(n),(m)->(),()')
-    results_vec = ks_2samp_vec(data_baseline, data_highlight)
-    results_vec = list(zip(results_vec[0], results_vec[1]))
+        ks_2samp_vec = np.vectorize(stats.ks_2samp, signature='(n),(m)->(),()')
+        results_vec = ks_2samp_vec(data_baseline, data_highlight)
+        results_vec = list(zip(results_vec[0], results_vec[1]))
+
+    elif ks_mode == 'default':
+
+        for chart in charts:
+            chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
+            df_chart = df[chart_cols]
+            ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
+            if ks_results:
+                results[chart] = ks_results
 
     time_got_ks = time.time()
     print(f'... time data to ks = {time_got_ks - time_got_data}')
-    XXX
 
-    for chart in charts:
-        chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
-        df_chart = df[chart_cols]
-        ks_results = do_ks(df_chart, baseline_after, baseline_before, highlight_after, highlight_before)
-        if ks_results:
-            results[chart] = ks_results
 elif run_mode == 'default':
+
     for chart in charts:
         df = get_chart_df(chart, after=baseline_after, before=highlight_before, host=host)
         if len(df) > 0:
@@ -90,8 +97,7 @@ elif run_mode == 'default':
                 results[chart] = ks_results
 
 results = rank_results(results, rank_by, ascending=False)
-
-print(results)
+#print(results)
 
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
