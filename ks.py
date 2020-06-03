@@ -7,9 +7,7 @@ import pandas as pd
 from utils import filter_useless_cols
 
 
-def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end, diff: bool = True):
-    if diff:
-        df = df.diff().dropna()
+def do_ks(df, baseline_start, baseline_end, highlight_start, highlight_end):
     if len(df.columns) > 0:
         df_baseline = df[(df.index >= baseline_start) & (df.index <= baseline_end)]
         df_highlight = df[(df.index >= highlight_start) & (df.index <= highlight_end)]
