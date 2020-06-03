@@ -43,7 +43,7 @@ async def get_charts_df_async(api_calls):
     print(df.shape)
     df = filter_useless_cols(df)
     print(df.shape)
-    df = df.diff().dropna()
+    df = df.diff().dropna(how='all')
     print(df.shape)
     return df
 
