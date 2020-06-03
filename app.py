@@ -5,7 +5,9 @@ from io import BytesIO
 import trio
 import asks
 from flask import Flask, request, render_template, jsonify
-from utils import get_chart_df, get_chart_list, parse_params
+
+from get_data import get_charts_df_async
+from utils import get_chart_list, parse_params
 from ks import do_ks, rank_results
 import pandas as pd
 
@@ -13,25 +15,6 @@ import pandas as pd
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
 logging.basicConfig(level=logging.INFO)
-
-
-async def get_chart_df_async(api_call, data):
-    url, chart = api_call
-    r = await asks.get(url)
-    r_json = r.json()
-    df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
-    df = df.set_index('time_idx').add_prefix(f'{chart}.')
-    data[chart] = df
-
-
-async def get_charts_df_async(api_calls):
-    data = {}
-    with trio.move_on_after(5):
-        async with trio.open_nursery() as nursery:
-            for api_call in api_calls:
-                nursery.start_soon(get_chart_df_async, api_call, data)
-    df = pd.concat(data, join='outer', axis=1, sort=True)
-    return df
 
 
 @app.route("/tmp")
@@ -65,6 +48,10 @@ def results():
     response_format = params['format']
     remote_host = params['remote_host']
     local_host = params['local_host']
+
+    # get charts to pull data for
+    print(get_chart_list(starts_with=starts_with, host=remote_host))
+    xxx
 
     # get results
     results = {}
