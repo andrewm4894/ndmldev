@@ -15,26 +15,22 @@ app.config["JSON_SORT_KEYS"] = False
 logging.basicConfig(level=logging.INFO)
 
 
-async def get_chart_df_async(api_call, results):
+async def get_chart_df_async(api_call, data):
     url, chart = api_call
     r = await asks.get(url)
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
-    df = df.set_index('time_idx')
-    #df = pd.read_csv(BytesIO(response.content))
-    #df = df.set_index('time').add_prefix('{}.'.format(chart))
-    results[chart] = df
+    df = df.set_index('time_idx').add_prefix(f'{chart}.')
+    data[chart] = df
 
 
 async def get_charts_df_async(api_calls):
-    results = {}
+    data = {}
     with trio.move_on_after(5):
         async with trio.open_nursery() as nursery:
             for api_call in api_calls:
-                nursery.start_soon(get_chart_df_async, api_call, results)
+                nursery.start_soon(get_chart_df_async, api_call, data)
     df = pd.concat(results, join='outer', axis=1, sort=True)
-    print(df.shape)
-    print(df.head())
     return df
 
 
@@ -45,7 +41,6 @@ def tmp():
         ("http://london.my-netdata.io/api/v1/data?chart=system.load&format=json", "system.load")
     ]
     df = trio.run(get_charts_df_async, api_calls)
-    print(df.dtypes)
     return 'hello'
 
 
