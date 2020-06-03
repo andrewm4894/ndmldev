@@ -134,7 +134,7 @@ elif run_mode == 'thread':
     threads = []
     params_list = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
     for param in params_list:
-        process = Thread(target=do_thread, args=param)
+        process = Thread(target=do_thread, args=[param])
         process.start()
         threads.append(process)
 
