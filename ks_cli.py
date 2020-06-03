@@ -90,8 +90,8 @@ if run_mode == 'async':
         for col in df.columns:
             results.append(
                 ks_2samp(
-                    df[col].sample(frac=0.5),
-                    df[col].sample(frac=0.5)
+                    df[col].head(500),
+                    df[col].tail(500)
                 )
             )
 
