@@ -115,6 +115,7 @@ elif run_mode == 'multi':
     p = Pool(processes=10)
     stuff = [(chart, baseline_after, baseline_before, highlight_after, highlight_before) for chart in charts]
     results = p.map(do_it, stuff)
+    results = [result for result in results if result]
     print(results)
     print(len(results))
     print(type(results))
