@@ -12,7 +12,7 @@ parser.add_argument(
     '--url', type=str, nargs='?', help='url', default='http://127.0.0.1:19999/'
 )
 parser.add_argument(
-    '--remote', type=bool, nargs='?', default=False
+    '--remote', type=str, nargs='?', default='no'
 )
 args = parser.parse_args()
 
@@ -25,7 +25,7 @@ baseline_window_multiplier = 2
 url_params = parse_qs(url)
 url_parse = urlparse(url)
 
-if remote:
+if remote == "yes":
     host = url_parse.netloc
 else:
     host = 'http://127.0.0.1:19999'
