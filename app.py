@@ -1,6 +1,6 @@
 import logging
 import time
-from io import BytesIO
+from io import BytesIO, StringIO
 
 import trio
 import asks
@@ -102,6 +102,8 @@ def results():
     elif response_format == 'json':
         return jsonify(results)
     elif response_format == 'csv':
-        jsonify(df_results_chart.to_string())
+        buffer = StringIO()
+        df.to_csv(buffer)
+        return buffer
     else:
         return None
