@@ -102,6 +102,6 @@ def results():
     elif response_format == 'json':
         return jsonify(results)
     elif response_format == 'csv':
-        df_results_chart.to_string()
+        jsonify(df_results_chart.to_string())
     else:
         return None
