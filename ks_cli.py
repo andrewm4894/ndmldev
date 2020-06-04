@@ -74,34 +74,17 @@ if run_mode == 'async':
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
 
-    if ks_mode == 'vec':
-
-        ks_2samp_vec = np.vectorize(stats.ks_2samp, signature='(n),(m)->(),()')
-        results_vec = ks_2samp_vec(data_baseline, data_highlight)
-        results_vec = list(zip(results_vec[0], results_vec[1]))
-
-    elif ks_mode == 'default':
-
-        results = []
-        for n in range(arr_baseline.shape[1]):
-            ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-            results.append((ks_stat, p_value))
-
-        #for col in data_baseline.dtype.names:
-        #    ks_2samp(
-        #        data_baseline[col],
-        #        data_highlight[col]
-        #    )
-
-        #for chart in charts:
-        #    chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
-        #    ks_results = do_ks(df[chart_cols], baseline_after, baseline_before, highlight_after, highlight_before)
-        #    if ks_results:
-        #        results[chart] = ks_results
+    results = []
+    for n in range(arr_baseline.shape[1]):
+        ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
+        results.append((ks_stat, p_value))
 
     time_got_ks = time.time()
     print(f'... time data to ks = {time_got_ks - time_got_data}')
-    #print(results)
+
+    print(results)
+    print(df.columns)
+
     XXX
 
 elif run_mode == 'default':
