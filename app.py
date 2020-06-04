@@ -104,6 +104,6 @@ def results():
     elif response_format == 'csv':
         buffer = StringIO()
         df.to_csv(buffer)
-        return buffer
+        return str(buffer)
     else:
         return None
