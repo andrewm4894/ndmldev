@@ -100,6 +100,6 @@ def results():
         ]
         return render_template('results.html', charts=charts)
     elif response_format == 'json':
-        return jsonify(df_results_chart.to_dict(orient='columns'))
+        return jsonify(df_results_chart.to_dict(orient='records'))
     else:
         return None
