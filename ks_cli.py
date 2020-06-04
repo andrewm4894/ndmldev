@@ -6,7 +6,7 @@ from threading import Thread
 from urllib.parse import parse_qs, urlparse
 
 import trio
-import numpy as np
+import pandas as pd
 from scipy import stats
 from scipy.stats import ks_2samp
 
@@ -85,7 +85,8 @@ if run_mode == 'async':
     # wrangle results
     results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.columns)], results)
     results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
-    print(results)
+    df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
+    print(df_results)
 
     XXX
 
