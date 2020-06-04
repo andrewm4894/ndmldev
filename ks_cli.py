@@ -5,7 +5,6 @@ from multiprocessing import Pool
 from threading import Thread
 from urllib.parse import parse_qs, urlparse
 
-from numba import njit
 import trio
 import numpy as np
 from scipy import stats
@@ -70,8 +69,8 @@ if run_mode == 'async':
     df = trio.run(get_charts_df_async, api_calls)
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
-    data_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').to_records()
-    data_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').to_records()
+    arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
+    arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     time_got_data = time.time()
     print(f'... time start to data = {time_got_data - time_start}')
 
@@ -84,11 +83,15 @@ if run_mode == 'async':
     elif ks_mode == 'default':
 
         results = []
-        for col in data_baseline.dtype.names:
-            ks_2samp(
-                data_baseline[col],
-                data_highlight[col]
-            )
+        for n in range(arr_baseline.shape[1]):
+            ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
+            results.append((ks_stat, p_value))
+
+        #for col in data_baseline.dtype.names:
+        #    ks_2samp(
+        #        data_baseline[col],
+        #        data_highlight[col]
+        #    )
 
         #for chart in charts:
         #    chart_cols = [col for col in df.columns if col.startswith(f'{chart}__')]
