@@ -77,6 +77,5 @@ print(f'... time ks to results = {time_got_results - time_got_ks}')
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
 
-print(df_results.shape)
 print(df_results)
 
