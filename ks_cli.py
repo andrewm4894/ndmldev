@@ -18,11 +18,22 @@ parser.add_argument(
 parser.add_argument(
     '--remote', type=str, nargs='?', default='no'
 )
+parser.add_argument(
+    '--rank_by', type=str, nargs='?', default='ks_max'
+)
+parser.add_argument(
+    '--rank_asc', type=bool, nargs='?', default=True
+)
 args = parser.parse_args()
 
 # parse args
 url = args.url
 remote = args.remote
+rank_by = args.rank_by
+rank_asc = args.rank_asc
+
+rank_by_var = rank_by.split('_')[0]
+rank_by_agg = rank_by.split('_')[1]
 
 baseline_window_multiplier = 2
 url_params = parse_qs(url)
@@ -41,7 +52,6 @@ starts_with = None
 window_size = highlight_before - highlight_after
 baseline_before = highlight_after - 1
 baseline_after = baseline_before - (window_size * baseline_window_multiplier)
-rank_by = 'ks_max'
 
 results = {}
 charts = get_chart_list(starts_with=starts_with, host=host)
@@ -70,12 +80,17 @@ print(f'... time data to ks = {time_got_ks - time_got_data}')
 # wrangle results
 results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.columns)], results)
 results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
+
 df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
-df_results['rank'] = df_results['ks'].rank(method='first')
+df_results['rank'] = df_results[rank_by_var].rank(method='first', ascending=rank_asc)
+df_results = df_results.sort_values('rank')
+
 df_results_chart = df_results.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
 df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
 df_results_chart = df_results_chart.reset_index()
-df_results_chart['rank'] = df_results_chart['ks_min'].rank(method='first')
+df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
+df_results_chart = df_results_chart.sort_values('rank')
+
 time_got_results = time.time()
 print(f'... time ks to results = {time_got_results - time_got_ks}')
 
