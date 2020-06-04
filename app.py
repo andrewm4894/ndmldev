@@ -88,16 +88,18 @@ def results():
 
     # build response
     if response_format == 'html':
-        charts = [
-            {
-                "id": result,
-                "title": f"{results[result]['rank']} - {result} (ks={results[result]['summary']['ks_max']}, p={results[result]['summary']['p_min']})",
-                "after": baseline_after,
-                "before": highlight_before,
-                "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}/"
-
-            } for result in results
-        ]
+        charts = []
+        for i, row in df_results_chart.iterrows():
+            charts.append(
+                {
+                    "id": row['chart'],
+                    "title": f"{row['chart']} - {row['chart']} (ks={row[rank_by]}, p={row['p_min']})",
+                    "after": baseline_after,
+                    "before": highlight_before,
+                    "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}/"
+                }
+            )
+        print(charts)
         return render_template('results.html', charts=charts)
     elif response_format == 'json':
         return jsonify(df_results_chart.to_dict(orient='records'))
