@@ -82,7 +82,10 @@ if run_mode == 'async':
     time_got_ks = time.time()
     print(f'... time data to ks = {time_got_ks - time_got_data}')
 
-    print(list(zip(list(df.columns), results)))
+    print(list(zip(
+        [(col.split('__')[0], col.split('__')[1]) for col in list(df.columns)],
+        results
+    )))
 
     XXX
 
