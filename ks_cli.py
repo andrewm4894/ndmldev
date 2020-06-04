@@ -77,5 +77,8 @@ print(f'... time ks to results = {time_got_results - time_got_ks}')
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
 
+df_results["chart_rank"] = df_results.groupby('chart')['ks'].agg('mean').rank('first')
+df_results["dimension_rank"] = df_results['ks'].rank('first')
+
 print(df_results)
 
