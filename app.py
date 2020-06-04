@@ -1,15 +1,12 @@
 import logging
 import time
-from io import BytesIO, StringIO
 
 import trio
-import asks
 from flask import Flask, request, render_template, jsonify
 from scipy.stats import ks_2samp
 
-from get_data import get_charts_df_async, get_chart_df
+from get_data import get_charts_df_async
 from utils import get_chart_list, parse_params
-from ks import do_ks, rank_results
 import pandas as pd
 
 
@@ -40,7 +37,6 @@ def results():
     response_format = params['format']
     remote_host = params['remote_host']
     local_host = params['local_host']
-    run_mode = params['run_mode']
     rank_by_var = rank_by.split('_')[0]
     rank_by_agg = rank_by.split('_')[1]
 
@@ -54,7 +50,7 @@ def results():
     arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
     arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     time_got_data = time.time()
-    print(f'... time start to data = {time_got_data - time_start}')
+    app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
     # get ks
     results = []
@@ -62,7 +58,7 @@ def results():
         ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
         results.append([ks_stat, p_value])
     time_got_ks = time.time()
-    print(f'... time data to ks = {round(time_got_ks - time_got_data, 2)}')
+    app.logger.info(f'... time data to ks = {round(time_got_ks - time_got_data, 2)}')
 
     # wrangle results
     results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.columns)], results)
@@ -81,10 +77,10 @@ def results():
     df_results_chart = df_results_chart.sort_values('rank')
 
     time_got_results = time.time()
-    print(f'... time ks to results = {round(time_got_results - time_got_ks, 2)}')
+    app.logger.info(f'... time ks to results = {round(time_got_results - time_got_ks, 2)}')
 
     time_done = time.time()
-    print(f'... time total = {round(time_done - time_start, 2)}')
+    app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
 
     # build response
     if response_format == 'html':
@@ -93,13 +89,12 @@ def results():
             charts.append(
                 {
                     "id": row['chart'],
-                    "title": f"{row['chart']} - {row['chart']} (ks={row[rank_by]}, p={row['p_min']})",
+                    "title": f"{row['rank']} - {row['chart']} (ks={round(row[rank_by],2)}, p={round(row['p_min'],2)})",
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}/"
                 }
             )
-        print(charts)
         return render_template('results.html', charts=charts)
     elif response_format == 'json':
         return jsonify(df_results_chart.to_dict(orient='records'))
