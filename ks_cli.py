@@ -77,7 +77,7 @@ if run_mode == 'async':
     results = []
     for n in range(arr_baseline.shape[1]):
         ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-        results.append((ks_stat, p_value))
+        results.append([ks_stat, p_value])
 
     time_got_ks = time.time()
     print(f'... time data to ks = {time_got_ks - time_got_data}')
