@@ -72,7 +72,7 @@ results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.colum
 results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
 df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
 time_got_results = time.time()
-df_results["chart_rank"] = df_results.groupby('chart')['ks'].agg('mean').rank()
+df_results["chart_rank"] = df_results.groupby('chart')['ks'].rank()
 df_results["dimension_rank"] = df_results['ks'].rank('first')
 print(f'... time ks to results = {time_got_results - time_got_ks}')
 
