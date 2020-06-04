@@ -1,23 +1,23 @@
 #%%
 
-import requests
-import numpy as np
-
-chart = 'system.cpu'
-host='34.75.216.243:19999'
-after=1591184028
-before=1591184889
-
-url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
-r = requests.get(url)
-r_json = r.json()
-print(r_json['data'])
-data = np.array(r_json['data'], dtype=[(col, '<f4') for col in r_json['labels']])
+import pandas as pd
+df = pd.DataFrame(
+    [
+        ['2012', 'A', 3, 4], ['2012', 'B', 8, 5], ['2011', 'A', 20, 7], ['2011', 'B', 30, 3], ['2011', 'C', 40, 5],
+    ],
+    columns=['chart', 'dim', 'ks', 'p'])
+#df['chart_rank'] = df.groupby(['chart'])[['ks']].agg('mean').rank()
+print(df)
 
 #%%
 
-[(col, '<f4') for col in r_json['labels']]
+df_results_chart = df.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
+df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
+df_results_chart = df_results_chart.reset_index()
+print(df_results_chart)
 
 #%%
+
+['_'.join(col) for col in df_results_chart.columns]
 
 #%%

@@ -71,15 +71,15 @@ print(f'... time data to ks = {time_got_ks - time_got_data}')
 results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.columns)], results)
 results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
 df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
+df_results_chart = df_results.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
+df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
+df_results_chart = df_results_chart.reset_index()
 time_got_results = time.time()
-df_results["chart_rank"] = df_results.groupby('chart')['ks'].rank()
-df_results["dimension_rank"] = df_results['ks'].rank('first')
 print(f'... time ks to results = {time_got_results - time_got_ks}')
 
 time_done = time.time()
 print(f'... time total = {time_done - time_start}')
 
-
-
 print(df_results)
+print(df_results_chart)
 
