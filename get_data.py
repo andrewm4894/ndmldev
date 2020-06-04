@@ -42,7 +42,7 @@ async def get_chart_df_async(api_call, data):
 
 async def get_charts_df_async(api_calls):
     data = {}
-    with trio.move_on_after(5):
+    with trio.move_on_after(10):
         async with trio.open_nursery() as nursery:
             for api_call in api_calls:
                 nursery.start_soon(get_chart_df_async, api_call, data)
