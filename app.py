@@ -38,7 +38,6 @@ def results():
     remote_host = params['remote_host']
     local_host = params['local_host']
     rank_by_var = rank_by.split('_')[0]
-    rank_by_agg = rank_by.split('_')[1]
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
