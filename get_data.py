@@ -51,5 +51,7 @@ async def get_charts_df_async(api_calls):
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
     df = df.diff().dropna(how='all')
+    df = df._get_numeric_data()
+    df = filter_useless_cols(df)
     return df
 

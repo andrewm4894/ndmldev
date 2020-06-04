@@ -50,8 +50,6 @@ def results():
         for chart in charts
     ]
     df = trio.run(get_charts_df_async, api_calls)
-    df = df._get_numeric_data()
-    df = filter_useless_cols(df)
     arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
     arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     time_got_data = time.time()
