@@ -62,6 +62,7 @@ def parse_params(request):
         "baseline_before": baseline_before,
         "baseline_after": baseline_after,
         "rank_by": request.args.get('rank_by', 'ks_max'),
+        "rank_asc": request.args.get('rank_asc', False),
         "starts_with": request.args.get('starts_with', None),
         "format": request.args.get('format', 'html'),
         "remote_host": remote_host,

@@ -35,6 +35,7 @@ def results():
     baseline_before = params['baseline_before']
     baseline_after = params['baseline_after']
     rank_by = params['rank_by']
+    rank_asc = params['rank_asc']
     starts_with = params['starts_with']
     response_format = params['format']
     remote_host = params['remote_host']
