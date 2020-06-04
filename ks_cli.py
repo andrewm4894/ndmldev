@@ -22,7 +22,7 @@ parser.add_argument(
     '--rank_by', type=str, nargs='?', default='ks_max'
 )
 parser.add_argument(
-    '--rank_asc', type=bool, nargs='?', default=True
+    '--rank_asc', type=bool, nargs='?', default=False
 )
 args = parser.parse_args()
 
