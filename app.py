@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, jsonify
 from scipy.stats import ks_2samp
 
 from get_data import get_data
+from ks import do_ks, results_to_df
 from utils import get_chart_list, parse_params
 import pandas as pd
 
@@ -36,39 +37,22 @@ def results():
     response_format = params['format']
     remote_host = params['remote_host']
     local_host = params['local_host']
-    rank_by_var = rank_by.split('_')[0]
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
-    colnames, arr_baseline, arr_highlight = get_data(remote_host, charts, baseline_after, baseline_before,
-                                                     highlight_after, highlight_before)
+    colnames, arr_baseline, arr_highlight = get_data(
+        remote_host, charts, baseline_after, baseline_before, highlight_after, highlight_before
+    )
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
-    # get ks
-    results = []
-    for n in range(arr_baseline.shape[1]):
-        ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-        results.append([ks_stat, p_value])
+    # do ks
+    results = do_ks(colnames, arr_baseline, arr_highlight)
     time_got_ks = time.time()
     app.logger.info(f'... time data to ks = {round(time_got_ks - time_got_data, 2)}')
 
-    # wrangle results
-    results = zip([[col.split('__')[0], col.split('__')[1]] for col in colnames], results)
-    results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
-
     # df_results
-    df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
-    df_results['rank'] = df_results[rank_by_var].rank(method='first', ascending=rank_asc)
-    df_results = df_results.sort_values('rank')
-
-    # df_results_chart
-    df_results_chart = df_results.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
-    df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
-    df_results_chart = df_results_chart.reset_index()
-    df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
-    df_results_chart = df_results_chart.sort_values('rank')
-
+    df_results, df_results_chart = results_to_df(results, rank_by, rank_asc)
     time_got_results = time.time()
     app.logger.info(f'... time ks to results = {round(time_got_results - time_got_ks, 2)}')
 
