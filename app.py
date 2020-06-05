@@ -2,12 +2,10 @@ import logging
 import time
 
 from flask import Flask, request, render_template, jsonify
-from scipy.stats import ks_2samp
 
 from get_data import get_data
-from ks import do_ks, results_to_df
-from utils import get_chart_list, parse_params
-import pandas as pd
+from ks import do_ks
+from utils import get_chart_list, parse_params, results_to_df
 
 
 app = Flask(__name__)
