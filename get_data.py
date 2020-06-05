@@ -64,8 +64,9 @@ def get_data(host, charts, baseline_after, baseline_before, highlight_after, hig
     df = trio.run(get_charts_df_async, api_calls)
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
+    colnames = list(df.columns)
     arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
     arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
-    return arr_baseline, arr_highlight
+    return colnames, arr_baseline, arr_highlight
 
 

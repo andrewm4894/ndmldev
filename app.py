@@ -40,7 +40,7 @@ def results():
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
-    arr_baseline, arr_highlight = get_data(remote_host, charts, baseline_after, baseline_before, highlight_after,
+    colnames, arr_baseline, arr_highlight = get_data(remote_host, charts, baseline_after, baseline_before, highlight_after,
                                            highlight_before)
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
@@ -54,7 +54,7 @@ def results():
     app.logger.info(f'... time data to ks = {round(time_got_ks - time_got_data, 2)}')
 
     # wrangle results
-    results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.columns)], results)
+    results = zip([[col.split('__')[0], col.split('__')[1]] for col in colnames], results)
     results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
 
     # df_results
