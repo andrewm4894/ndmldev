@@ -7,6 +7,7 @@ from utils import filter_useless_cols
 
 async def get_chart_df_async(api_call, data):
     url, chart = api_call
+    print(url)
     r = await asks.get(url)
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
