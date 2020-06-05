@@ -55,3 +55,17 @@ async def get_charts_df_async(api_calls):
     df = filter_useless_cols(df)
     return df
 
+
+def get_data(host, charts, baseline_after, baseline_before, highlight_after, highlight_before):
+    api_calls = [
+        (f'http://{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
+        for chart in charts
+    ]
+    df = trio.run(get_charts_df_async, api_calls)
+    df = df._get_numeric_data()
+    df = filter_useless_cols(df)
+    arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
+    arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
+    return arr_baseline, arr_highlight
+
+
