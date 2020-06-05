@@ -33,7 +33,7 @@ async def get_charts_df_async(api_calls):
 def get_data(host, charts, baseline_after, baseline_before, highlight_after, highlight_before):
     api_calls = [
         (
-            "http://" + f'{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json'.replace('///', '/'),.replace('//', '/'),
+            "http://" + f'{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json'.replace('///', '/').replace('//', '/'),
             chart
         )
         for chart in charts
