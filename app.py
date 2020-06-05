@@ -38,6 +38,8 @@ def results():
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
+
+    # get data
     colnames, arr_baseline, arr_highlight = get_data(
         remote_host, charts, baseline_after, baseline_before, highlight_after, highlight_before
     )
