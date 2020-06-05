@@ -1,3 +1,5 @@
+import logging
+
 import asks
 
 import pandas as pd
@@ -7,7 +9,7 @@ from utils import filter_useless_cols
 
 async def get_chart_df_async(api_call, data):
     url, chart = api_call
-    print(url)
+    logging.info(url)
     r = await asks.get(url)
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
@@ -34,7 +36,7 @@ async def get_charts_df_async(api_calls):
 def get_data(host, charts, baseline_after, baseline_before, highlight_after, highlight_before):
     api_calls = [
         (
-            f'http://{host}api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json',
+            f'http://{host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json',
             chart
         )
         for chart in charts
