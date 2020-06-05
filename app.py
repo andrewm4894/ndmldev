@@ -69,7 +69,7 @@ def results():
                     "title": f"{row['rank']} - {row['chart']} (ks={round(row[rank_by],2)}, p={round(row['p_min'],2)})",
                     "after": baseline_after,
                     "before": highlight_before,
-                    "data_host": f"http://{remote_host.replace('127.0.0.1', local_host)}/"
+                    "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/')
                 }
             )
         return render_template('results.html', charts=charts)
