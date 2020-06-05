@@ -6,6 +6,7 @@ import pandas as pd
 from scipy.stats import ks_2samp
 
 from get_data import get_data
+from ks import do_ks
 from utils import get_chart_list
 
 time_start = time.time()
@@ -52,25 +53,18 @@ window_size = highlight_before - highlight_after
 baseline_before = highlight_after - 1
 baseline_after = baseline_before - (window_size * baseline_window_multiplier)
 
-results = {}
+# get charts
 charts = get_chart_list(starts_with=starts_with, host=host)
 
 # get data
-arr_baseline, arr_highlight = get_data(host, charts, baseline_after, baseline_before, highlight_after, highlight_before)
+colnames, arr_baseline, arr_highlight = get_data(host, charts, baseline_after, baseline_before, highlight_after, highlight_before)
 time_got_data = time.time()
 print(f'... time start to data = {time_got_data - time_start}')
 
-# get ks
-results = []
-for n in range(arr_baseline.shape[1]):
-    ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-    results.append([ks_stat, p_value])
+# do ks
+results = do_ks(colnames, arr_baseline, arr_highlight)
 time_got_ks = time.time()
 print(f'... time data to ks = {round(time_got_ks - time_got_data,2)}')
-
-# wrangle results
-results = zip([[col.split('__')[0], col.split('__')[1]] for col in list(df.columns)], results)
-results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
 
 # df_results
 df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
