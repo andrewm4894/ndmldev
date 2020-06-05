@@ -51,6 +51,10 @@ def parse_params(request):
     else:
         highlight_before = request.args.get('highlight_before', before)
 
+    if url_parse.path.startswith('/host/'):
+        remote_host = f'{remote_host}{url_parse.path}'
+        local_host = f'{local_host}{url_parse.path}'
+
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
     baseline_after = baseline_before - (window_size * baseline_window_multiplier)
