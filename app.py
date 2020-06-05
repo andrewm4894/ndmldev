@@ -5,7 +5,7 @@ import trio
 from flask import Flask, request, render_template, jsonify
 from scipy.stats import ks_2samp
 
-from get_data import get_charts_df_async
+from get_data import get_charts_df_async, get_data
 from utils import get_chart_list, parse_params
 import pandas as pd
 
@@ -41,13 +41,8 @@ def results():
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
-    api_calls = [
-        (f'http://{remote_host}/api/v1/data?chart={chart}&after={baseline_after}&before={highlight_before}&format=json', chart)
-        for chart in charts
-    ]
-    df = trio.run(get_charts_df_async, api_calls)
-    arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
-    arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
+    arr_baseline, arr_highlight = get_data(remote_host, charts, baseline_after, baseline_before, highlight_after,
+                                           highlight_before)
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
