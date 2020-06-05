@@ -40,8 +40,8 @@ def results():
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
-    colnames, arr_baseline, arr_highlight = get_data(remote_host, charts, baseline_after, baseline_before, highlight_after,
-                                           highlight_before)
+    colnames, arr_baseline, arr_highlight = get_data(remote_host, charts, baseline_after, baseline_before,
+                                                     highlight_after, highlight_before)
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
