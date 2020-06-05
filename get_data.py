@@ -1,34 +1,8 @@
 import asks
-import requests
 
 import pandas as pd
-import numpy as np
 import trio
 from utils import filter_useless_cols
-
-
-def get_chart_df(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json', numeric_only: bool = True):
-    url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}"
-    r = requests.get(url)
-    r_json = r.json()
-    df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
-    if len(df) == 0:
-        return df
-    else:
-        if numeric_only:
-            df = df._get_numeric_data()
-        df = df.set_index('time_idx')
-        df = df.diff().dropna()
-        return df
-
-
-def get_chart_arr(chart, after, before, host: str = '127.0.0.1:19999', format: str = 'json', numeric_only: bool = True):
-    url = f"http://{host}/api/v1/data?chart={chart}&after={after}&before={before}&format={format}".replace('//','/')
-    r = requests.get(url)
-    r_json = r.json()
-    arr = np.array(r_json['data'])
-    names = r_json['labels']
-    return names, arr
 
 
 async def get_chart_df_async(api_call, data):
