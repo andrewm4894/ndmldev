@@ -1,13 +1,9 @@
 #%%
+from urllib.parse import urlparse
 
-import pandas as pd
-df = pd.DataFrame(
-    [
-        ['2012', 'A', 3, 4], ['2012', 'B', 8, 5], ['2011', 'A', 20, 7], ['2011', 'B', 30, 3], ['2011', 'C', 40, 5],
-    ],
-    columns=['chart', 'dim', 'ks', 'p'])
-#df['chart_rank'] = df.groupby(['chart'])[['ks']].agg('mean').rank()
-print(df)
+url_parse = urlparse("http://35.246.123.204:19999/host/london.my-netdata.io/#menu_system;after=1591368740000;before=1591369159000;highlight_after=1591368948297;highlight_before=1591369120515;theme=slate;help=true")
+
+print(url_parse.path)
 
 #%%
 
