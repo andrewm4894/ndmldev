@@ -72,3 +72,22 @@ def parse_params(request):
     }
     return params
 
+
+def results_to_df(results, rank_by, rank_asc):
+
+    rank_by_var = rank_by.split('_')[0]
+
+    # df_results
+    df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
+    df_results['rank'] = df_results[rank_by_var].rank(method='first', ascending=rank_asc)
+    df_results = df_results.sort_values('rank')
+
+    # df_results_chart
+    df_results_chart = df_results.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
+    df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
+    df_results_chart = df_results_chart.reset_index()
+    df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
+    df_results_chart = df_results_chart.sort_values('rank')
+
+    return df_results, df_results_chart
+

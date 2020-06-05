@@ -2,9 +2,6 @@ import argparse
 import time
 from urllib.parse import parse_qs, urlparse
 
-import pandas as pd
-from scipy.stats import ks_2samp
-
 from get_data import get_data
 from ks import do_ks
 from utils import get_chart_list
@@ -67,17 +64,7 @@ time_got_ks = time.time()
 print(f'... time data to ks = {round(time_got_ks - time_got_data,2)}')
 
 # df_results
-df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
-df_results['rank'] = df_results[rank_by_var].rank(method='first', ascending=rank_asc)
-df_results = df_results.sort_values('rank')
-
-# df_results_chart
-df_results_chart = df_results.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
-df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
-df_results_chart = df_results_chart.reset_index()
-df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
-df_results_chart = df_results_chart.sort_values('rank')
-
+df_results, df_results_chart = results_to_df(results, rank_by, rank_asc)
 time_got_results = time.time()
 print(f'... time ks to results = {round(time_got_results - time_got_ks,2)}')
 
