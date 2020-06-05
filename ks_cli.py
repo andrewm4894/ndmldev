@@ -2,12 +2,11 @@ import argparse
 import time
 from urllib.parse import parse_qs, urlparse
 
-import trio
 import pandas as pd
 from scipy.stats import ks_2samp
 
-from get_data import get_charts_df_async, get_data
-from utils import get_chart_list, filter_useless_cols
+from get_data import get_data
+from utils import get_chart_list
 
 time_start = time.time()
 

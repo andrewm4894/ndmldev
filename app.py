@@ -1,11 +1,10 @@
 import logging
 import time
 
-import trio
 from flask import Flask, request, render_template, jsonify
 from scipy.stats import ks_2samp
 
-from get_data import get_charts_df_async, get_data
+from get_data import get_data
 from utils import get_chart_list, parse_params
 import pandas as pd
 
