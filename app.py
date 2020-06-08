@@ -30,7 +30,7 @@ def results():
     highlight_after = params['highlight_after']
     baseline_before = params['baseline_before']
     baseline_after = params['baseline_after']
-    response_type = params['response_type']
+    return_type = params['return_type']
     remote_host = params['remote_host']
     local_host = params['local_host']
     method = params['method']

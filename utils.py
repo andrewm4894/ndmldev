@@ -36,7 +36,7 @@ def parse_params(request):
     config_default = """
     {
       "method": "ks",
-      "return_fmt": "html"
+      "return_type": "html"
     }
     """
 
@@ -80,7 +80,7 @@ def parse_params(request):
         "remote_host": remote_host,
         "local_host": local_host,
         "method": config.get('method', 'ks'),
-        "response_fmt": config.get('response_fmt', 'html'),
+        "return_type": config.get('return_type', 'html'),
     }
     return params
 
