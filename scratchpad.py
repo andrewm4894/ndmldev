@@ -7,11 +7,11 @@ import pandas as pd
 
 df = pd.DataFrame(
     [
-        [1, 'x'], [2, 'y'],
+        [1, 'x', 0.2346], [2, 'y', 1.2345],
     ],
-    columns=['a', 'b']
+    columns=['a', 'b', 'f']
 )
-print(df)
+print(df.round(2))
 
 #%%
 

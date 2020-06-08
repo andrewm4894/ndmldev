@@ -77,33 +77,30 @@ def parse_params(request):
         "highlight_after": highlight_after,
         "baseline_before": baseline_before,
         "baseline_after": baseline_after,
-        "rank_by": request.args.get('rank_by', 'ks_max'),
-        "rank_asc": request.args.get('rank_asc', False),
-        "starts_with": request.args.get('starts_with', None),
-        "format": request.args.get('format', 'html'),
         "remote_host": remote_host,
         "local_host": local_host,
-        "method": request.args.get('method', 'ks'),
-        "run_mode": request.args.get('run_mode', 'default'),
-        "config": request.args.get('config', '{"baz":"goo"}')
+        "method": config.get('method', 'ks'),
+        "response_fmt": config.get('response_fmt', 'html'),
     }
     return params
 
 
-def results_to_df(results, rank_by, rank_asc, method):
-
-    rank_by_var = rank_by.split('_')[0]
+def results_to_df(results, method):
 
     if method == 'pyod':
 
-        # df_results_chart
         rank_by_var = 'prob'
         rank_asc = False
+
+        # df_results_chart
         df_results_chart = pd.DataFrame(results, columns=['chart', 'prob', 'pred'])
         df_results_chart['rank'] = df_results_chart[rank_by_var].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
     else:
+
+        rank_by_var = 'ks_max'
+        rank_asc = False
 
         # df_results
         df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
@@ -117,8 +114,7 @@ def results_to_df(results, rank_by, rank_asc, method):
         df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
-    #for col in df_results_chart._get_numeric_data.columns:
-    #    df_results_chart[col] = df_results_chart[col].round(2)
+    df_results_chart = df_results_chart.round(2)
 
     return df_results_chart
 
