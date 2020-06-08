@@ -1,4 +1,5 @@
 #%%
+import json
 
 import pandas as pd
 
@@ -15,6 +16,7 @@ print(df)
 #%%
 
 for i, row in df.iterrows():
-    print(str(row.to_dict()))
+    print(json.dumps(row.to_dict()))
+    #print(row.tolist())
 
 #%%
