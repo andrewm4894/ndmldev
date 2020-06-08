@@ -7,6 +7,8 @@ import pandas as pd
 
 def get_chart_list(starts_with: str = None, host: str = '127.0.0.1:19999'):
     url = f"http://{host}/api/v1/charts"
+    print(url)
+    XXX
     r = requests.get(url)
     charts = r.json().get('charts')
     chart_list = [chart for chart in charts]
