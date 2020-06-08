@@ -7,6 +7,7 @@ from pyod.models.knn import KNN
 
 from get_data import get_data
 from ks import do_ks
+from ml import do_knn
 from utils import get_chart_list, parse_params, results_to_df
 
 
@@ -54,26 +55,11 @@ def results():
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
-    chart_cols = {}
-    for chart in charts:
-        chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-
     if method == 'knn':
-        results = []
-        for chart in chart_cols:
-            print('------------')
-            print(chart)
-            print(arr_baseline[:, chart_cols[chart]])
-            print(arr_baseline[:, chart_cols[chart]])
-            model = KNN(contamination=0.01, n_neighbors=5)
-            model.fit(arr_baseline[:, chart_cols[chart]])
-            anomaly_preds = model.predict(arr_highlight[:, chart_cols[chart]])
-            anomaly_probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
-            print('############')
-            print(anomaly_preds)
-            print(anomaly_probs)
-            results.append([chart, np.mean(anomaly_probs), np.mean(anomaly_preds)])
-            print('------------')
+        chart_cols = {}
+        for chart in charts:
+            chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
+        results = do_knn(chart_cols, arr_baseline, arr_highlight)
 
     elif method == 'ks':
 
@@ -81,8 +67,6 @@ def results():
         results = do_ks(colnames, arr_baseline, arr_highlight)
 
     print(results)
-    XX
-
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
