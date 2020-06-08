@@ -105,8 +105,8 @@ def results_to_df(results, rank_by, rank_asc, method):
         df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
-    for col in df_results_chart._get_numeric_data.columns:
-        df_results_chart[col] = df_results_chart[col].round(2)
+    #for col in df_results_chart._get_numeric_data.columns:
+    #    df_results_chart[col] = df_results_chart[col].round(2)
 
     return df_results_chart
 
