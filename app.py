@@ -66,7 +66,6 @@ def results():
         # do ks
         results = do_ks(colnames, arr_baseline, arr_highlight)
 
-    print(results)
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
