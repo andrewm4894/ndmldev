@@ -16,7 +16,7 @@ print(df)
 #%%
 
 for i, row in df.iterrows():
-    print(json.dumps(row.to_dict()))
-    #print(row.tolist())
+    #print(f"{row.to_dict()[x] for x in row.to_dict()}")
+    print()
 
 #%%
