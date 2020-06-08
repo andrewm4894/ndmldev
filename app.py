@@ -37,6 +37,10 @@ def results():
     remote_host = params['remote_host']
     local_host = params['local_host']
     method = params['method']
+    config = params['config']
+    print(config)
+
+    xxx
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)

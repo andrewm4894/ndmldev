@@ -74,6 +74,7 @@ def parse_params(request):
         "local_host": local_host,
         "method": request.args.get('method', 'ks'),
         "run_mode": request.args.get('run_mode', 'default')
+        "config": request.args.get('config', '{"baz":"goo"}'),
     }
     return params
 
