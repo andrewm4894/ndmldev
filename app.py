@@ -77,7 +77,7 @@ def results():
             charts.append(
                 {
                     "id": row['chart'],
-                    "title": ' | '.join([f"{x[0]}={x[1]}" for x in list(zip(df_results_chart.columns, row.tolist()))]),
+                    "title": ' | '.join([f"{x[0]} = {x[1]}" for x in list(zip(df_results_chart.columns, row.tolist()))]),
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/')
