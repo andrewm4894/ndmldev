@@ -69,8 +69,6 @@ def results():
 
     # df_results_chart
     df_results_chart = results_to_df(results, rank_by, rank_asc, method=method)
-    print(df_results_chart)
-    XXX
     time_got_results = time.time()
     app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
@@ -81,10 +79,14 @@ def results():
     if response_format == 'html':
         charts = []
         for i, row in df_results_chart.iterrows():
+            if method == 'pyod':
+                title = f"{row['rank']} - {row['chart']} (pred={round(row['pred'],2)}, prob={round(row['prob'],2)})"
+            else:
+                title = f"{row['rank']} - {row['chart']} (ks={round(row[rank_by],2)}, p={round(row['p_min'],2)})"
             charts.append(
                 {
                     "id": row['chart'],
-                    "title": f"{row['rank']} - {row['chart']} (ks={round(row[rank_by],2)}, p={round(row['p_min'],2)})",
+                    "title": title,
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/')
