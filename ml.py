@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.stats import ks_2samp
 from pyod.models.cblof import CBLOF as PyODModel
+from pyod.models.hbos import HBOS as DefaultPyODModel
 
 from data import add_lags
 
@@ -22,7 +23,11 @@ def do_pyod(chart_cols, arr_baseline, arr_highlight, n_lags=2):
     results = []
     model = PyODModel(contamination=0.1, n_clusters=2)
     for chart in chart_cols:
-        model.fit(arr_baseline[:, chart_cols[chart]])
+        try:
+            model.fit(arr_baseline[:, chart_cols[chart]])
+        except:
+            model = DefaultPyODModel(contamination=0.1)
+            model.fit(arr_baseline[:, chart_cols[chart]])
         preds = model.predict(arr_highlight[:, chart_cols[chart]])
         probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
         results.append([chart, np.mean(probs), np.mean(preds)])
