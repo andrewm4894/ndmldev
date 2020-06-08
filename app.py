@@ -43,6 +43,7 @@ def results():
     colnames, arr_baseline, arr_highlight = get_data(
         remote_host, charts, baseline_after, baseline_before, highlight_after, highlight_before
     )
+    app.logger.info(f'... len(charts) = {len(charts)}')
     app.logger.info(f'... len(colnames) = {len(colnames)}')
     app.logger.info(f'... arr_baseline.shape = {arr_baseline.shape}')
     app.logger.info(f'... arr_highlight.shape = {arr_highlight.shape}')
