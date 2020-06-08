@@ -85,9 +85,9 @@ def results_to_df(results, rank_by, rank_asc, method):
     if method == 'pyod':
 
         # df_results_chart
-        rank_by_var = 'as_preds'
-        rank_asc = True
-        df_results_chart = pd.DataFrame(results, columns=['chart', 'as_probs', 'as_preds'])
+        rank_by_var = 'probs'
+        rank_asc = False
+        df_results_chart = pd.DataFrame(results, columns=['chart', 'probs', 'preds'])
         df_results_chart['rank'] = df_results_chart[rank_by_var].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
