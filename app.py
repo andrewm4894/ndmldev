@@ -73,7 +73,7 @@ def results():
             print(anomaly_probs)
             print('------------')
 
-    elif method == 'ks'
+    elif method == 'ks':
 
         # do ks
         results = do_ks(colnames, arr_baseline, arr_highlight)
