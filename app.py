@@ -63,8 +63,8 @@ def results():
         print(arr_baseline[:, chart_cols[chart]])
         model = KNN(contamination=0.1, n_neighbors=5)
         model.fit(arr_baseline[:, chart_cols[chart]])
-        anomaly_preds = model.predict(arr_highlight[:, chart_cols[chart]])
-        anomaly_probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])
+        anomaly_preds = model.predict(arr_highlight[:, chart_cols[chart]])[:, 1]
+        anomaly_probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
         print('############')
         print(anomaly_preds)
         print(anomaly_probs)
