@@ -7,3 +7,4 @@ aiohttp==3.6.2
 trio==0.15.1
 asks==2.3.7
 numba==0.49.1
+pyod==0.8.0
