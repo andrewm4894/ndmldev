@@ -14,7 +14,13 @@ print(df_results_chart)
 
 #%%
 
-host = '/xxxx/'
-print(host[:-1])
+charts = ['system.cpu', 'system.load']
+colnames = ['system.cpu__user', 'system.cpu__guest', 'system.load__load5', 'system.load__load15']
+
+chart_cols = []
+for chart in charts:
+    chart_cols.append([colnames.index(col) for col in colnames if col.startswith(chart)])
+
+print(chart_cols)
 
 #%%

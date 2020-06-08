@@ -50,6 +50,8 @@ def results():
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
+    print()
+
     # do ks
     results = do_ks(colnames, arr_baseline, arr_highlight)
     time_got_ks = time.time()
