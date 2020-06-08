@@ -53,15 +53,13 @@ def results():
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
+    # get scores
     if method == 'pyod':
         chart_cols = {}
         for chart in charts:
             chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
         results = do_pyod(chart_cols, arr_baseline, arr_highlight)
-
     else:
-
-        # do ks
         results = do_ks(colnames, arr_baseline, arr_highlight)
 
     time_got_scores = time.time()
