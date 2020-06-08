@@ -94,7 +94,8 @@ def results_to_df(results, method):
 
         # df_results_chart
         df_results_chart = pd.DataFrame(results, columns=['chart', 'prob', 'pred'])
-        df_results_chart['rank'] = df_results_chart[rank_by_var].rank(method='first', ascending=rank_asc)
+        df_results_chart['score'] = (df_results_chart['prob'] + df_results_chart['pred']) / 2
+        df_results_chart['rank'] = df_results_chart['score'].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
     else:
