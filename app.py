@@ -7,7 +7,7 @@ from pyod.models.knn import KNN
 
 from get_data import get_data
 from ks import do_ks
-from ml import do_knn
+from ml import do_knn, do_pyod
 from utils import get_chart_list, parse_params, results_to_df
 
 
@@ -55,11 +55,11 @@ def results():
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
-    if method == 'knn':
+    if method == 'pyod':
         chart_cols = {}
         for chart in charts:
             chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-        results = do_knn(chart_cols, arr_baseline, arr_highlight)
+        results = do_pyod(chart_cols, arr_baseline, arr_highlight)
 
     elif method == 'ks':
 
