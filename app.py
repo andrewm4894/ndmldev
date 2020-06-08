@@ -51,11 +51,17 @@ def results():
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
-    chart_cols = []
+    chart_cols = {}
     for chart in charts:
-        chart_cols.append([colnames.index(col) for col in colnames if col.startswith(chart)])
+        chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
 
-    print(chart_cols)
+    for chart in chart_cols:
+        print('------------')
+        print(chart)
+        print(arr_baseline[:, chart_cols[chart]])
+        print(arr_baseline[:, chart_cols[chart]])
+        print('------------')
+
     XXX
 
     # do ks
