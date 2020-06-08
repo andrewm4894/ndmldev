@@ -19,6 +19,7 @@ def filter_useless_cols(df):
     s = (df.min() == df.max())
     useless_cols = list(s.where(s == True).dropna().index)
     df = df.drop(useless_cols, axis=1)
+    df = df.dropna(axis=1)
     return df
 
 
