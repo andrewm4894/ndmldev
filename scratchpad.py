@@ -20,3 +20,22 @@ for i, row in df.iterrows():
     print()
 
 #%%
+
+import numpy as np
+
+arr = np.array([
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12]]
+)
+
+#%%
+
+arr_lag = np.empty(arr.shape, float)
+print(arr_lag)
+
+#%%
+
+np.concatenate((arr, arr[1:, :]), axis=1)
+
+#%%
