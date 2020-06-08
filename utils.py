@@ -33,10 +33,14 @@ def parse_params(request):
     url_parse = urlparse(request.args.get('url'))
     url_params = parse_qs(request.args.get('url'))
 
+    config_default = """
+    {
+      "method": "ks",
+      "return_type": "html"
+    }
+    """
+
     config = json.loads(request.args.get('config', '{"baz":"goo"}'))
-    print(config)
-    print(type(config))
-    XXX
 
     remote_host = url_parse.netloc.split(':')[0]
     if remote_host == request.host.split(':')[0]:
