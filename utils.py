@@ -99,7 +99,8 @@ def results_to_df(results, method):
 
     else:
 
-        rank_by_var = 'ks_max'
+        rank_by = 'ks_max'
+        rank_by_var = 'ks'
         rank_asc = False
 
         # df_results
