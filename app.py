@@ -3,9 +3,8 @@ import time
 
 from flask import Flask, request, render_template, jsonify
 
-from get_data import get_data
-from ks import do_ks
-from ml import do_pyod
+from data import get_data
+from ml import do_ks, do_pyod
 from utils import get_chart_list, parse_params, results_to_df
 
 

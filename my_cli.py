@@ -2,7 +2,7 @@ import argparse
 import time
 from urllib.parse import parse_qs, urlparse
 
-from get_data import get_data
+from data import get_data
 from ks import do_ks
 from utils import get_chart_list, results_to_df
 
