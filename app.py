@@ -1,6 +1,5 @@
 import logging
 import time
-import json
 
 from flask import Flask, request, render_template, jsonify
 
@@ -26,21 +25,18 @@ def results():
 
     # get params
     params = parse_params(request)
+    app.logger.info(f'... params = {params}')
     highlight_before = params['highlight_before']
     highlight_after = params['highlight_after']
     baseline_before = params['baseline_before']
     baseline_after = params['baseline_after']
-    response_fmt = params['format']
+    response_type = params['response_type']
     remote_host = params['remote_host']
     local_host = params['local_host']
     method = params['method']
-    config = params['config']
-    print(config)
-
-    xxx
 
     # get charts to pull data for
-    charts = get_chart_list(starts_with=starts_with, host=remote_host)
+    charts = get_chart_list(host=remote_host)
 
     # get data
     colnames, arr_baseline, arr_highlight = get_data(
@@ -67,7 +63,7 @@ def results():
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
     # df_results_chart
-    df_results_chart = results_to_df(results, rank_by, rank_asc, method=method)
+    df_results_chart = results_to_df(results, method)
     time_got_results = time.time()
     app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
@@ -75,7 +71,7 @@ def results():
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
 
     # build response
-    if response_format == 'html':
+    if response_type == 'html':
         charts = []
         for i, row in df_results_chart.iterrows():
             charts.append(
@@ -88,7 +84,7 @@ def results():
                 }
             )
         return render_template('results.html', charts=charts)
-    elif response_format == 'json':
+    elif response_type == 'json':
         return jsonify(df_results_chart.to_dict(orient='records'))
     else:
         return None
