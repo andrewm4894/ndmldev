@@ -77,16 +77,10 @@ def results():
     if response_format == 'html':
         charts = []
         for i, row in df_results_chart.iterrows():
-            if 1 == 1:
-                title = '|'.join([f"{x[0]}={x[1]}" for x in list(zip(df_results_chart.columns, row.tolist()))])
-            elif method == 'pyod':
-                title = f"{row['rank']} - {row['chart']} (pred={round(row['pred'],2)}, prob={round(row['prob'],2)})"
-            else:
-                title = f"{row['rank']} - {row['chart']} (ks={round(row[rank_by],2)}, p={round(row['p_min'],2)})"
             charts.append(
                 {
                     "id": row['chart'],
-                    "title": title,
+                    "title": ' | '.join([f"{x[0]}={x[1]}" for x in list(zip(df_results_chart.columns, row.tolist()))]),
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/')
