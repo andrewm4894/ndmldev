@@ -36,6 +36,7 @@ def results():
     response_format = params['format']
     remote_host = params['remote_host']
     local_host = params['local_host']
+    method = params['method']
 
     # get charts to pull data for
     charts = get_chart_list(starts_with=starts_with, host=remote_host)
@@ -56,31 +57,36 @@ def results():
     for chart in charts:
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
 
-    for chart in chart_cols:
-        print('------------')
-        print(chart)
-        print(arr_baseline[:, chart_cols[chart]])
-        print(arr_baseline[:, chart_cols[chart]])
-        model = KNN(contamination=0.01, n_neighbors=5)
-        model.fit(arr_baseline[:, chart_cols[chart]])
-        anomaly_preds = model.predict(arr_highlight[:, chart_cols[chart]])
-        anomaly_probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
-        print('############')
-        print(anomaly_preds)
-        print(anomaly_probs)
-        print('------------')
+    if method == 'knn':
+
+        for chart in chart_cols:
+            print('------------')
+            print(chart)
+            print(arr_baseline[:, chart_cols[chart]])
+            print(arr_baseline[:, chart_cols[chart]])
+            model = KNN(contamination=0.01, n_neighbors=5)
+            model.fit(arr_baseline[:, chart_cols[chart]])
+            anomaly_preds = model.predict(arr_highlight[:, chart_cols[chart]])
+            anomaly_probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
+            print('############')
+            print(anomaly_preds)
+            print(anomaly_probs)
+            print('------------')
+
+    elif method == 'ks'
+
+        # do ks
+        results = do_ks(colnames, arr_baseline, arr_highlight)
+
+    time_got_scores = time.time()
+    app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
     XXX
-
-    # do ks
-    results = do_ks(colnames, arr_baseline, arr_highlight)
-    time_got_ks = time.time()
-    app.logger.info(f'... time data to ks = {round(time_got_ks - time_got_data, 2)}')
 
     # df_results
     df_results, df_results_chart = results_to_df(results, rank_by, rank_asc)
     time_got_results = time.time()
-    app.logger.info(f'... time ks to results = {round(time_got_results - time_got_ks, 2)}')
+    app.logger.info(f'... time ks to results = {round(time_got_results - time_got_scores, 2)}')
 
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
