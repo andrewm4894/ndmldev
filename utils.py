@@ -88,6 +88,8 @@ def results_to_df(results, rank_by, rank_asc, method):
         rank_by_var = 'prob'
         rank_asc = False
         df_results_chart = pd.DataFrame(results, columns=['chart', 'prob', 'pred'])
+        df_results_chart = df_results_chart[df_results_chart['pred'] != 1]
+        df_results_chart = df_results_chart[df_results_chart['prob'] != 1]
         df_results_chart['rank'] = df_results_chart[rank_by_var].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
