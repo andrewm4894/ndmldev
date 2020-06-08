@@ -50,7 +50,12 @@ def results():
     time_got_data = time.time()
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
-    print()
+    chart_cols = []
+    for chart in charts:
+        chart_cols.append([colnames.index(col) for col in colnames if col.startswith(chart)])
+
+    print(chart_cols)
+    XXX
 
     # do ks
     results = do_ks(colnames, arr_baseline, arr_highlight)
