@@ -1,5 +1,3 @@
-import logging
-
 import asks
 
 import pandas as pd
