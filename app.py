@@ -71,7 +71,7 @@ def results():
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
 
     # build response
-    if response_type == 'html':
+    if return_type == 'html':
         charts = []
         for i, row in df_results_chart.iterrows():
             charts.append(
@@ -84,7 +84,7 @@ def results():
                 }
             )
         return render_template('results.html', charts=charts)
-    elif response_type == 'json':
+    elif return_type == 'json':
         return jsonify(df_results_chart.to_dict(orient='records'))
     else:
         return None
