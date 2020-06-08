@@ -55,6 +55,9 @@ def parse_params(request):
         remote_host = f'{remote_host}{url_parse.path[:-1]}'
         local_host = f'{local_host}{url_parse.path[:-1]}'
 
+    print(remote_host)
+    print(local_host)
+
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
     baseline_after = baseline_before - (window_size * baseline_window_multiplier)
