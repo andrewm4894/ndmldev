@@ -2,6 +2,7 @@ import logging
 import time
 
 from flask import Flask, request, render_template, jsonify
+import numpy as np
 from pyod.models.knn import KNN
 
 from get_data import get_data
@@ -58,7 +59,7 @@ def results():
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
 
     if method == 'knn':
-
+        results = []
         for chart in chart_cols:
             print('------------')
             print(chart)
@@ -71,7 +72,10 @@ def results():
             print('############')
             print(anomaly_preds)
             print(anomaly_probs)
+            results.append([chart, np.mean(anomaly_probs), np.mean(anomaly_preds)])
             print('------------')
+            print(results)
+            yyy
 
     elif method == 'ks':
 
