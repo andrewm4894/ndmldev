@@ -59,7 +59,7 @@ def results():
             chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
         results = do_pyod(chart_cols, arr_baseline, arr_highlight)
 
-    elif method == 'ks':
+    else:
 
         # do ks
         results = do_ks(colnames, arr_baseline, arr_highlight)
@@ -67,12 +67,12 @@ def results():
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
+    # df_results_chart
+    df_results_chart = results_to_df(results, rank_by, rank_asc, method=method)
+    print(df_results_chart)
     XXX
-
-    # df_results
-    df_results, df_results_chart = results_to_df(results, rank_by, rank_asc)
     time_got_results = time.time()
-    app.logger.info(f'... time ks to results = {round(time_got_results - time_got_scores, 2)}')
+    app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
