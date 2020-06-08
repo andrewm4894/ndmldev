@@ -14,6 +14,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
 
 def do_pyod(chart_cols, arr_baseline, arr_highlight):
+
     results = []
     for chart in chart_cols:
         model = PyODModel(contamination=0.01)

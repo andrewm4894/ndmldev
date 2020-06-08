@@ -24,20 +24,20 @@ for i, row in df.iterrows():
 import numpy as np
 
 arr = np.array([
-    [1, 2, 3, 4],
-    [5, 6, 7, 8],
-    [9, 10, 11, 12]]
+    [10, 200],
+    [20, 300],
+    [30, 400],
+    [40, 500],
+    [50, 600],
+]
 )
 
-#%%
+n_lags = 3
+arr_orig = np.copy(arr)
+for n_lag in range(1, n_lags+1):
+    arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
+arr = arr[n_lags:]
 
-
-
-#%%
-
-n_lags = 1
-
-for n_lag in range(n_lags):
-    arr = np.concatenate((arr, np.roll(arr, n_lag, axis=0)), axis=1)
+print(arr)
 
 #%%
