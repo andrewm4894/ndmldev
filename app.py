@@ -76,7 +76,9 @@ def results():
     if response_format == 'html':
         charts = []
         for i, row in df_results_chart.iterrows():
-            if method == 'pyod':
+            if 1 == 1:
+                title = f"{row}"
+            elif method == 'pyod':
                 title = f"{row['rank']} - {row['chart']} (pred={round(row['pred'],2)}, prob={round(row['prob'],2)})"
             else:
                 title = f"{row['rank']} - {row['chart']} (ks={round(row[rank_by],2)}, p={round(row['p_min'],2)})"
