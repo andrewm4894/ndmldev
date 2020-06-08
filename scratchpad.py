@@ -14,6 +14,7 @@ print(df_results_chart)
 
 #%%
 
-['_'.join(col) for col in df_results_chart.columns]
+host = '/xxxx/'
+print(host[:-1])
 
 #%%
