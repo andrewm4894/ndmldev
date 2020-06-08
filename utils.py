@@ -36,11 +36,11 @@ def parse_params(request):
     config_default = """
     {
       "method": "ks",
-      "return_type": "html"
+      "return_fmt": "html"
     }
     """
 
-    config = json.loads(request.args.get('config', '{"baz":"goo"}'))
+    config = json.loads(request.args.get('config', config_default))
 
     remote_host = url_parse.netloc.split(':')[0]
     if remote_host == request.host.split(':')[0]:
