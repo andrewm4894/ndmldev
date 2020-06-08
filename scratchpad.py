@@ -31,11 +31,13 @@ arr = np.array([
 
 #%%
 
-arr_lag = np.empty(arr.shape, float)
-print(arr_lag)
+
 
 #%%
 
-np.concatenate((arr, arr[1:, :]), axis=1)
+n_lags = 1
+
+for n_lag in range(n_lags):
+    arr = np.concatenate((arr, np.roll(arr, n_lag, axis=0)), axis=1)
 
 #%%
