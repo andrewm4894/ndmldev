@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.stats import ks_2samp
-from pyod.models.hbos import HBOS as PyODModel
+from pyod.models.cblof import CBLOF as PyODModel
 
 from data import add_lags
 
