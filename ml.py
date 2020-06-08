@@ -15,13 +15,13 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     return results
 
 
-def do_pyod(chart_cols, arr_baseline, arr_highlight, n_lags=1):
+def do_pyod(chart_cols, arr_baseline, arr_highlight, n_lags=2):
     if n_lags > 0:
         arr_baseline = add_lags(arr_baseline, n_lags=n_lags)
         arr_highlight = add_lags(arr_highlight, n_lags=n_lags)
     results = []
     for chart in chart_cols:
-        model = PyODModel(contamination=0.01)
+        model = PyODModel(contamination=0.1)
         model.fit(arr_baseline[:, chart_cols[chart]])
         preds = model.predict(arr_highlight[:, chart_cols[chart]])
         probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
