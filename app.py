@@ -77,7 +77,7 @@ def results():
         charts = []
         for i, row in df_results_chart.iterrows():
             if 1 == 1:
-                title = f"{row.to_dict(orient='records')}"
+                title = f"{row.to_dict()}"
             elif method == 'pyod':
                 title = f"{row['rank']} - {row['chart']} (pred={round(row['pred'],2)}, prob={round(row['prob'],2)})"
             else:
