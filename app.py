@@ -2,12 +2,10 @@ import logging
 import time
 
 from flask import Flask, request, render_template, jsonify
-import numpy as np
-from pyod.models.knn import KNN
 
 from get_data import get_data
 from ks import do_ks
-from ml import do_knn, do_pyod
+from ml import do_pyod
 from utils import get_chart_list, parse_params, results_to_df
 
 
