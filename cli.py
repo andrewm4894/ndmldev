@@ -3,10 +3,23 @@ import time
 from urllib.parse import parse_qs, urlparse
 
 from data import get_data
-from ks import do_ks
+
+from model import run_model
 from utils import get_chart_list, results_to_df
 
 time_start = time.time()
+
+model_default ="""
+    {
+        "model": {
+            "type": "ks",
+            "params": {},
+            "n_lags": 0
+        },
+        "return_type": "html",
+        "baseline_window_multiplier": 2
+    }
+"""
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -16,7 +29,7 @@ parser.add_argument(
     '--remote', type=str, nargs='?', default='no'
 )
 parser.add_argument(
-    '--rank_by', type=str, nargs='?', default='ks_max'
+    '--model', type=str, nargs='?', default=model_default
 )
 parser.add_argument(
     '--rank_asc', type=bool, nargs='?', default=False
@@ -26,11 +39,8 @@ args = parser.parse_args()
 # parse args
 url = args.url
 remote = args.remote
-rank_by = args.rank_by
-rank_asc = args.rank_asc
+model = args.model
 
-rank_by_var = rank_by.split('_')[0]
-rank_by_agg = rank_by.split('_')[1]
 
 baseline_window_multiplier = 2
 url_params = parse_qs(url)
@@ -58,19 +68,18 @@ colnames, arr_baseline, arr_highlight = get_data(host, charts, baseline_after, b
 time_got_data = time.time()
 print(f'... time start to data = {time_got_data - time_start}')
 
-# do ks
-results = do_ks(colnames, arr_baseline, arr_highlight)
-time_got_ks = time.time()
-print(f'... time data to ks = {round(time_got_ks - time_got_data,2)}')
+# get scores
+results = run_model(model, charts, colnames, arr_baseline, arr_highlight)
+time_got_scores = time.time()
+print(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
-# df_results
-df_results, df_results_chart = results_to_df(results, rank_by, rank_asc)
+# df_results_chart
+df_results_chart = results_to_df(results, model)
 time_got_results = time.time()
-print(f'... time ks to results = {round(time_got_results - time_got_ks,2)}')
+print(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
 time_done = time.time()
 print(f'... time total = {round(time_done - time_start,2)}')
 
-print(df_results)
 print(df_results_chart)
 
