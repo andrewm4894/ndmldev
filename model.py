@@ -7,7 +7,7 @@ from pyod.models.cblof import CBLOF
 
 from data import add_lags
 
-supported_pyod_models = ['knn', 'hbos']
+supported_pyod_models = ['knn', 'hbos', 'cblof']
 
 
 def run_model(model, charts, colnames, arr_baseline, arr_highlight):
