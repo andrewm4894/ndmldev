@@ -74,12 +74,12 @@ def results():
                     "title": ' | '.join([f"{x[0]} = {x[1]}" for x in list(zip(df_results_chart.columns, row.tolist()))]),
                     "after": baseline_after,
                     "before": highlight_before,
-                    "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/'),
-                    "highlight_after": highlight_after*1000,
-                    "highlight_before": highlight_before*1000,
+                    "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/')
                 }
             )
-        return render_template('results.html', charts=charts)
+        return render_template(
+            'results.html', charts=charts, highlight_after=highlight_after*1000, highlight_before=highlight_before*1000
+        )
     elif return_type == 'json':
         return jsonify(df_results_chart.to_dict(orient='records'))
     else:
