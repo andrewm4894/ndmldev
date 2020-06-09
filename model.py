@@ -59,7 +59,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         try:
             clf.fit(arr_baseline[:, chart_cols[chart]])
         except:
-            clf = DefaultPyODModel(**model['params'])
+            clf = DefaultPyODModel()
             clf.fit(arr_baseline[:, chart_cols[chart]])
         # 0/1 anomaly predictions
         preds = clf.predict(arr_highlight[:, chart_cols[chart]])
