@@ -30,7 +30,7 @@ def parse_params(request):
 
     now = int(datetime.now().timestamp())
     default_window_size = 60 * 2
-    baseline_window_multiplier = 2
+    default_baseline_window_multiplier = 2
 
     url_parse = urlparse(request.args.get('url'))
     url_params = parse_qs(request.args.get('url'))
@@ -41,7 +41,8 @@ def parse_params(request):
             "params": {},
             "n_lags": 0
         },
-        "return_type": "html"
+        "return_type": "html",
+        "baseline_window_multiplier": 2
     }
 
     pyod_config_default = {
@@ -50,7 +51,8 @@ def parse_params(request):
             "params": {"contamination": 0.1},
             "n_lags": 2
         },
-        "return_type": "html"
+        "return_type": "html",
+        "baseline_window_multiplier": 2
     }
 
     config = json.loads(request.args.get('config', json.dumps(ks_config_default)))
@@ -80,6 +82,7 @@ def parse_params(request):
         remote_host = f'{remote_host}:19999{url_parse.path[:-1]}'
         local_host = f'{local_host}:19999{url_parse.path[:-1]}'
 
+    baseline_window_multiplier = config.get('baseline_window_multiplier', default_baseline_window_multiplier)
     window_size = highlight_before - highlight_after
     baseline_before = highlight_after - 1
     baseline_after = baseline_before - (window_size * baseline_window_multiplier)
