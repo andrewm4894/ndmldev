@@ -5,9 +5,16 @@ from pyod.models.knn import KNN
 from pyod.models.hbos import HBOS
 from pyod.models.cblof import CBLOF
 
-from data import add_lags
 
 supported_pyod_models = ['knn', 'hbos', 'cblof']
+
+
+def add_lags(arr, n_lags=1):
+    arr_orig = np.copy(arr)
+    for n_lag in range(1, n_lags + 1):
+        arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
+    arr = arr[n_lags:]
+    return arr
 
 
 def run_model(model, charts, colnames, arr_baseline, arr_highlight):

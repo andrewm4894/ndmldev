@@ -3,7 +3,6 @@ import asks
 import pandas as pd
 import trio
 from utils import filter_useless_cols
-import numpy as np
 
 
 async def get_chart_df_async(api_call, data):
@@ -48,11 +47,6 @@ def get_data(host, charts, baseline_after, baseline_before, highlight_after, hig
     return colnames, arr_baseline, arr_highlight
 
 
-def add_lags(arr, n_lags=1):
-    arr_orig = np.copy(arr)
-    for n_lag in range(1, n_lags + 1):
-        arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
-    arr = arr[n_lags:]
-    return arr
+
 
 
