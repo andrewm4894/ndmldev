@@ -5,6 +5,8 @@ from urllib.parse import parse_qs, urlparse
 import requests
 import pandas as pd
 
+from model import supported_pyod_models
+
 
 def get_chart_list(starts_with: str = None, host: str = '127.0.0.1:19999'):
     url = f"http://{host}/api/v1/charts"
@@ -98,7 +100,7 @@ def parse_params(request):
 
 def results_to_df(results, model):
 
-    if model['type'] in ['knn', 'hbos']:
+    if model['type'] in supported_pyod_models:
 
         rank_asc = False
 
