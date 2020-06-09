@@ -4,7 +4,7 @@ import time
 from flask import Flask, request, render_template, jsonify
 
 from data import get_data
-from model import do_ks, do_pyod, run_model
+from model import run_model
 from utils import get_chart_list, parse_params, results_to_df
 
 
