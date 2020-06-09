@@ -41,3 +41,16 @@ arr = arr[n_lags:]
 print(arr)
 
 #%%
+
+{
+    "model": {
+        "type": "hbos",
+        "params": {
+            "contamination": 0.1
+        },
+        "n_lags": 2
+    },
+    "return_type": "html"
+}
+
+#%%

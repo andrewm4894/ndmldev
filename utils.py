@@ -33,16 +33,25 @@ def parse_params(request):
     url_parse = urlparse(request.args.get('url'))
     url_params = parse_qs(request.args.get('url'))
 
-    config_default = """
-    {
-      "model": "ks",
-      "model_params" : {},
-      "data_params" : {}
-      "return_type": "html"
+    ks_config_default = {
+        "model": {
+            "type": "ks",
+            "params": {},
+            "n_lags": 0
+        },
+        "return_type": "html"
     }
-    """
 
-    config = json.loads(request.args.get('config', config_default))
+    pyod_config_default = {
+        "model": {
+            "type": "hbos",
+            "params": {"contamination": 0.1},
+            "n_lags": 2
+        },
+        "return_type": "html"
+    }
+
+    config = json.loads(request.args.get('config', json.dumps(ks_config_default)))
 
     remote_host = url_parse.netloc.split(':')[0]
     if remote_host == request.host.split(':')[0]:

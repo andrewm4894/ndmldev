@@ -4,7 +4,7 @@ import time
 from flask import Flask, request, render_template, jsonify
 
 from data import get_data
-from ml import do_ks, do_pyod
+from model import do_ks, do_pyod, run_model
 from utils import get_chart_list, parse_params, results_to_df
 
 
@@ -33,7 +33,8 @@ def results():
     return_type = params['return_type']
     remote_host = params['remote_host']
     local_host = params['local_host']
-    method = params['method']
+    model = params['model']
+    model = params['model_params']
 
     # get charts to pull data for
     charts = get_chart_list(host=remote_host)
@@ -51,13 +52,7 @@ def results():
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
     # get scores
-    if method == 'pyod':
-        chart_cols = {}
-        for chart in charts:
-            chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-        results = do_pyod(chart_cols, arr_baseline, arr_highlight)
-    else:
-        results = do_ks(colnames, arr_baseline, arr_highlight)
+    results = run_model(model, charts, colnames, arr_baseline, arr_highlight, model_params, data_params)
 
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
