@@ -35,7 +35,9 @@ def parse_params(request):
 
     config_default = """
     {
-      "method": "ks",
+      "model": "ks",
+      "model_params" : {},
+      "data_params" : {}
       "return_type": "html"
     }
     """
@@ -79,15 +81,17 @@ def parse_params(request):
         "baseline_after": baseline_after,
         "remote_host": remote_host,
         "local_host": local_host,
-        "method": config.get('method', 'ks'),
+        "model": config.get('model', 'ks'),
+        "model_params": config.get('model_params', {}),
+        "data_params": config.get('data_params', {}),
         "return_type": config.get('return_type', 'html'),
     }
     return params
 
 
-def results_to_df(results, method):
+def results_to_df(results, model):
 
-    if method == 'pyod':
+    if model in ['knn', 'hbos']:
 
         rank_by_var = 'prob'
         rank_asc = False
@@ -98,7 +102,7 @@ def results_to_df(results, method):
         df_results_chart['rank'] = df_results_chart['score'].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
-    else:
+    elif model == 'ks':
 
         rank_by = 'ks_max'
         rank_by_var = 'ks'
@@ -115,6 +119,10 @@ def results_to_df(results, method):
         df_results_chart = df_results_chart.reset_index()
         df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
+
+    else:
+
+        raise ValueError(f'unknown model "{model}" ')
 
     df_results_chart = df_results_chart.round(2)
 
