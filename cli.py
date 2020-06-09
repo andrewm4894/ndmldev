@@ -17,7 +17,6 @@ config_default ="""
             "params": {},
             "n_lags": 0
         },
-        "return_type": "html",
         "baseline_window_multiplier": 2
     }
 """
@@ -43,7 +42,7 @@ remote = args.remote
 config = json.loads(args.config)
 model = config['model']
 
-baseline_window_multiplier = 2
+baseline_window_multiplier = config.get('baseline_window_multiplier', 2)
 url_params = parse_qs(url)
 url_parse = urlparse(url)
 
