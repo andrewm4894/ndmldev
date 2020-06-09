@@ -16,6 +16,6 @@
              data-height="200"
         ></div>
     {% endfor %}
-    <script>NETDATA.globalChartUnderlay.init(null, 1591717570000, 1591717583000, null, null)</script>
+    <script>NETDATA.globalChartUnderlay.init(null, {{ chart.highlight_after }}, {{ chart.highlight_before }}, null, null)</script>
 
 {% endblock %}
