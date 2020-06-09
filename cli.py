@@ -1,4 +1,5 @@
 import argparse
+import json
 import time
 from urllib.parse import parse_qs, urlparse
 
@@ -39,7 +40,7 @@ args = parser.parse_args()
 # parse args
 url = args.url
 remote = args.remote
-model = args.model
+model = json.loads(args.model)
 
 
 baseline_window_multiplier = 2
