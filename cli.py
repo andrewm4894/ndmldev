@@ -10,7 +10,7 @@ from utils import get_chart_list, results_to_df
 
 time_start = time.time()
 
-model_default ="""
+config_default ="""
     {
         "model": {
             "type": "ks",
@@ -30,7 +30,7 @@ parser.add_argument(
     '--remote', type=str, nargs='?', default='no'
 )
 parser.add_argument(
-    '--model', type=str, nargs='?', default=model_default
+    '--config', type=str, nargs='?', default=config_default
 )
 parser.add_argument(
     '--rank_asc', type=bool, nargs='?', default=False
@@ -40,8 +40,8 @@ args = parser.parse_args()
 # parse args
 url = args.url
 remote = args.remote
-model = json.loads(args.model)
-
+config = json.loads(args.config)
+model = config['model']
 
 baseline_window_multiplier = 2
 url_params = parse_qs(url)
