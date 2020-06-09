@@ -16,6 +16,6 @@
              data-height="200"
         ></div>
     {% endfor %}
-    <script type="text/javascript" window.netdataCallback = () => {NETDATA.globalChartUnderlay.init(null, {{ chart.highlightStart, chart.highlightEnd, null, null)}></script>
+    <script type="text/javascript" window.netdataCallback = () => {NETDATA.globalChartUnderlay.init(null, new Date().valueOf() - 60_000, new Date().valueOf(), null, null)}></script>
 
 {% endblock %}
