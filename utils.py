@@ -90,9 +90,7 @@ def parse_params(request):
         "baseline_after": baseline_after,
         "remote_host": remote_host,
         "local_host": local_host,
-        "model": config.get('model', 'ks'),
-        "model_params": config.get('model_params', {}),
-        "data_params": config.get('data_params', {}),
+        "model": config.get('model'),
         "return_type": config.get('return_type', 'html'),
     }
     return params
@@ -100,9 +98,8 @@ def parse_params(request):
 
 def results_to_df(results, model):
 
-    if model in ['knn', 'hbos']:
+    if model['type'] in ['knn', 'hbos']:
 
-        rank_by_var = 'prob'
         rank_asc = False
 
         # df_results_chart
@@ -111,7 +108,7 @@ def results_to_df(results, model):
         df_results_chart['rank'] = df_results_chart['score'].rank(method='first', ascending=rank_asc)
         df_results_chart = df_results_chart.sort_values('rank')
 
-    elif model == 'ks':
+    elif model['type'] == 'ks':
 
         rank_by = 'ks_max'
         rank_by_var = 'ks'
@@ -131,7 +128,7 @@ def results_to_df(results, model):
 
     else:
 
-        raise ValueError(f'unknown model "{model}" ')
+        raise ValueError(f'unknown model "{model["type"]}"')
 
     df_results_chart = df_results_chart.round(2)
 

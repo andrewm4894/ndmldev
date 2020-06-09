@@ -10,12 +10,11 @@ from data import add_lags
 supported_pyod_models = ['knn', 'hbos']
 
 
-def run_model(model, charts, colnames, arr_baseline, arr_highlight, model_params, data_params):
+def run_model(model, charts, colnames, arr_baseline, arr_highlight):
     """Function to take in data and some config and decide what model to run.
     """
-    if model in supported_pyod_models:
-        n_lags = data_params.get('n_lags', 0)
-        results = do_pyod(model, model_params, charts, colnames, arr_baseline, arr_highlight, n_lags)
+    if model['type'] in supported_pyod_models:
+        results = do_pyod(model, charts, colnames, arr_baseline, arr_highlight)
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
     return results
@@ -35,7 +34,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     return results
 
 
-def do_pyod(model, model_params, charts, colnames, arr_baseline, arr_highlight, n_lags=2):
+def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     # list to collect results into
     results = []
     # map cols from array to charts
@@ -43,28 +42,29 @@ def do_pyod(model, model_params, charts, colnames, arr_baseline, arr_highlight, 
     for chart in charts:
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
     # add lags if specified
+    n_lags = model.get('n_lags', 0)
     if n_lags > 0:
         arr_baseline = add_lags(arr_baseline, n_lags=n_lags)
         arr_highlight = add_lags(arr_highlight, n_lags=n_lags)
     # initial model set up
-    if model == 'knn':
-        model = KNN(**model_params)
-    elif model == 'cblof':
-        model = CBLOF(**model_params)
+    if model['type'] == 'knn':
+        clf = KNN(**model['params'])
+    elif model['type'] == 'cblof':
+        clf = CBLOF(**model['params'])
     else:
-        model = HBOS(**model_params)
+        clf = HBOS(**model['params'])
     # fit model for each chart and then use model to score highlighted area
     for chart in chart_cols:
         # try fit and if fails fallback to default model
         try:
-            model.fit(arr_baseline[:, chart_cols[chart]])
+            clf.fit(arr_baseline[:, chart_cols[chart]])
         except:
-            model = DefaultPyODModel(**model_params)
-            model.fit(arr_baseline[:, chart_cols[chart]])
+            clf = DefaultPyODModel(**model['params'])
+            clf.fit(arr_baseline[:, chart_cols[chart]])
         # 0/1 anomaly predictions
-        preds = model.predict(arr_highlight[:, chart_cols[chart]])
+        preds = clf.predict(arr_highlight[:, chart_cols[chart]])
         # anomaly probability scores
-        probs = model.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
+        probs = clf.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
         # save results
         results.append([chart, np.mean(probs), np.mean(preds)])
     return results

@@ -34,7 +34,6 @@ def results():
     remote_host = params['remote_host']
     local_host = params['local_host']
     model = params['model']
-    model = params['model_params']
 
     # get charts to pull data for
     charts = get_chart_list(host=remote_host)
@@ -52,13 +51,13 @@ def results():
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
     # get scores
-    results = run_model(model, charts, colnames, arr_baseline, arr_highlight, model_params, data_params)
+    results = run_model(model, charts, colnames, arr_baseline, arr_highlight)
 
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
     # df_results_chart
-    df_results_chart = results_to_df(results, method)
+    df_results_chart = results_to_df(results, model)
     time_got_results = time.time()
     app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
