@@ -14,12 +14,14 @@
         <label for="config">Job Config:</label>
         <br><br>
         <textarea rows="6" cols="100" name="config" form="inputs">
-{
-  "model": "ks",
-  "model_params" : {},
-  "data_params" : {}
-  "return_type": "html"
-}
+    {
+        "model": {
+            "type": "ks",
+            "params": {},
+            "n_lags": 0
+        },
+        "return_type": "html"
+    }
         </textarea>
         <br><br>
         <input type="submit" value="Run" >
