@@ -15,12 +15,14 @@ from pyod.models.lof import LOF
 from pyod.models.mcd import MCD
 from pyod.models.ocsvm import OCSVM
 from pyod.models.pca import PCA
+from pyod.models.sod import SOD
 
 
 log = logging.getLogger(__name__)
 
 supported_pyod_models = [
-    'abod', 'auto_encoder', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'ocsvm', 'pca'
+    'abod', 'auto_encoder', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'ocsvm',
+    'pca', 'sod'
 ]
 
 
@@ -93,6 +95,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = OCSVM(**model['params'])
     elif model['type'] == 'pca':
         clf = PCA(**model['params'])
+    elif model['type'] == 'sod':
+        clf = SOD(**model['params'])
     else:
         clf = DefaultPyODModel(**model['params'])
     # fit model for each chart and then use model to score highlighted area
