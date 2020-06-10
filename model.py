@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 from scipy.stats import ks_2samp
 from pyod.models.hbos import HBOS as DefaultPyODModel
@@ -7,6 +8,7 @@ from pyod.models.cblof import CBLOF
 from pyod.models.abod import ABOD
 from pyod.models.pca import PCA
 
+log = logging.getLogger('model')
 
 supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca']
 
@@ -30,6 +32,7 @@ def run_model(model, charts, colnames, arr_baseline, arr_highlight):
 
 
 def do_ks(colnames, arr_baseline, arr_highlight):
+    log.info('hello')
     # list to collect results into
     results = []
     # loop over each col and do the ks test
