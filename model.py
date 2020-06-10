@@ -58,7 +58,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     chart_cols = {}
     for chart in charts:
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-    log.info(f'... chart_cols = {chart_cols}')
+    #log.info(f'... chart_cols = {chart_cols}')
     # initial model set up
     if model['type'] == 'knn':
         clf = KNN(**model['params'])
@@ -77,11 +77,11 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         if n_lags > 0:
             arr_baseline_chart = add_lags(arr_baseline_chart, n_lags=n_lags)
             arr_highlight_chart = add_lags(arr_highlight_chart, n_lags=n_lags)
-        log.info(f'... chart = {chart}')
-        log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
-        log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
-        log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
-        log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
+        #log.info(f'... chart = {chart}')
+        #log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
+        #log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
+        #log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
+        #log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
         # try fit and if fails fallback to default model
         try:
             clf.fit(arr_baseline_chart)
