@@ -6,7 +6,7 @@ import pandas as pd
 import trio
 from utils import filter_useless_cols, filter_lowstd_cols
 
-log = logging.getLogger('data')
+log = logging.getLogger(__name__)
 
 
 async def get_chart_df_async(api_call, data):

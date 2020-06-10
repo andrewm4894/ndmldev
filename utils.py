@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 from urllib.parse import parse_qs, urlparse
 
@@ -6,6 +7,8 @@ import requests
 import pandas as pd
 
 from model import supported_pyod_models
+
+log = logging.getLogger(__name__)
 
 
 def get_chart_list(starts_with: str = None, host: str = '127.0.0.1:19999'):
