@@ -10,7 +10,7 @@ async def get_chart_df_async(api_call, data):
     r = await asks.get(url)
     r_json = r.json()
     df = pd.DataFrame(r_json['data'], columns=['time_idx'] + r_json['labels'][1:])
-    df = df.set_index('time_idx').add_prefix(f'{chart}__')
+    df = df.set_index('time_idx').add_prefix(f'{chart}|')
     data[chart] = df
 
 
