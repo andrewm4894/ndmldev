@@ -18,7 +18,7 @@ def add_lags(arr, n_lags=1):
     for n_lag in range(1, n_lags + 1):
         arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
     arr = arr[n_lags:]
-    log.info(f'... (add_lags) arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
+    log.info(f'... (add_lags) n_lags = {n_lags} arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
     return arr
 
 
