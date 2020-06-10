@@ -32,7 +32,6 @@ def run_model(model, charts, colnames, arr_baseline, arr_highlight):
 
 
 def do_ks(colnames, arr_baseline, arr_highlight):
-    log.info('hello')
     # list to collect results into
     results = []
     # loop over each col and do the ks test
@@ -53,6 +52,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     chart_cols = {}
     for chart in charts:
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
+    log.debug(f'... chart_cols = {chart_cols}')
     # add lags if specified
     n_lags = model.get('n_lags', 0)
     if n_lags > 0:
