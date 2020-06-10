@@ -1,8 +1,12 @@
+import logging
+
 import asks
 
 import pandas as pd
 import trio
 from utils import filter_useless_cols, filter_lowstd_cols
+
+log = logging.getLogger('data')
 
 
 async def get_chart_df_async(api_call, data):
@@ -22,11 +26,17 @@ async def get_charts_df_async(api_calls):
                 nursery.start_soon(get_chart_df_async, api_call, data)
     df = pd.concat(data, join='outer', axis=1, sort=True)
     df.columns = df.columns.droplevel()
+    log.info(f'... df.shape = {df.shape}')
     df = df._get_numeric_data()
+    log.info(f'... df.shape = {df.shape}')
     df = filter_useless_cols(df)
+    log.info(f'... df.shape = {df.shape}')
     df = df.diff().dropna(how='all')
+    log.info(f'... df.shape = {df.shape}')
     df = df._get_numeric_data()
+    log.info(f'... df.shape = {df.shape}')
     df = filter_useless_cols(df)
+    log.info(f'... df.shape = {df.shape}')
     return df
 
 
