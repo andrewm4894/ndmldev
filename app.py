@@ -42,7 +42,7 @@ def results():
     colnames, arr_baseline, arr_highlight = get_data(
         remote_host, charts, baseline_after, baseline_before, highlight_after, highlight_before
     )
-    charts = list(set([col.split('__')[0] for col in colnames]))
+    charts = list(set([col.split('|')[0] for col in colnames]))
     app.logger.info(f'... len(charts) = {len(charts)}')
     app.logger.info(f'... len(colnames) = {len(colnames)}')
     app.logger.info(f'... arr_baseline.shape = {arr_baseline.shape}')
