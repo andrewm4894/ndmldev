@@ -84,7 +84,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     elif model['type'] == 'lof':
         clf = LOF(**model['params'])
     elif model['type'] == 'lscp':
-        clf = LSCP(**model['params'])
+        #clf = LSCP(**model['params'])
+        clf = LSCP([HBOS(), CBLOF()], contamination=model['params'].get('contamination', 0.1))
     elif model['type'] == 'pca':
         clf = PCA(**model['params'])
     else:
