@@ -18,7 +18,7 @@ def get_chart_list(starts_with: str = None, host: str = '127.0.0.1:19999'):
     return chart_list
 
 
-def filter_useless_cols(df, nunique_thold=0.01):
+def filter_useless_cols(df, nunique_thold=0.05):
     s = (df.min() == df.max())
     useless_cols = list(s.where(s == True).dropna().index)
     df = df.drop(useless_cols, axis=1)
