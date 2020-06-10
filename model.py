@@ -79,6 +79,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
         log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
         log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
+        XXX
         # try fit and if fails fallback to default model
         try:
             clf.fit(arr_baseline_chart)
