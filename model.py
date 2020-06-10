@@ -2,19 +2,22 @@ import logging
 import numpy as np
 from scipy.stats import ks_2samp
 from pyod.models.hbos import HBOS as DefaultPyODModel
-from pyod.models.knn import KNN
-from pyod.models.hbos import HBOS
-from pyod.models.cblof import CBLOF
 from pyod.models.abod import ABOD
-from pyod.models.pca import PCA
+from pyod.models.cblof import CBLOF
+from pyod.models.hbos import HBOS
 from pyod.models.iforest import IForest
+from pyod.models.knn import KNN
 from pyod.models.lmdd import LMDD
+from pyod.models.loci import LOCI
 from pyod.models.loda import LODA
 from pyod.models.lof import LOF
+from pyod.models.pca import PCA
+
+
 
 log = logging.getLogger(__name__)
 
-supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca', 'iforest', 'lmdd', 'loda', 'lof']
+supported_pyod_models = ['abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'pca']
 
 
 def add_lags(arr, n_lags=1):
@@ -62,22 +65,24 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     # initial model set up
     if model['type'] == 'knn':
         clf = KNN(**model['params'])
-    elif model['type'] == 'cblof':
-        clf = CBLOF(**model['params'])
     elif model['type'] == 'abod':
         clf = ABOD(**model['params'])
-    elif model['type'] == 'pca':
-        clf = PCA(**model['params'])
+    elif model['type'] == 'cblof':
+        clf = CBLOF(**model['params'])
+    elif model['type'] == 'hbos':
+        clf = HBOS(**model['params'])
     elif model['type'] == 'iforest':
         clf = IForest(**model['params'])
     elif model['type'] == 'lmdd':
         clf = LMDD(**model['params'])
-    elif model['type'] == 'hbos':
-        clf = HBOS(**model['params'])
+    elif model['type'] == 'loci':
+        clf = LOCI(**model['params'])
     elif model['type'] == 'loda':
         clf = LODA(**model['params'])
     elif model['type'] == 'lof':
         clf = LOF(**model['params'])
+    elif model['type'] == 'pca':
+        clf = PCA(**model['params'])
     else:
         clf = DefaultPyODModel(**model['params'])
     # fit model for each chart and then use model to score highlighted area
