@@ -55,6 +55,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     log.info(f'... chart_cols = {chart_cols}')
     # add lags if specified
     n_lags = model.get('n_lags', 0)
+    log.info(f'... n_lags = {n_lags}')
     if n_lags > 0:
         arr_baseline = add_lags(arr_baseline, n_lags=n_lags)
         arr_highlight = add_lags(arr_highlight, n_lags=n_lags)
