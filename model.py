@@ -8,10 +8,11 @@ from pyod.models.cblof import CBLOF
 from pyod.models.abod import ABOD
 from pyod.models.pca import PCA
 from pyod.models.iforest import IForest
+from pyod.models.lmdd import LMDD
 
 log = logging.getLogger(__name__)
 
-supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca', 'iforest']
+supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca', 'iforest', 'lmdd']
 
 
 def add_lags(arr, n_lags=1):
@@ -67,8 +68,12 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = PCA(**model['params'])
     elif model['type'] == 'iforest':
         clf = IForest(**model['params'])
-    else:
+    elif model['type'] == 'lmdd':
+        clf = LMDD(**model['params'])
+    elif model['type'] == 'hbos':
         clf = HBOS(**model['params'])
+    else:
+        clf = DefaultPyODModel(**model['params'])
     # fit model for each chart and then use model to score highlighted area
     for chart in chart_cols:
         arr_baseline_chart = arr_baseline[:, chart_cols[chart]]
