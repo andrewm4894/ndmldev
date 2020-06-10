@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 from scipy.stats import ks_2samp
-from pyod.models.hbos import HBOS as DefaultPyODModel
+from pyod.models.pca import PCA as DefaultPyODModel
 from pyod.models.abod import ABOD
 from pyod.models.cblof import CBLOF
 from pyod.models.hbos import HBOS
