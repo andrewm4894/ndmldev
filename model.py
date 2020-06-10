@@ -12,13 +12,14 @@ from pyod.models.loci import LOCI
 from pyod.models.loda import LODA
 from pyod.models.lof import LOF
 from pyod.models.mcd import MCD
+from pyod.models.mo_gaal import MO_GAAL
 from pyod.models.pca import PCA
 
 
 log = logging.getLogger(__name__)
 
 supported_pyod_models = [
-    'abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'pca'
+    'abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'mo_gaal', 'pca'
 ]
 
 
@@ -85,6 +86,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = LOF(**model['params'])
     elif model['type'] == 'mcd':
         clf = MCD(**model['params'])
+    elif model['type'] == 'mo_gaal':
+        clf = MO_GAAL(**model['params'])
     elif model['type'] == 'pca':
         clf = PCA(**model['params'])
     else:
