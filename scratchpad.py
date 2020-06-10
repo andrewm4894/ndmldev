@@ -18,7 +18,7 @@ df.nunique() / len(df)
 
 #%%
 
-1 - (df.nunique() / len(df))
+
 
 #%%
 

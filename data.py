@@ -26,17 +26,6 @@ async def get_charts_df_async(api_calls):
                 nursery.start_soon(get_chart_df_async, api_call, data)
     df = pd.concat(data, join='outer', axis=1, sort=True)
     df.columns = df.columns.droplevel()
-    log.info(f'... df.shape = {df.shape}')
-    df = df._get_numeric_data()
-    log.info(f'... df.shape = {df.shape}')
-    df = filter_useless_cols(df)
-    log.info(f'... df.shape = {df.shape}')
-    df = df.diff().dropna(how='all')
-    log.info(f'... df.shape = {df.shape}')
-    df = df._get_numeric_data()
-    log.info(f'... df.shape = {df.shape}')
-    df = filter_useless_cols(df)
-    log.info(f'... df.shape = {df.shape}')
     return df
 
 
@@ -49,10 +38,18 @@ def get_data(host, charts, baseline_after, baseline_before, highlight_after, hig
         for chart in charts
     ]
     df = trio.run(get_charts_df_async, api_calls)
+    log.info(f'... df.shape = {df.shape}')
     df = df._get_numeric_data()
+    log.info(f'... df.shape = {df.shape} (drop nonnumeric)')
     df = filter_useless_cols(df)
+    log.info(f'... df.shape = {df.shape} (filter useless)')
     df = filter_lowstd_cols(df)
+    log.info(f'... df.shape = {df.shape} (filter lowstd)')
+    df = df.diff().dropna(how='all')
+    log.info(f'... df.shape = {df.shape} (diff & drop na all)')
+    log.info(f"... df.describe = {df.describe(include='all').transpose()}")
     colnames = list(df.columns)
+    log.info(f'... colnames = {colnames}')
     arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
     arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     return colnames, arr_baseline, arr_highlight
