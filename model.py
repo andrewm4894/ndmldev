@@ -14,15 +14,11 @@ supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca']
 
 
 def add_lags(arr, n_lags=1):
-    log.info(f'... arr.shape = {arr.shape}')
     arr_orig = np.copy(arr)
-    log.info(f'... arr_orig.shape = {arr_orig.shape}')
     for n_lag in range(1, n_lags + 1):
-        log.info(f'... n_lag = {n_lag}')
-        log.info(f'... arr.shape = {arr.shape}')
         arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
     arr = arr[n_lags:]
-    log.info(f'... arr.shape = {arr.shape}')
+    log.info(f'... (add_lags) arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
     return arr
 
 
