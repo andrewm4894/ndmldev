@@ -7,10 +7,11 @@ from pyod.models.hbos import HBOS
 from pyod.models.cblof import CBLOF
 from pyod.models.abod import ABOD
 from pyod.models.pca import PCA
+from pyod.models.cof import COF
 
 log = logging.getLogger(__name__)
 
-supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca']
+supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca', 'cof']
 
 
 def add_lags(arr, n_lags=1):
@@ -64,6 +65,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = ABOD(**model['params'])
     elif model['type'] == 'pca':
         clf = PCA(**model['params'])
+    elif model['type'] == 'cof':
+        clf = COF(**model['params'])
     else:
         clf = HBOS(**model['params'])
     # fit model for each chart and then use model to score highlighted area
