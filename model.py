@@ -14,7 +14,6 @@ from pyod.models.lof import LOF
 from pyod.models.pca import PCA
 
 
-
 log = logging.getLogger(__name__)
 
 supported_pyod_models = ['abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'pca']
