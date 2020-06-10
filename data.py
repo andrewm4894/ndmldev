@@ -2,7 +2,7 @@ import asks
 
 import pandas as pd
 import trio
-from utils import filter_useless_cols
+from utils import filter_useless_cols, filter_lowstd_cols
 
 
 async def get_chart_df_async(api_call, data):
@@ -41,6 +41,7 @@ def get_data(host, charts, baseline_after, baseline_before, highlight_after, hig
     df = trio.run(get_charts_df_async, api_calls)
     df = df._get_numeric_data()
     df = filter_useless_cols(df)
+    df = filter_lowstd_cols(df)
     colnames = list(df.columns)
     arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
     arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
