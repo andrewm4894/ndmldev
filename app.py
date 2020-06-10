@@ -10,7 +10,7 @@ from utils import get_chart_list, parse_params, results_to_df
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 @app.route('/')

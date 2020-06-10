@@ -52,7 +52,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     chart_cols = {}
     for chart in charts:
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-    log.debug(f'... chart_cols = {chart_cols}')
+    log.info(f'... chart_cols = {chart_cols}')
     # add lags if specified
     n_lags = model.get('n_lags', 0)
     if n_lags > 0:
@@ -71,16 +71,23 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = HBOS(**model['params'])
     # fit model for each chart and then use model to score highlighted area
     for chart in chart_cols:
+        arr_baseline_chart = arr_baseline[:, chart_cols[chart]]
+        arr_highlight_chart = arr_highlight[:, chart_cols[chart]]
+        log.info(f'... chart = {chart}')
+        log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
+        log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
+        log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
+        log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
         # try fit and if fails fallback to default model
         try:
-            clf.fit(arr_baseline[:, chart_cols[chart]])
+            clf.fit(arr_baseline_chart)
         except:
             clf = DefaultPyODModel()
-            clf.fit(arr_baseline[:, chart_cols[chart]])
+            clf.fit(arr_baseline_chart)
         # 0/1 anomaly predictions
-        preds = clf.predict(arr_highlight[:, chart_cols[chart]])
+        preds = clf.predict(arr_highlight_chart)
         # anomaly probability scores
-        probs = clf.predict_proba(arr_highlight[:, chart_cols[chart]])[:, 1]
+        probs = clf.predict_proba(arr_highlight_chart)[:, 1]
         # save results
         results.append([chart, np.mean(probs), np.mean(preds)])
     return results
