@@ -11,12 +11,15 @@ from pyod.models.lmdd import LMDD
 from pyod.models.loci import LOCI
 from pyod.models.loda import LODA
 from pyod.models.lof import LOF
+from pyod.models.lscp import LSCP
 from pyod.models.pca import PCA
 
 
 log = logging.getLogger(__name__)
 
-supported_pyod_models = ['abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'pca']
+supported_pyod_models = [
+    'abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'lscp', 'pca'
+]
 
 
 def add_lags(arr, n_lags=1):
@@ -80,6 +83,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = LODA(**model['params'])
     elif model['type'] == 'lof':
         clf = LOF(**model['params'])
+    elif model['type'] == 'lscp':
+        clf = LSCP(**model['params'])
     elif model['type'] == 'pca':
         clf = PCA(**model['params'])
     else:
