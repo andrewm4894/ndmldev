@@ -7,11 +7,22 @@ import pandas as pd
 
 df = pd.DataFrame(
     [
-        [1, 'x', 0.2346], [2, 'y', 1.2345],
+        [1, 0.2346], [1, 1.2345], [1.1, 1.2345]
     ],
-    columns=['a', 'b', 'f']
+    columns=['a', 'b']
 )
-print(df.round(2))
+print(df.std())
+#%%
+
+df.nunique() / len(df)
+
+#%%
+
+1 - (df.nunique() / len(df))
+
+#%%
+
+df.loc[:, df.nunique() / len(df) > 0.05]
 
 #%%
 
