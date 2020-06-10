@@ -9,5 +9,5 @@ trio==0.15.1
 asks==2.3.7
 numba==0.49.1
 pyod==0.8.0
-Keras
-tensorflow
+Keras==2.3.1
+tensorflow==1.14.0
