@@ -51,6 +51,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
 
 def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
+    n_lags = model.get('n_lags', 0)
     # list to collect results into
     results = []
     # map cols from array to charts
@@ -58,12 +59,6 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     for chart in charts:
         chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
     log.info(f'... chart_cols = {chart_cols}')
-    # add lags if specified
-    n_lags = model.get('n_lags', 0)
-    log.info(f'... n_lags = {n_lags}')
-    if n_lags > 0:
-        arr_baseline = add_lags(arr_baseline, n_lags=n_lags)
-        arr_highlight = add_lags(arr_highlight, n_lags=n_lags)
     # initial model set up
     if model['type'] == 'knn':
         clf = KNN(**model['params'])
@@ -79,6 +74,9 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     for chart in chart_cols:
         arr_baseline_chart = arr_baseline[:, chart_cols[chart]]
         arr_highlight_chart = arr_highlight[:, chart_cols[chart]]
+        if n_lags > 0:
+            arr_baseline_chart = add_lags(arr_baseline_chart, n_lags=n_lags)
+            arr_highlight_chart = add_lags(arr_highlight_chart, n_lags=n_lags)
         log.info(f'... chart = {chart}')
         log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
         log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
