@@ -3,6 +3,7 @@ import numpy as np
 from scipy.stats import ks_2samp
 from pyod.models.pca import PCA as DefaultPyODModel
 from pyod.models.abod import ABOD
+from pyod.models.auto_encoder import AutoEncoder
 from pyod.models.cblof import CBLOF
 from pyod.models.hbos import HBOS
 from pyod.models.iforest import IForest
@@ -19,7 +20,7 @@ from pyod.models.pca import PCA
 log = logging.getLogger(__name__)
 
 supported_pyod_models = [
-    'abod', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'mo_gaal', 'pca'
+    'abod', 'auto_encoder', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'mo_gaal', 'pca'
 ]
 
 
@@ -70,6 +71,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = KNN(**model['params'])
     elif model['type'] == 'abod':
         clf = ABOD(**model['params'])
+    elif model['type'] == 'auto_encoder':
+        clf = AutoEncoder(**model['params'])
     elif model['type'] == 'cblof':
         clf = CBLOF(**model['params'])
     elif model['type'] == 'hbos':
