@@ -8,11 +8,11 @@ from pyod.models.cblof import CBLOF
 from pyod.models.abod import ABOD
 from pyod.models.pca import PCA
 from pyod.models.iforest import IForest
-from pyod.models.lmdd import LMDD
+from pyod.models.loda import LODA
 
 log = logging.getLogger(__name__)
 
-supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca', 'iforest', 'lmdd']
+supported_pyod_models = ['knn', 'hbos', 'cblof', 'abod', 'pca', 'iforest', 'loda']
 
 
 def add_lags(arr, n_lags=1):
@@ -68,8 +68,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = PCA(**model['params'])
     elif model['type'] == 'iforest':
         clf = IForest(**model['params'])
-    elif model['type'] == 'lmdd':
-        clf = LMDD(**model['params'])
+    elif model['type'] == 'loda':
+        clf = LODA(**model['params'])
     elif model['type'] == 'hbos':
         clf = HBOS(**model['params'])
     else:

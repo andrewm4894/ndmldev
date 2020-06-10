@@ -47,9 +47,9 @@ def get_data(host, charts, baseline_after, baseline_before, highlight_after, hig
     log.info(f'... df.shape = {df.shape} (filter useless)')
     df = filter_lowstd_cols(df)
     log.info(f'... df.shape = {df.shape} (filter lowstd)')
-    log.info(f"... df.describe = {df.describe(include='all').transpose()}")
+    #log.info(f"... df.describe = {df.describe(include='all').transpose()}")
     colnames = list(df.columns)
-    log.info(f'... colnames = {colnames}')
+    #log.info(f'... colnames = {colnames}')
     arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
     arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     return colnames, arr_baseline, arr_highlight
