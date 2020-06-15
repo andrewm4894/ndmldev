@@ -129,12 +129,12 @@ def results_to_df(results, model):
         rank_asc = False
 
         # df_results
-        df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p'])
+        df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p', 'score'])
         df_results['rank'] = df_results[rank_by_var].rank(method='first', ascending=rank_asc)
         df_results = df_results.sort_values('rank')
 
         # df_results_chart
-        df_results_chart = df_results.groupby(['chart'])[['ks', 'p']].agg(['mean', 'min', 'max'])
+        df_results_chart = df_results.groupby(['chart'])[['ks', 'p', 'score']].agg(['mean', 'min', 'max'])
         df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
         df_results_chart = df_results_chart.reset_index()
         df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)

@@ -60,7 +60,6 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     results = zip([[col.split('|')[0], col.split('|')[1]] for col in colnames], results)
     # ('chart', 'dimension', 'ks', 'p', 'score')
     results = [[x[0][0], x[0][1], x[1][0], x[1][1], (x[1][0]-ks_min)/(ks_max-ks_min)] for x in results]
-    print(results)
     return results
 
 
