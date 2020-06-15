@@ -54,6 +54,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     for n in range(arr_baseline.shape[1]):
         ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
         results.append([ks_stat, p_value])
+    # get max and min to normalize ks score
     ks_max = max([result[0] for result in results])
     ks_min = min([result[0] for result in results])
     # wrangle results
