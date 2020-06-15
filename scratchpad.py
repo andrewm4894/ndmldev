@@ -1,5 +1,6 @@
 #%%
 import json
+from collections import Counter, OrderedDict
 
 import pandas as pd
 
@@ -18,7 +19,13 @@ df.nunique() / len(df)
 
 #%%
 
+charts = ['system.cpu', 'system.load', 'a.b', 'foo.1', 'foo.2', 'foo.3']
+charts
 
+#%%
+
+counts = OrderedDict(Counter([c.split('.')[0] for c in charts]).most_common())
+counts = '|'.join([f"{c}:{counts[c]}" for c in counts])
 
 #%%
 

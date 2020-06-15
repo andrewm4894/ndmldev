@@ -1,5 +1,6 @@
 import logging
 import time
+from collections import OrderedDict, Counter
 
 from flask import Flask, request, render_template, jsonify
 
@@ -69,8 +70,10 @@ def results():
 
     # build response
     if return_type == 'html':
-        summary_text = f'number of charts = {len(df_results_chart)}'
-        print(df_results_chart['dimension'])
+        counts = OrderedDict(Counter([c.split('.')[0] for c in charts]).most_common())
+        counts = '|'.join([f"{c}:{counts[c]}" for c in counts])
+        summary_text = f'number of charts = {len(df_results_chart)}, {counts}'
+        print(df_results_chart['chart'])
         charts = []
         for i, row in df_results_chart.iterrows():
             charts.append(
