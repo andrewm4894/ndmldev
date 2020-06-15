@@ -70,7 +70,7 @@ def results():
     # build response
     if return_type == 'html':
         summary_text = f'number of charts = {len(df_results_chart)}'
-        print(df_results_chart['chart'].value_counts())
+        print(df_results_chart['dimension'])
         charts = []
         for i, row in df_results_chart.iterrows():
             charts.append(
