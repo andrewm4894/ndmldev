@@ -55,11 +55,12 @@ def do_ks(colnames, arr_baseline, arr_highlight):
         ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
         results.append([ks_stat, p_value])
     ks_max = max([result[0] for result in results])
-    print(ks_max)
+    ks_min = min([result[0] for result in results])
     # wrangle results
     results = zip([[col.split('|')[0], col.split('|')[1]] for col in colnames], results)
-    # ('chart', 'dimension', 'ks', 'p')
-    results = [[x[0][0], x[0][1], x[1][0], x[1][1]] for x in results]
+    # ('chart', 'dimension', 'ks', 'p', 'score')
+    results = [[x[0][0], x[0][1], x[1][0], x[1][1], (x[1][0]-ks_min)/(ks_max-ks_min)] for x in results]
+    print(results)
     return results
 
 
