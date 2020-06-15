@@ -66,7 +66,7 @@ def results():
 
     # build response
     if return_type == 'html':
-        summary_text = f'Number Of Charts = {len(df_results_chart)}'
+        summary_text = f'number of charts = {len(df_results_chart)}'
         charts = []
         for i, row in df_results_chart.iterrows():
             charts.append(
