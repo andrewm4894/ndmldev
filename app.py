@@ -60,7 +60,7 @@ def results():
     # df_results_chart
     df_results_chart = results_to_df(results, model)
     if score_thold > 0:
-        df_results_chart = df_results_chart[df_results_chart['score']] >= score_thold
+        df_results_chart = df_results_chart[df_results_chart['score'] >= score_thold]
     time_got_results = time.time()
     app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
