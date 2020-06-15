@@ -141,6 +141,7 @@ def results_to_df(results, model):
         df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
         df_results_chart = df_results_chart.reset_index()
         df_results_chart['rank'] = df_results_chart[rank_by].rank(method='first', ascending=rank_asc)
+        df_results_chart = df_results_chart.rename(columns={"score_mean": "score"})
         df_results_chart = df_results_chart.sort_values('rank')
 
     else:
