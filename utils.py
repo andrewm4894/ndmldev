@@ -51,7 +51,8 @@ def parse_params(request):
             "n_lags": 0
         },
         "return_type": "html",
-        "baseline_window_multiplier": 2
+        "baseline_window_multiplier": 2,
+        "score_thold": 0.2
     }
 
     pyod_config_default = {
@@ -61,7 +62,8 @@ def parse_params(request):
             "n_lags": 2
         },
         "return_type": "html",
-        "baseline_window_multiplier": 2
+        "baseline_window_multiplier": 2,
+        "score_thold": 0.2
     }
 
     config = json.loads(request.args.get('config', json.dumps(ks_config_default)))
@@ -106,6 +108,7 @@ def parse_params(request):
         "local_host": local_host,
         "model": config.get('model'),
         "return_type": config.get('return_type', 'html'),
+        "score_thold": config.get('score_thold', 0),
     }
     return params
 

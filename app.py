@@ -34,6 +34,7 @@ def results():
     remote_host = params['remote_host']
     local_host = params['local_host']
     model = params['model']
+    score_thold = params['score_thold']
 
     # get charts to pull data for
     charts = get_chart_list(host=remote_host)
@@ -58,6 +59,8 @@ def results():
 
     # df_results_chart
     df_results_chart = results_to_df(results, model)
+    if score_thold > 0:
+        df_results_chart = df_results_chart[df_results_chart['score']] >= score_thold
     time_got_results = time.time()
     app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
