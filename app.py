@@ -71,7 +71,7 @@ def results():
     # build response
     if return_type == 'html':
         counts = OrderedDict(Counter([c.split('.')[0] for c in charts]).most_common())
-        counts = '|\n'.join([f"{c}:{counts[c]}" for c in counts])
+        counts = ' | '.join([f"{c}:{counts[c]}" for c in counts])
         summary_text = f'number of charts = {len(df_results_chart)}, {counts}'
         print(df_results_chart['chart'])
         charts = []
