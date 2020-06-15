@@ -66,6 +66,7 @@ def results():
 
     # build response
     if return_type == 'html':
+        summary_text = 'blah'
         charts = []
         for i, row in df_results_chart.iterrows():
             charts.append(
@@ -78,7 +79,8 @@ def results():
                 }
             )
         return render_template(
-            'results.html', charts=charts, highlight_after=highlight_after*1000, highlight_before=highlight_before*1000
+            'results.html', charts=charts, highlight_after=highlight_after*1000,
+            highlight_before=highlight_before*1000, summary_text=summary_text
         )
     elif return_type == 'json':
         return jsonify(df_results_chart.to_dict(orient='records'))
