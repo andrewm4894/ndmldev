@@ -83,7 +83,11 @@ def results():
     if score_thold > 0:
         df_results = df_results[df_results['score_norm'] >= score_thold]
     df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
-    df_results['chart_rank'] = df_results['chart'].map(df_results.groupby('chart')[['score']].mean().rank()['score'].to_dict())
+    df_results['chart_rank'] = df_results['chart'].map(
+        df_results.groupby('chart')[['score']].mean().rank(
+            method='first', ascending=False
+        )['score'].to_dict()
+    )
     df_results = df_results.sort_values('chart_rank', ascending=True)
 
     time_done = time.time()
