@@ -11,6 +11,7 @@
     {% for chart in charts %}
         <div data-netdata="{{ chart.id }}"
              data-dimensions="{{ chart.dimensions }}"
+             data-append-options="match-names"
              data-host="{{ chart.data_host }}"
              data-title="{{ chart.title }}"
              data-after="{{ chart.after }}"
