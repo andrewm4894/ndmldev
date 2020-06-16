@@ -90,6 +90,7 @@ def results():
     print(df_results)
     for chart in df_results['chart'].unique():
         print(chart)
+        print(','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist()))
     XXX
 
     # df_results_chart
