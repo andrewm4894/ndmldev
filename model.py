@@ -107,39 +107,38 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = XGBOD(**model['params'])
     else:
         clf = DefaultPyODModel(**model['params'])
-    print(arr_baseline.shape)
-    XXX
     # fit model for each dimension and then use model to score highlighted area
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-        arr_baseline_chart = arr_baseline[:, n]
-        arr_highlight_chart = arr_highlight[:, n]
+        arr_baseline_dim = arr_baseline[:, n]
+        arr_highlight_dim = arr_highlight[:, n]
         if n_lags > 0:
-            arr_baseline_chart = add_lags(arr_baseline_chart, n_lags=n_lags)
-            arr_highlight_chart = add_lags(arr_highlight_chart, n_lags=n_lags)
+            arr_baseline_dim = add_lags(arr_baseline_dim, n_lags=n_lags)
+            arr_highlight_dim = add_lags(arr_highlight_dim, n_lags=n_lags)
         # remove any nan rows
-        arr_baseline_chart = arr_baseline_chart[~np.isnan(arr_baseline_chart).any(axis=1)]
-        arr_highlight_chart = arr_highlight_chart[~np.isnan(arr_highlight_chart).any(axis=1)]
-        #log.info(f'... chart = {chart}')
-        #log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
-        #log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
-        #log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
-        #log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
+        arr_baseline_dim = arr_baseline_dim[~np.isnan(arr_baseline_dim).any(axis=1)]
+        arr_highlight_dim = arr_highlight_dim[~np.isnan(arr_highlight_dim).any(axis=1)]
+        log.info(f'... chart = {chart}')
+        log.info(f'... dimension = {dimension}')
+        log.info(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
+        log.info(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
+        log.info(f'... arr_baseline_dim = {arr_baseline_dim}')
+        log.info(f'... arr_highlight_dim = {arr_highlight_dim}')
         # try fit and if fails fallback to default model
         try:
-            clf.fit(arr_baseline_chart)
+            clf.fit(arr_baseline_dim)
         except:
             clf = DefaultPyODModel()
-            clf.fit(arr_baseline_chart)
+            clf.fit(arr_baseline_dim)
         # 0/1 anomaly predictions
-        preds = clf.predict(arr_highlight_chart)
-        #log.info(f'... preds.shape = {preds.shape}')
-        #log.info(f'... preds = {preds}')
+        preds = clf.predict(arr_highlight_dim)
+        log.info(f'... preds.shape = {preds.shape}')
+        log.info(f'... preds = {preds}')
         # anomaly probability scores
-        probs = clf.predict_proba(arr_highlight_chart)[:, 1]
-        #log.info(f'... probs.shape = {probs.shape}')
-        #log.info(f'... probs = {probs}')
+        probs = clf.predict_proba(arr_highlight_dim)[:, 1]
+        log.info(f'... probs.shape = {probs.shape}')
+        log.info(f'... probs = {probs}')
         # save results
         score = (np.mean(probs) + np.mean(preds))/2
         results[chart] = {dimension: {'score': score}}
