@@ -93,24 +93,6 @@ def results():
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
 
-    #print(df_results)
-    for chart in df_results['chart'].unique():
-        print(chart)
-        print(','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist()))
-    #XXX
-
-    # df_results_chart
-    #df_results_chart = results_to_df(results, model)
-    #if score_thold > 0:
-    #    df_results_chart = df_results_chart[df_results_chart['score'] >= score_thold]
-    #time_got_results = time.time()
-    #app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
-
-    #print(df_results_chart)
-    #xxx
-
-
-
     # build response
     if return_type == 'html':
         charts = df_results['chart'].values.tolist()
