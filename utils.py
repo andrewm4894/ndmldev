@@ -3,36 +3,10 @@ import logging
 from datetime import datetime
 from urllib.parse import parse_qs, urlparse
 
-import requests
 import pandas as pd
 
-from model import supported_pyod_models
 
 log = logging.getLogger(__name__)
-
-
-def get_chart_list(starts_with: str = None, host: str = '127.0.0.1:19999'):
-    url = f"http://{host}/api/v1/charts"
-    r = requests.get(url)
-    charts = r.json().get('charts')
-    chart_list = [chart for chart in charts]
-    if starts_with:
-        chart_list = [chart for chart in chart_list if chart.startswith(starts_with)]
-    return chart_list
-
-
-def filter_useless_cols(df, nunique_thold=0.05):
-    s = (df.min() == df.max())
-    useless_cols = list(s.where(s == True).dropna().index)
-    df = df.drop(useless_cols, axis=1)
-    df = df.dropna(axis=1)
-    df = df.loc[:, df.nunique() / len(df) > nunique_thold]
-    return df
-
-
-def filter_lowstd_cols(df, std_thold=0.05):
-    df = df.loc[:, df.std() > std_thold]
-    return df
 
 
 def parse_params(request):
