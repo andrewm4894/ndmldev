@@ -116,7 +116,7 @@ def results():
         charts_to_render = []
         for chart in df_results['chart'].unique():
             dimensions = ','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist())
-            rank = df_results[df_results['chart'] == chart]['chart_rank'].unique().values.tolist()[0]
+            rank = df_results[df_results['chart'] == chart]['chart_rank'].unique().tolist()[0]
             charts_to_render.append(
                 {
                     "id": chart,
