@@ -113,43 +113,35 @@ def parse_params(request):
     return params
 
 
-def results_to_df(results, model):
+def results_to_df(results_dict, score_thold):
 
-    if model['type'] in supported_pyod_models:
+    # get max and min scores
+    scores = []
+    for chart in results_dict:
+        for dimension in results_dict[chart]:
+            scores.append([k['score'] for k in dimension.values()])
+    score_max = max(scores)[0]
+    score_min = min(scores)[0]
 
-        rank_asc = False
+    # normalize scores
+    results_list = []
+    for chart in results_dict:
+        for dimension in results_dict[chart]:
+            for k in dimension:
+                score = dimension[k]['score']
+                score_norm = (score - score_min) / (score_max - score_min)
+                results_list.append([chart, k, score, score_norm])
 
-        # df_results_chart
-        df_results_chart = pd.DataFrame(results, columns=['chart', 'prob', 'pred'])
-        df_results_chart['score'] = (df_results_chart['prob'] + df_results_chart['pred']) / 2
-        df_results_chart['rank'] = df_results_chart['score'].rank(method='first', ascending=rank_asc)
-        df_results_chart = df_results_chart.sort_values('rank')
+    df_results = pd.DataFrame(results_list, columns=['chart', 'dimension', 'score', 'score_norm'])
+    if score_thold > 0:
+        df_results = df_results[df_results['score_norm'] >= score_thold]
+    df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
+    df_results['chart_rank'] = df_results['chart'].map(
+        df_results.groupby('chart')[['score']].mean().rank(
+            method='first', ascending=False
+        )['score'].to_dict()
+    )
+    df_results = df_results.sort_values('chart_rank', ascending=True)
 
-    elif model['type'] == 'ks':
-
-        rank_by = 'ks_max'
-        rank_by_var = 'ks'
-        rank_asc = False
-
-        # df_results
-        df_results = pd.DataFrame(results, columns=['chart', 'dimension', 'ks', 'p', 'score'])
-        df_results['rank'] = df_results[rank_by_var].rank(method='first', ascending=rank_asc)
-        df_results = df_results.sort_values('rank')
-
-        # df_results_chart
-        df_results_chart = df_results.groupby(['chart'])[['ks', 'p', 'score']].agg(['mean', 'min', 'max'])
-        df_results_chart.columns = ['_'.join(col) for col in df_results_chart.columns]
-        df_results_chart = df_results_chart.reset_index()
-        df_results_chart = df_results_chart.rename(columns={"score_max": "score"})
-        df_results_chart['rank'] = df_results_chart['score'].rank(method='first', ascending=rank_asc)
-
-        df_results_chart = df_results_chart.sort_values('rank')
-
-    else:
-
-        raise ValueError(f'unknown model "{model["type"]}"')
-
-    df_results_chart = df_results_chart.round(2)
-
-    return df_results_chart
+    return df_results
 

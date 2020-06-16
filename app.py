@@ -61,33 +61,8 @@ def results():
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
-    # get max and min scores
-    scores = []
-    for chart in results_dict:
-        for dimension in results_dict[chart]:
-            scores.append([k['score'] for k in dimension.values()])
-    score_max = max(scores)[0]
-    score_min = min(scores)[0]
-
-    # normalize scores
-    results_list = []
-    for chart in results_dict:
-        for dimension in results_dict[chart]:
-            for k in dimension:
-                score = dimension[k]['score']
-                score_norm = (score - score_min)/(score_max - score_min)
-                results_list.append([chart, k, score, score_norm])
-
-    df_results = pd.DataFrame(results_list, columns=['chart', 'dimension', 'score', 'score_norm'])
-    if score_thold > 0:
-        df_results = df_results[df_results['score_norm'] >= score_thold]
-    df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
-    df_results['chart_rank'] = df_results['chart'].map(
-        df_results.groupby('chart')[['score']].mean().rank(
-            method='first', ascending=False
-        )['score'].to_dict()
-    )
-    df_results = df_results.sort_values('chart_rank', ascending=True)
+    # get results to df
+    df_results = results_to_df(results_dict, score_thold)
 
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
