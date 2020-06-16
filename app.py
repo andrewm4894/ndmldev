@@ -56,12 +56,30 @@ def results():
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
     # get scores
-    results = run_model(model, charts, colnames, arr_baseline, arr_highlight)
+    results_dict = run_model(model, charts, colnames, arr_baseline, arr_highlight)
 
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
 
-    print(results)
+    # get max and min scores
+    scores = []
+    for chart in results_dict:
+        for dimension in results_dict[chart]:
+            scores.append([k['score'] for k in dimension.values()])
+    score_max = max(scores)
+    score_min = min(scores)
+
+    # normalize scores
+    results_list = []
+    for chart in results:
+        for dimension in results[chart]:
+            for k in dimension:
+                score = dimension[k]['score']
+                score_norm = (score - score_min)/(score_max - score_min)
+                results_list.append([chart, k, score, score_norm])
+
+    print(results_list)
+    XXX
 
     # df_results_chart
     df_results_chart = results_to_df(results, model)
