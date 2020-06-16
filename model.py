@@ -55,7 +55,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-        results[chart][dimension] = {'score': ks_stat}
+        results[chart] = {dimension: {'score': ks_stat}}
         #results.append([ks_stat, p_value])
     # get max and min to normalize ks score
     #ks_max = max([result[0] for result in results])
