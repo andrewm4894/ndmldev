@@ -76,7 +76,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
             chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
     elif model_level == 'dimension':
         for col in colnames:
-            chart_cols[col] = [colnames.index(col) for col in colnames]
+            chart_cols[col] = colnames.index(col)
     else:
         raise ValueError(f'invalid model_level {model_level}')
     log.info(f'... chart_cols = {chart_cols}')
