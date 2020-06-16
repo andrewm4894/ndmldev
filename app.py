@@ -122,7 +122,7 @@ def results():
             df_results_chart = df_results[df_results['chart'] == chart]
             dimensions = ','.join(df_results_chart['dimension'].values.tolist())
             rank = df_results_chart['chart_rank'].unique().tolist()[0]
-            score_avg = df_results_chart['score'].mean()
+            score_avg = round(df_results_chart['score'].mean(),2)
             charts_to_render.append(
                 {
                     "id": chart,
