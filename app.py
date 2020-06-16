@@ -122,11 +122,13 @@ def results():
             df_results_chart = df_results[df_results['chart'] == chart]
             dimensions = ','.join(df_results_chart['dimension'].values.tolist())
             rank = df_results_chart['chart_rank'].unique().tolist()[0]
-            score_avg = round(df_results_chart['score'].mean(),2)
+            score_avg = round(df_results_chart['score'].mean(), 2)
+            score_min = round(df_results_chart['score'].min(), 2)
+            score_max = round(df_results_chart['score'].max(), 2)
             charts_to_render.append(
                 {
                     "id": chart,
-                    "title": f"{rank} - {chart} - {score_avg}",
+                    "title": f"{rank} - {chart} - score_avg = {score_avg}, score_min = {score_min}, score_max = {score_max}",
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/'),
