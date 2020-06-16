@@ -4,7 +4,7 @@ from collections import OrderedDict, Counter
 
 from flask import Flask, request, render_template, jsonify
 
-from data import get_data
+from netdata_pandas.data import get_data
 from model import run_model
 from utils import get_chart_list, parse_params, results_to_df
 
@@ -41,6 +41,9 @@ def results():
     charts = get_chart_list(host=remote_host)
 
     # get data
+    df = get_data(remote_host, charts, after=baseline_after, before=highlight_before)
+    print(df.head())
+    XXX
     colnames, arr_baseline, arr_highlight = get_data(
         remote_host, charts, baseline_after, baseline_before, highlight_after, highlight_before
     )
