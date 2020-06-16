@@ -66,8 +66,8 @@ def results():
     for chart in results_dict:
         for dimension in results_dict[chart]:
             scores.append([k['score'] for k in dimension.values()])
-    score_max = max(scores)
-    score_min = min(scores)
+    score_max = max(scores)[0]
+    score_min = min(scores)[0]
 
     # normalize scores
     results_list = []
