@@ -56,7 +56,7 @@ def results():
     app.logger.info(f'... time start to data = {time_got_data - time_start}')
 
     # get scores
-    results_dict = run_model(model, charts, colnames, arr_baseline, arr_highlight)
+    results_dict = run_model(model, colnames, arr_baseline, arr_highlight)
 
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
