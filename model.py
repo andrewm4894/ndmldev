@@ -37,11 +37,11 @@ def add_lags(arr, n_lags=1):
     return arr
 
 
-def run_model(model, charts, colnames, arr_baseline, arr_highlight):
+def run_model(model, colnames, arr_baseline, arr_highlight):
     """Function to take in data and some config and decide what model to run.
     """
     if model['type'] in supported_pyod_models:
-        results = do_pyod(model, charts, colnames, arr_baseline, arr_highlight)
+        results = do_pyod(model, colnames, arr_baseline, arr_highlight)
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
     return results
@@ -59,22 +59,13 @@ def do_ks(colnames, arr_baseline, arr_highlight):
             results[chart].append({dimension: {'score': score}})
         else:
             results[chart] = [{dimension: {'score': score}}]
-        #results.append([ks_stat, p_value])
-    # get max and min to normalize ks score
-    #ks_max = max([result[0] for result in results])
-    #ks_min = min([result[0] for result in results])
-    ## wrangle results
-    #results = zip([[col.split('|')[0], col.split('|')[1]] for col in colnames], results)
-    ## ('chart', 'dimension', 'ks', 'p', 'score')
-    #results = [[x[0][0], x[0][1], x[1][0], x[1][1], (x[1][0]-ks_min)/(ks_max-ks_min)] for x in results]
     return results
 
 
-def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
+def do_pyod(model, colnames, arr_baseline, arr_highlight):
     n_lags = model.get('n_lags', 0)
     # dict to collect results into
     results = {}
-    #log.info(f'... chart_cols = {chart_cols}')
     # initial model set up
     if model['type'] == 'knn':
         clf = KNN(**model['params'])
@@ -122,12 +113,12 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         # remove any nan rows
         arr_baseline_dim = arr_baseline_dim[~np.isnan(arr_baseline_dim).any(axis=1)]
         arr_highlight_dim = arr_highlight_dim[~np.isnan(arr_highlight_dim).any(axis=1)]
-        log.info(f'... chart = {chart}')
-        log.info(f'... dimension = {dimension}')
-        log.info(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
-        log.info(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
-        log.info(f'... arr_baseline_dim = {arr_baseline_dim}')
-        log.info(f'... arr_highlight_dim = {arr_highlight_dim}')
+        #log.info(f'... chart = {chart}')
+        #log.info(f'... dimension = {dimension}')
+        #log.info(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
+        #log.info(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
+        #log.info(f'... arr_baseline_dim = {arr_baseline_dim}')
+        #log.info(f'... arr_highlight_dim = {arr_highlight_dim}')
         # try fit and if fails fallback to default model
         try:
             clf.fit(arr_baseline_dim)
@@ -136,12 +127,12 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
             clf.fit(arr_baseline_dim)
         # 0/1 anomaly predictions
         preds = clf.predict(arr_highlight_dim)
-        log.info(f'... preds.shape = {preds.shape}')
-        log.info(f'... preds = {preds}')
+        #log.info(f'... preds.shape = {preds.shape}')
+        #log.info(f'... preds = {preds}')
         # anomaly probability scores
         probs = clf.predict_proba(arr_highlight_dim)[:, 1]
-        log.info(f'... probs.shape = {probs.shape}')
-        log.info(f'... probs = {probs}')
+        #log.info(f'... probs.shape = {probs.shape}')
+        #log.info(f'... probs = {probs}')
         # save results
         score = (np.mean(probs) + np.mean(preds))/2
         if chart in results:
