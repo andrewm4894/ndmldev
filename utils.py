@@ -60,8 +60,7 @@ def parse_params(request):
         "model": {
             "type": "hbos",
             "params": {"contamination": 0.1},
-            "n_lags": 2,
-            "model_level": "dimension"
+            "n_lags": 2
         },
         "return_type": "html",
         "baseline_window_multiplier": 2,
