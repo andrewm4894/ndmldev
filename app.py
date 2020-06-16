@@ -37,7 +37,6 @@ def results():
     local_host = params['local_host']
     model = params['model']
     score_thold = params['score_thold']
-    model_level = model.get('model_level', 'dimension')
 
     # get charts to pull data for
     charts = get_chart_list(host=remote_host)
