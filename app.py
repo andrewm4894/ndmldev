@@ -3,6 +3,7 @@ import time
 from collections import OrderedDict, Counter
 
 from flask import Flask, request, render_template, jsonify
+import pandas as pd
 
 from netdata_pandas.data import get_data
 from model import run_model
@@ -78,7 +79,12 @@ def results():
                 score_norm = (score - score_min)/(score_max - score_min)
                 results_list.append([chart, k, score, score_norm])
 
-    print(results_list)
+    df_results = pd.DataFrame(results_list, columns=['chart', 'dimension', 'score', 'score_norm'])
+    if score_thold > 0:
+        df_results = df_results[df_results['score_norm'] >= score_thold]
+    df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
+
+    print(df_results)
     XXX
 
     # df_results_chart
