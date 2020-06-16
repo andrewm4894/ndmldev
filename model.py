@@ -111,8 +111,8 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-        arr_baseline_dim = arr_baseline[:, n]
-        arr_highlight_dim = arr_highlight[:, n]
+        arr_baseline_dim = arr_baseline[:, [n]]
+        arr_highlight_dim = arr_highlight[:, [n]]
         if n_lags > 0:
             arr_baseline_dim = add_lags(arr_baseline_dim, n_lags=n_lags)
             arr_highlight_dim = add_lags(arr_highlight_dim, n_lags=n_lags)
