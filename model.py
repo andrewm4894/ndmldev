@@ -66,13 +66,20 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
 def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     n_lags = model.get('n_lags', 0)
+    model_level = model.get('model_level', 'dimension')
     # list to collect results into
     results = []
     # map cols from array to charts
     chart_cols = {}
-    for chart in charts:
-        chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-    #log.info(f'... chart_cols = {chart_cols}')
+    if model_level == 'chart':
+        for chart in charts:
+            chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
+    elif model_level == 'dimension':
+        for col in colnames:
+            chart_cols[col] = [colnames.index(col) for col in colnames]
+    else:
+        raise ValueError(f'invalid model_level {model_level}')
+    log.info(f'... chart_cols = {chart_cols}')
     # initial model set up
     if model['type'] == 'knn':
         clf = KNN(**model['params'])

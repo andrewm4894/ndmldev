@@ -48,24 +48,24 @@ def parse_params(request):
         "model": {
             "type": "ks",
             "params": {},
-            "n_lags": 0
+            "n_lags": 0,
+            "model_level": "dimension"
         },
         "return_type": "html",
         "baseline_window_multiplier": 2,
-        "score_thold": 0.2,
-        "model_level": "dimension"
+        "score_thold": 0.2
     }
 
     pyod_config_default = {
         "model": {
             "type": "hbos",
             "params": {"contamination": 0.1},
-            "n_lags": 2
+            "n_lags": 2,
+            "model_level": "dimension"
         },
         "return_type": "html",
         "baseline_window_multiplier": 2,
-        "score_thold": 0.2,
-        "model_level": "dimension"
+        "score_thold": 0.2
     }
 
     config = json.loads(request.args.get('config', json.dumps(ks_config_default)))
@@ -110,8 +110,7 @@ def parse_params(request):
         "local_host": local_host,
         "model": config.get('model'),
         "return_type": config.get('return_type', 'html'),
-        "score_thold": config.get('score_thold', 0),
-        "model_level": config.get('model_level', 'dimension'),
+        "score_thold": config.get('score_thold', 0)
     }
     return params
 
