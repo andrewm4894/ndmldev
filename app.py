@@ -58,11 +58,10 @@ def results():
     # get scores
     results = run_model(model, charts, colnames, arr_baseline, arr_highlight)
 
-    print(results)
-    xxx
-
     time_got_scores = time.time()
     app.logger.info(f'... time data to scores = {round(time_got_scores - time_got_data, 2)}')
+
+    print(results)
 
     # df_results_chart
     df_results_chart = results_to_df(results, model)
