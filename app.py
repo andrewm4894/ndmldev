@@ -83,6 +83,8 @@ def results():
     if score_thold > 0:
         df_results = df_results[df_results['score_norm'] >= score_thold]
     df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
+    df_results['chart_rank'] = df_results['chart'].map(df_results.groupby('chart')[['score']].mean().rank()['score'].to_dict())
+    df_results = df_results.sort_values('chart_rank', ascending=False)
 
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
@@ -114,10 +116,11 @@ def results():
         charts_to_render = []
         for chart in df_results['chart'].unique():
             dimensions = ','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist())
+            rank = df_results[df_results['chart'] == chart]['chart_rank'].unique().values.tolist()[0]
             charts_to_render.append(
                 {
                     "id": chart,
-                    "title": chart,
+                    "title": f"{rank} - {chart}",
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/'),
