@@ -120,11 +120,12 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
         #log.info(f'... arr_baseline_dim = {arr_baseline_dim}')
         #log.info(f'... arr_highlight_dim = {arr_highlight_dim}')
         # try fit and if fails fallback to default model
-        try:
-            clf.fit(arr_baseline_dim)
-        except:
-            clf = DefaultPyODModel()
-            clf.fit(arr_baseline_dim)
+        clf.fit(arr_baseline_dim)
+        #try:
+        #    clf.fit(arr_baseline_dim)
+        #except:
+        #    clf = DefaultPyODModel()
+        #    clf.fit(arr_baseline_dim)
         # 0/1 anomaly predictions
         preds = clf.predict(arr_highlight_dim)
         #log.info(f'... preds.shape = {preds.shape}')
