@@ -70,8 +70,8 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     n_lags = model.get('n_lags', 0)
     model_level = model.get('model_level', 'dimension')
-    # list to collect results into
-    results = []
+    # dict to collect results into
+    results = {}
     # map cols from array to charts
     chart_cols = {}
     if model_level == 'chart':
@@ -119,9 +119,11 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     else:
         clf = DefaultPyODModel(**model['params'])
     # fit model for each chart and then use model to score highlighted area
-    for chart in chart_cols:
-        arr_baseline_chart = arr_baseline[:, chart_cols[chart]]
-        arr_highlight_chart = arr_highlight[:, chart_cols[chart]]
+    for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+        chart = colname.split('|')[0]
+        dimension = colname.split('|')[1]
+        arr_baseline_chart = arr_baseline[:, n]
+        arr_highlight_chart = arr_highlight[:, n]
         if n_lags > 0:
             arr_baseline_chart = add_lags(arr_baseline_chart, n_lags=n_lags)
             arr_highlight_chart = add_lags(arr_highlight_chart, n_lags=n_lags)
@@ -148,6 +150,7 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         #log.info(f'... probs.shape = {probs.shape}')
         #log.info(f'... probs = {probs}')
         # save results
-        results.append([chart, np.mean(probs), np.mean(preds)])
+        score = (np.mean(probs) + np.mean(preds))/2
+        results[chart] = {dimension: {'score': score}}
     return results
 
