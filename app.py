@@ -71,8 +71,8 @@ def results():
 
     # normalize scores
     results_list = []
-    for chart in results:
-        for dimension in results[chart]:
+    for chart in results_dict:
+        for dimension in results_dict[chart]:
             for k in dimension:
                 score = dimension[k]['score']
                 score_norm = (score - score_min)/(score_max - score_min)
