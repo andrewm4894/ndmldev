@@ -125,11 +125,11 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         # remove any nan rows
         arr_baseline_chart = arr_baseline_chart[~np.isnan(arr_baseline_chart).any(axis=1)]
         arr_highlight_chart = arr_highlight_chart[~np.isnan(arr_highlight_chart).any(axis=1)]
-        log.info(f'... chart = {chart}')
-        log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
-        log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
-        log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
-        log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
+        #log.info(f'... chart = {chart}')
+        #log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
+        #log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
+        #log.info(f'... arr_baseline_chart = {arr_baseline_chart}')
+        #log.info(f'... arr_highlight_chart = {arr_highlight_chart}')
         # try fit and if fails fallback to default model
         try:
             clf.fit(arr_baseline_chart)
@@ -138,12 +138,12 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
             clf.fit(arr_baseline_chart)
         # 0/1 anomaly predictions
         preds = clf.predict(arr_highlight_chart)
-        log.info(f'... preds.shape = {preds.shape}')
-        log.info(f'... preds = {preds}')
+        #log.info(f'... preds.shape = {preds.shape}')
+        #log.info(f'... preds = {preds}')
         # anomaly probability scores
         probs = clf.predict_proba(arr_highlight_chart)[:, 1]
-        log.info(f'... probs.shape = {probs.shape}')
-        log.info(f'... probs = {probs}')
+        #log.info(f'... probs.shape = {probs.shape}')
+        #log.info(f'... probs = {probs}')
         # save results
         results.append([chart, np.mean(probs), np.mean(preds)])
     return results
