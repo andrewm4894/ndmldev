@@ -122,6 +122,9 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         if n_lags > 0:
             arr_baseline_chart = add_lags(arr_baseline_chart, n_lags=n_lags)
             arr_highlight_chart = add_lags(arr_highlight_chart, n_lags=n_lags)
+        # remove any nan rows
+        arr_baseline_chart = arr_baseline_chart[~np.isnan(arr_baseline_chart).any(axis=1)]
+        arr_highlight_chart = arr_highlight_chart[~np.isnan(arr_highlight_chart).any(axis=1)]
         log.info(f'... chart = {chart}')
         log.info(f'... arr_baseline_chart.shape = {arr_baseline_chart.shape}')
         log.info(f'... arr_highlight_chart.shape = {arr_highlight_chart.shape}')
