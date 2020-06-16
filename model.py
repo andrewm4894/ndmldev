@@ -54,8 +54,11 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-        ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-        results[chart] = {dimension: {'score': ks_stat}}
+        score, _ = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
+        if chart in results:
+            results[chart].append({dimension: {'score': score}})
+        else:
+            results[chart] = [{dimension: {'score': score}}]
         #results.append([ks_stat, p_value])
     # get max and min to normalize ks score
     #ks_max = max([result[0] for result in results])
@@ -141,6 +144,9 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         log.info(f'... probs = {probs}')
         # save results
         score = (np.mean(probs) + np.mean(preds))/2
-        results[chart] = {dimension: {'score': score}}
+        if chart in results:
+            results[chart].append({dimension: {'score': score}})
+        else:
+            results[chart] = [{dimension: {'score': score}}]
     return results
 
