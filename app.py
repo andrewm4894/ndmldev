@@ -87,46 +87,48 @@ def results():
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
 
-    print(df_results)
+    #print(df_results)
     for chart in df_results['chart'].unique():
         print(chart)
         print(','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist()))
-    XXX
+    #XXX
 
     # df_results_chart
-    df_results_chart = results_to_df(results, model)
-    if score_thold > 0:
-        df_results_chart = df_results_chart[df_results_chart['score'] >= score_thold]
-    time_got_results = time.time()
-    app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
+    #df_results_chart = results_to_df(results, model)
+    #if score_thold > 0:
+    #    df_results_chart = df_results_chart[df_results_chart['score'] >= score_thold]
+    #time_got_results = time.time()
+    #app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
-    print(df_results_chart)
-    xxx
+    #print(df_results_chart)
+    #xxx
 
 
 
     # build response
     if return_type == 'html':
+        charts = df_results['chart'].values.tolist()
         counts = OrderedDict(Counter([c.split('.')[0] for c in charts]).most_common())
         counts = ' | '.join([f"{c}:{counts[c]}" for c in counts])
-        summary_text = f'number of charts = {len(df_results_chart)}, {counts}'
-        print(df_results_chart['chart'])
-        charts = []
-        for i, row in df_results_chart.iterrows():
-            charts.append(
+        summary_text = f"number of charts = {df_results['chart'].nunique()}, number of dimensions = {len(df_results)}, {counts}"
+        charts_to_render = []
+        for chart in df_results['chart'].unique():
+            dimensions = ','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist())
+            charts_to_render.append(
                 {
-                    "id": row['chart'],
-                    "title": ' | '.join([f"{x[0]} = {x[1]}" for x in list(zip(df_results_chart.columns, row.tolist()))]),
+                    "id": chart,
+                    "title": chart,
                     "after": baseline_after,
                     "before": highlight_before,
-                    "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/')
+                    "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/'),
+                    "dimensions": dimensions
                 }
             )
         return render_template(
-            'results.html', charts=charts, highlight_after=highlight_after*1000,
+            'results.html', charts=charts_to_render, highlight_after=highlight_after*1000,
             highlight_before=highlight_before*1000, summary_text=summary_text
         )
     elif return_type == 'json':
-        return jsonify(df_results_chart.to_dict(orient='records'))
+        return jsonify(df_results.to_dict(orient='records'))
     else:
         return None
