@@ -6,7 +6,7 @@ from flask import Flask, request, render_template, jsonify
 
 from netdata_pandas.data import get_data, get_chart_list
 from model import run_model
-from utils import get_chart_list, parse_params, results_to_df
+from utils import parse_params, results_to_df
 
 
 app = Flask(__name__)
