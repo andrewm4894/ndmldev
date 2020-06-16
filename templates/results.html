@@ -10,11 +10,11 @@
     <div><p>Summary: {{ summary_text }}</p></div>
     {% for chart in charts %}
         <div data-netdata="{{ chart.id }}"
+             data-dimensions="{{ chart.dimensions }}"
              data-host="{{ chart.data_host }}"
              data-title="{{ chart.title }}"
              data-after="{{ chart.after }}"
              data-before="{{ chart.before }}"
-             data-dimensions="{{ chart.dimensions }}"
              data-width="1200"
              data-height="200"
         ></div>
