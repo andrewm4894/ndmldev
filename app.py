@@ -84,7 +84,7 @@ def results():
         df_results = df_results[df_results['score_norm'] >= score_thold]
     df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
     df_results['chart_rank'] = df_results['chart'].map(df_results.groupby('chart')[['score']].mean().rank()['score'].to_dict())
-    df_results = df_results.sort_values('chart_rank', ascending=False)
+    df_results = df_results.sort_values('chart_rank', ascending=True)
 
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
@@ -115,12 +115,14 @@ def results():
         summary_text = f"number of charts = {df_results['chart'].nunique()}, number of dimensions = {len(df_results)}, {counts}"
         charts_to_render = []
         for chart in df_results['chart'].unique():
-            dimensions = ','.join(df_results[df_results['chart'] == chart]['dimension'].values.tolist())
-            rank = df_results[df_results['chart'] == chart]['chart_rank'].unique().tolist()[0]
+            df_results_chart = df_results[df_results['chart'] == chart]
+            dimensions = ','.join(df_results_chart['dimension'].values.tolist())
+            rank = df_results_chart['chart_rank'].unique().tolist()[0]
+            score_avg = df_results_chart['score'].mean()
             charts_to_render.append(
                 {
                     "id": chart,
-                    "title": f"{rank} - {chart}",
+                    "title": f"{rank} - {chart} - {score_avg}",
                     "after": baseline_after,
                     "before": highlight_before,
                     "data_host": "http://" + f"{remote_host.replace('127.0.0.1', local_host)}/".replace('//', '/'),
