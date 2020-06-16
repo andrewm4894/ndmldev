@@ -68,6 +68,9 @@ def results():
     time_got_results = time.time()
     app.logger.info(f'... time scores to results = {round(time_got_results - time_got_scores, 2)}')
 
+    print(df_results_chart)
+    xxx
+
     time_done = time.time()
     app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
 
