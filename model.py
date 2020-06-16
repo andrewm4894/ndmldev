@@ -69,19 +69,8 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
 def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
     n_lags = model.get('n_lags', 0)
-    model_level = model.get('model_level', 'dimension')
     # dict to collect results into
     results = {}
-    # map cols from array to charts
-    chart_cols = {}
-    if model_level == 'chart':
-        for chart in charts:
-            chart_cols[chart] = [colnames.index(col) for col in colnames if col.startswith(chart)]
-    elif model_level == 'dimension':
-        for col in colnames:
-            chart_cols[col] = [colnames.index(col)]
-    else:
-        raise ValueError(f'invalid model_level {model_level}')
     #log.info(f'... chart_cols = {chart_cols}')
     # initial model set up
     if model['type'] == 'knn':
@@ -118,7 +107,9 @@ def do_pyod(model, charts, colnames, arr_baseline, arr_highlight):
         clf = XGBOD(**model['params'])
     else:
         clf = DefaultPyODModel(**model['params'])
-    # fit model for each chart and then use model to score highlighted area
+    print(arr_baseline.shape)
+    XXX
+    # fit model for each dimension and then use model to score highlighted area
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
