@@ -48,8 +48,7 @@ def parse_params(request):
         "model": {
             "type": "ks",
             "params": {},
-            "n_lags": 0,
-            "model_level": "dimension"
+            "n_lags": 0
         },
         "return_type": "html",
         "baseline_window_multiplier": 2,
