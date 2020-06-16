@@ -84,7 +84,12 @@ def results():
         df_results = df_results[df_results['score_norm'] >= score_thold]
     df_results['rank'] = df_results['score'].rank(method='first', ascending=False)
 
+    time_done = time.time()
+    app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
+
     print(df_results)
+    for chart in df_results['chart'].unique():
+        print(chart)
     XXX
 
     # df_results_chart
@@ -97,8 +102,7 @@ def results():
     print(df_results_chart)
     xxx
 
-    time_done = time.time()
-    app.logger.info(f'... time total = {round(time_done - time_start, 2)}')
+
 
     # build response
     if return_type == 'html':
