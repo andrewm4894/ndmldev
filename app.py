@@ -42,11 +42,9 @@ def results():
 
     # get data
     df = get_data(remote_host, charts, after=baseline_after, before=highlight_before)
-    print(df.head())
-    XXX
-    colnames, arr_baseline, arr_highlight = get_data(
-        remote_host, charts, baseline_after, baseline_before, highlight_after, highlight_before
-    )
+    colnames = list(df.columns)
+    arr_baseline = df.query(f'{baseline_after} <= time_idx <= {baseline_before}').values
+    arr_highlight = df.query(f'{highlight_after} <= time_idx <= {highlight_before}').values
     charts = list(set([col.split('|')[0] for col in colnames]))
     app.logger.info(f'... len(charts) = {len(charts)}')
     app.logger.info(f'... len(colnames) = {len(colnames)}')
