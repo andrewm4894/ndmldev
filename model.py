@@ -48,19 +48,22 @@ def run_model(model, charts, colnames, arr_baseline, arr_highlight):
 
 
 def do_ks(colnames, arr_baseline, arr_highlight):
-    # list to collect results into
-    results = []
+    # dict to collect results into
+    results = {}
     # loop over each col and do the ks test
-    for n in range(arr_baseline.shape[1]):
+    for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+        chart = colname.split('|')[0]
+        dimension = colname.split('|')[1]
         ks_stat, p_value = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
-        results.append([ks_stat, p_value])
+        results[chart][dimension] = {'score': ks_stat}
+        #results.append([ks_stat, p_value])
     # get max and min to normalize ks score
-    ks_max = max([result[0] for result in results])
-    ks_min = min([result[0] for result in results])
-    # wrangle results
-    results = zip([[col.split('|')[0], col.split('|')[1]] for col in colnames], results)
-    # ('chart', 'dimension', 'ks', 'p', 'score')
-    results = [[x[0][0], x[0][1], x[1][0], x[1][1], (x[1][0]-ks_min)/(ks_max-ks_min)] for x in results]
+    #ks_max = max([result[0] for result in results])
+    #ks_min = min([result[0] for result in results])
+    ## wrangle results
+    #results = zip([[col.split('|')[0], col.split('|')[1]] for col in colnames], results)
+    ## ('chart', 'dimension', 'ks', 'p', 'score')
+    #results = [[x[0][0], x[0][1], x[1][0], x[1][1], (x[1][0]-ks_min)/(ks_max-ks_min)] for x in results]
     return results
 
 
