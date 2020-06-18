@@ -52,6 +52,8 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
 
 def do_mp(colnames, arr_baseline, arr_highlight):
     arr = np.concatenate((arr_baseline, arr_highlight))
+    n_baseline = arr_baseline.shape[0]
+    n_highlight = arr_highlight.shape[0]
     # dict to collect results into
     results = {}
     # loop over each col and do the ks test
@@ -59,8 +61,15 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         mp = stumpy.stump(arr[:, n], 30)[:, 0]
-        print(arr[arr_baseline.shape[0], n], arr_highlight[0, n])
-        xxx
+        mp_baseline = mp[0:n_baseline]
+        mp_highlight = mp[0:n_highlight]
+        print(arr_baseline.shape)
+        print(arr_highlight.shape)
+        print(mp_baseline.shape)
+        print(mp_highlight.shape)
+        raise ValueError('xxx')
+        #print(arr[arr_baseline.shape[0], n], arr_highlight[0, n])
+        #xxx
         if chart in results:
             results[chart].append({dimension: {'score': score}})
         else:
