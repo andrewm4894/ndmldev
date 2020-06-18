@@ -60,7 +60,9 @@ def do_mp(colnames, arr_baseline, arr_highlight):
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-        mp = stumpy.stump(arr[:, n], 30)[:, 0]
+        m = 30
+        #mp = stumpy.stump(arr[:, n], m)[:, 0]
+        mp = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=False)[:, 0]
         mp_baseline = mp[0:n_baseline]
         mp_highlight = mp[0:n_highlight]
         mp_thold = np.mean(mp)
