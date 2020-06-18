@@ -43,14 +43,14 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
     """
     if model['type'] in supported_pyod_models:
         results = do_pyod(model, colnames, arr_baseline, arr_highlight)
-    elif model['type'] == 'mp':
-        results = do_mp(colnames, arr_baseline, arr_highlight)
+    elif model['type'] in ['mp', 'mp_approx']:
+        results = do_mp(colnames, arr_baseline, arr_highlight, model=model['type'])
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
     return results
 
 
-def do_mp(colnames, arr_baseline, arr_highlight):
+def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
     arr = np.concatenate((arr_baseline, arr_highlight))
     n_baseline = arr_baseline.shape[0]
     n_highlight = arr_highlight.shape[0]
@@ -61,14 +61,17 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         m = 30
-        #mp = stumpy.stump(arr[:, n], m)[:, 0]
-        approx = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=True)
-        for _ in range(9):
-            approx.update()
-        mp = approx.P_
-        mp_baseline = mp[0:n_baseline]
+        if model == 'mp':
+            mp = stumpy.stump(arr[:, n], m)[:, 0]
+        elif model == 'mp_approx':
+            approx = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=True)
+            for _ in range(9):
+                approx.update()
+            mp = approx.P_
+        else:
+            raise ValueError(f"... unknown model '{model}'")
         mp_highlight = mp[0:n_highlight]
-        mp_thold = np.mean(mp)
+        mp_thold = np.percentile(mp, 90)
         score = np.mean(np.where(mp_highlight >= mp_thold, 1, 0))
         if chart in results:
             results[chart].append({dimension: {'score': score}})
