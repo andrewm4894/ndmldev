@@ -63,7 +63,9 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         mp = stumpy.stump(arr[:, n], 30)[:, 0]
         mp_baseline = mp[0:n_baseline]
         mp_highlight = mp[0:n_highlight]
-        print(arr_baseline.shape, arr_highlight.shape, mp_baseline.shape, mp_highlight.shape)
+        mp_mean = np.mean(mp)
+        score = np.mean(np.where(mp_highlight >= mp_mean, 1, 0))
+        print(score)
         xxx
         #print(arr[arr_baseline.shape[0], n], arr_highlight[0, n])
         #xxx
