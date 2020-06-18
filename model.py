@@ -18,6 +18,7 @@ from pyod.models.pca import PCA
 from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
+import stumpy
 
 
 log = logging.getLogger(__name__)
@@ -50,17 +51,17 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
 
 
 def do_mp(colnames, arr_baseline, arr_highlight):
-    arr = np.concatenate((arr_baseline, arr_highlight))
-    print(arr.shape)
-    print(arr)
-    xxx
     # dict to collect results into
     results = {}
     # loop over each col and do the ks test
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+        arr = np.concatenate((arr_baseline[:, n], arr_highlight[:, n]))
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-        score, _ = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
+        mp = stumpy.stump(arr, 30)
+        print(arr[arr_baseline.shape[0]+1])
+        print(arr_highlight[0, 0])
+        xxx
         if chart in results:
             results[chart].append({dimension: {'score': score}})
         else:
