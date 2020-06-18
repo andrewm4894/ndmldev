@@ -66,8 +66,6 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         for _ in range(9):
             approx.update()
         mp = approx.P_
-        print(mp.shape)
-        xxx
         mp_baseline = mp[0:n_baseline]
         mp_highlight = mp[0:n_highlight]
         mp_thold = np.mean(mp)
