@@ -65,7 +65,7 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
             mp = stumpy.stump(arr[:, n], m)[:, 0]
         elif model == 'mp_approx':
             approx = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=True)
-            for _ in range(9):
+            for _ in range(20):
                 approx.update()
             mp = approx.P_
         else:
