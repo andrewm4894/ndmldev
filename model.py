@@ -63,11 +63,8 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         mp = stumpy.stump(arr[:, n], 30)[:, 0]
         mp_baseline = mp[0:n_baseline]
         mp_highlight = mp[0:n_highlight]
-        print(arr_baseline.shape)
-        print(arr_highlight.shape)
-        print(mp_baseline.shape)
-        print(mp_highlight.shape)
-        raise ValueError('xxx')
+        print(arr_baseline.shape, arr_highlight.shape, mp_baseline.shape, mp_highlight.shape)
+        xxx
         #print(arr[arr_baseline.shape[0], n], arr_highlight[0, n])
         #xxx
         if chart in results:
