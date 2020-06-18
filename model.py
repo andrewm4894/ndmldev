@@ -63,12 +63,8 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         mp = stumpy.stump(arr[:, n], 30)[:, 0]
         mp_baseline = mp[0:n_baseline]
         mp_highlight = mp[0:n_highlight]
-        mp_mean = np.mean(mp)
-        score = np.mean(np.where(mp_highlight >= mp_mean, 1, 0))
-        print(score)
-        xxx
-        #print(arr[arr_baseline.shape[0], n], arr_highlight[0, n])
-        #xxx
+        mp_thold = np.mean(mp)
+        score = np.mean(np.where(mp_highlight >= mp_thold, 1, 0))
         if chart in results:
             results[chart].append({dimension: {'score': score}})
         else:
