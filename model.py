@@ -42,8 +42,29 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
     """
     if model['type'] in supported_pyod_models:
         results = do_pyod(model, colnames, arr_baseline, arr_highlight)
+    elif model['type'] == 'mp':
+        results = do_mp(colnames, arr_baseline, arr_highlight)
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
+    return results
+
+
+def do_mp(colnames, arr_baseline, arr_highlight):
+    arr = np.concatenate(arr_baseline, arr_highlight)
+    print(arr.shape)
+    print(arr)
+    xxx
+    # dict to collect results into
+    results = {}
+    # loop over each col and do the ks test
+    for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+        chart = colname.split('|')[0]
+        dimension = colname.split('|')[1]
+        score, _ = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
+        if chart in results:
+            results[chart].append({dimension: {'score': score}})
+        else:
+            results[chart] = [{dimension: {'score': score}}]
     return results
 
 
