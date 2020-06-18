@@ -50,7 +50,7 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
 
 
 def do_mp(colnames, arr_baseline, arr_highlight):
-    arr = np.concatenate(arr_baseline, arr_highlight)
+    arr = np.concatenate((arr_baseline, arr_highlight))
     print(arr.shape)
     print(arr)
     xxx
