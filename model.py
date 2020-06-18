@@ -62,7 +62,7 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         dimension = colname.split('|')[1]
         m = 30
         #mp = stumpy.stump(arr[:, n], m)[:, 0]
-        approx = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=False)[:, 0]
+        approx = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=True)
         for _ in range(9):
             approx.update()
         mp = approx.P_[:, 0]
