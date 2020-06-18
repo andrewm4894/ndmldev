@@ -59,7 +59,7 @@ def do_mp(colnames, arr_baseline, arr_highlight):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         mp = stumpy.stump(arr[:, n], 30)[:, 0]
-        print(arr[arr_baseline.shape[0]+1, n], arr_highlight[0, n])
+        print(arr[arr_baseline.shape[0], n], arr_highlight[0, n])
         xxx
         if chart in results:
             results[chart].append({dimension: {'score': score}})
