@@ -10,3 +10,4 @@ tensorflow==1.14.0
 xgboost==1.1.1
 netdata-pandas==0.0.13
 stumpy==1.4.0
+adtk==0.6.2
