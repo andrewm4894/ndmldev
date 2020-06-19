@@ -20,7 +20,7 @@ from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
 import stumpy
-from adtk.detector import InterQuartileRangeAD, AutoregressionAD
+from adtk.detector import InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
 
 
@@ -31,7 +31,7 @@ supported_pyod_models = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 
-supported_adtk_models = ['iqr', 'ar']
+supported_adtk_models = ['iqr', 'ar', 'esd']
 
 
 def add_lags(arr, n_lags=1):
@@ -116,10 +116,12 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = InterQuartileRangeAD()
         elif model == 'ar':
             clf = AutoregressionAD()
+        elif model == 'esd':
+            clf = GeneralizedESDTestAD()
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
-        preds = clf.detect(df_highlight[colname])
+        preds = clf.predict(df_highlight[colname])
         score = np.mean(preds)
         if chart in results:
             results[chart].append({dimension: {'score': score}})
