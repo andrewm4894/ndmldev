@@ -22,12 +22,13 @@ from pyod.models.xgbod import XGBOD
 import stumpy
 from adtk.detector import (
     InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD, LevelShiftAD, PersistAD, QuantileAD, SeasonalAD,
-    VolatilityShiftAD, MinClusterDetector, OutlierDetector, PcaAD
+    VolatilityShiftAD, MinClusterDetector, OutlierDetector, PcaAD, RegressionAD
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.covariance import EllipticEnvelope
+from sklearn.linear_model import LinearRegression
 
 
 log = logging.getLogger(__name__)
@@ -38,7 +39,8 @@ supported_pyod_models = [
 ]
 
 supported_adtk_models = [
-    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan', 'eliptic', 'pcaad'
+    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan', 'eliptic',
+    'pcaad', 'linear'
 ]
 
 
@@ -144,6 +146,8 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = OutlierDetector(EllipticEnvelope)
         elif model == 'pcaad':
             clf = PcaAD()
+        elif model == 'linear':
+            clf = RegressionAD(LinearRegression)
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
