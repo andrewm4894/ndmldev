@@ -131,7 +131,7 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         elif model == 'seasonal':
             clf = SeasonalAD()
         elif model == 'volatility':
-            clf = VolatilityShiftAD()
+            clf = VolatilityShiftAD(15)
         else:
             clf = ADTKDefault()
         try:
