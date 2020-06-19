@@ -26,6 +26,7 @@ from adtk.detector import (
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
+from sklearn.cluster import KMeans
 
 
 log = logging.getLogger(__name__)
@@ -133,7 +134,7 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         elif model == 'volatility':
             clf = VolatilityShiftAD(15)
         elif model == 'cluster':
-            clf = MinClusterDetector()
+            clf = MinClusterDetector(KMeans)
         else:
             clf = ADTKDefault()
         try:
