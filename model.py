@@ -119,7 +119,7 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         elif model == 'esd':
             clf = GeneralizedESDTestAD()
         elif model == 'level':
-            clf = LevelShiftAD()
+            clf = LevelShiftAD(15)
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
