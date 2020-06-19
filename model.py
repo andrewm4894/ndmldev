@@ -26,7 +26,7 @@ from adtk.detector import (
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, DBSCAN
 
 
 log = logging.getLogger(__name__)
@@ -36,7 +36,9 @@ supported_pyod_models = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 
-supported_adtk_models = ['iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'cluster']
+supported_adtk_models = [
+    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan'
+]
 
 
 def add_lags(arr, n_lags=1):
@@ -133,8 +135,10 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = SeasonalAD()
         elif model == 'volatility':
             clf = VolatilityShiftAD(15)
-        elif model == 'cluster':
+        elif model == 'kmeans':
             clf = MinClusterDetector(KMeans)
+        elif model == 'dbscan':
+            clf = MinClusterDetector(DBSCAN)
         else:
             clf = ADTKDefault()
         try:
