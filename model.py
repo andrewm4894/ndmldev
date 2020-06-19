@@ -20,7 +20,7 @@ from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
 import stumpy
-from adtk.detector import InterQuartileRangeAD
+from adtk.detector import InterQuartileRangeAD, AutoregressionAD
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
 
 
@@ -31,7 +31,7 @@ supported_pyod_models = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 
-supported_adtk_models = ['iqr']
+supported_adtk_models = ['iqr', 'ar']
 
 
 def add_lags(arr, n_lags=1):
@@ -114,6 +114,8 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         dimension = colname.split('|')[1]
         if model == 'iqr':
             clf = InterQuartileRangeAD()
+        elif model == 'ar':
+            clf = AutoregressionAD()
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
