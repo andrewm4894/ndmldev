@@ -20,7 +20,10 @@ from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
 import stumpy
-from adtk.detector import InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD, LevelShiftAD, PersistAD
+from adtk.detector import (
+    InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD, LevelShiftAD, PersistAD, QuantileAD
+)
+
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
 
 
@@ -31,7 +34,7 @@ supported_pyod_models = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 
-supported_adtk_models = ['iqr', 'ar', 'esd', 'level', 'persist']
+supported_adtk_models = ['iqr', 'ar', 'esd', 'level', 'persist', 'quantile']
 
 
 def add_lags(arr, n_lags=1):
@@ -122,6 +125,8 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = LevelShiftAD(15)
         elif model == 'persist':
             clf = PersistAD(15)
+        elif model == 'quantile':
+            clf = QuantileAD()
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
