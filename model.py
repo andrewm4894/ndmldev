@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+import pandas as pd
 from scipy.stats import ks_2samp
 from pyod.models.pca import PCA as DefaultPyODModel
 from pyod.models.abod import ABOD
@@ -19,6 +20,7 @@ from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
 import stumpy
+from adtk.detector import InterQuartileRangeAD as Detector
 
 
 log = logging.getLogger(__name__)
@@ -88,6 +90,42 @@ def do_ks(colnames, arr_baseline, arr_highlight):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         score, _ = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
+        if chart in results:
+            results[chart].append({dimension: {'score': score}})
+        else:
+            results[chart] = [{dimension: {'score': score}}]
+    return results
+
+
+def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
+    df_baseline = pd.DataFrame(arr_baseline, columns=colnames)
+    df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s')))
+    df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
+    df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s')))
+    print(df_baseline.head())
+    xxx
+    arr = np.concatenate((arr_baseline, arr_highlight))
+    n_baseline = arr_baseline.shape[0]
+    n_highlight = arr_highlight.shape[0]
+    # dict to collect results into
+    results = {}
+    # loop over each col and do the ks test
+    for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+        chart = colname.split('|')[0]
+        dimension = colname.split('|')[1]
+        m = 30
+        if model == 'mp':
+            mp = stumpy.stump(arr[:, n], m)[:, 0]
+        elif model == 'mp_approx':
+            approx = stumpy.scrump(arr[:, n], m, percentage=0.01, pre_scrump=True)
+            for _ in range(20):
+                approx.update()
+            mp = approx.P_
+        else:
+            raise ValueError(f"... unknown model '{model}'")
+        mp_highlight = mp[0:n_highlight]
+        mp_thold = np.percentile(mp, 90)
+        score = np.mean(np.where(mp_highlight >= mp_thold, 1, 0))
         if chart in results:
             results[chart].append({dimension: {'score': score}})
         else:
