@@ -147,7 +147,7 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         elif model == 'pcaad':
             clf = PcaAD()
         elif model == 'linear':
-            clf = RegressionAD(LinearRegression)
+            clf = RegressionAD(LinearRegression, target=colname)
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
