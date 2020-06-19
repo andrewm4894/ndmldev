@@ -22,11 +22,12 @@ from pyod.models.xgbod import XGBOD
 import stumpy
 from adtk.detector import (
     InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD, LevelShiftAD, PersistAD, QuantileAD, SeasonalAD,
-    VolatilityShiftAD, MinClusterDetector
+    VolatilityShiftAD, MinClusterDetector, OutlierDetector
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
 from sklearn.cluster import KMeans, DBSCAN
+from sklearn.covariance import EllipticEnvelope
 
 
 log = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ supported_pyod_models = [
 ]
 
 supported_adtk_models = [
-    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan'
+    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan', 'eliptic'
 ]
 
 
@@ -139,7 +140,8 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = MinClusterDetector(KMeans)
         elif model == 'dbscan':
             clf = MinClusterDetector(DBSCAN)
-            #clf.fit(df_baseline[[colname]])
+        elif model == 'eliptic':
+            clf = OutlierDetector(EllipticEnvelope)
         else:
             clf = ADTKDefault()
         clf.fit(df_baseline[colname])
