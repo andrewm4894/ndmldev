@@ -104,9 +104,9 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
 def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
     df_baseline = pd.DataFrame(arr_baseline, columns=colnames)
-    df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s')))
+    df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s'), freq='1s'))
     df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
-    df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s')))
+    df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s'), freq='1s'))
     results = {}
     # loop over each col and do the ks test
     for colname in df_baseline.columns:
