@@ -149,7 +149,7 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         #    log.warning(e)
         #    clf = ADTKDefault()
         #    clf.fit(df_baseline[colname])
-        preds = clf.predict(df_highlight[colname])
+        preds = clf.predict(df_highlight[[colname]])
         score = np.mean(preds)
         if chart in results:
             results[chart].append({dimension: {'score': score}})
