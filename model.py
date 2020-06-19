@@ -30,6 +30,8 @@ supported_pyod_models = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 
+supported_adtk_models = ['iqr']
+
 
 def add_lags(arr, n_lags=1):
     arr_orig = np.copy(arr)
@@ -47,6 +49,8 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
         results = do_pyod(model, colnames, arr_baseline, arr_highlight)
     elif model['type'] in ['mp', 'mp_approx']:
         results = do_mp(colnames, arr_baseline, arr_highlight, model=model['type'])
+    elif model['type'] in supported_adtk_models:
+        results = do_adtk(colnames, arr_baseline, arr_highlight, model=model['type'])
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
     return results
