@@ -22,7 +22,7 @@ from pyod.models.xgbod import XGBOD
 import stumpy
 from adtk.detector import (
     InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD, LevelShiftAD, PersistAD, QuantileAD, SeasonalAD,
-    VolatilityShiftAD
+    VolatilityShiftAD, MinClusterDetector
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
@@ -35,7 +35,7 @@ supported_pyod_models = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 
-supported_adtk_models = ['iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility']
+supported_adtk_models = ['iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'cluster']
 
 
 def add_lags(arr, n_lags=1):
@@ -132,6 +132,8 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = SeasonalAD()
         elif model == 'volatility':
             clf = VolatilityShiftAD(15)
+        elif model == 'cluster':
+            clf = MinClusterDetector()
         else:
             clf = ADTKDefault()
         try:
