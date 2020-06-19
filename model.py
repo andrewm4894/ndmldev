@@ -139,9 +139,10 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = MinClusterDetector(KMeans)
         elif model == 'dbscan':
             clf = MinClusterDetector(DBSCAN)
+            #clf.fit(df_baseline[[colname]])
         else:
             clf = ADTKDefault()
-        clf.fit(df_baseline[colname])
+        clf.fit(df_baseline[[colname]])
         #try:
         #    clf.fit(df_baseline[colname])
         #except Exception as e:
