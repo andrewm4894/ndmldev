@@ -106,7 +106,16 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
     df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s')))
     df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
     df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s')))
-    print(df_baseline.head())
+    results = {}
+    # loop over each col and do the ks test
+    for colname in df_baseline.columns:
+        chart = colname.split('|')[0]
+        dimension = colname.split('|')[1]
+        clf = Detector()
+        clf.fit(df_baseline[colname])
+        preds = clf.detect(df_highlight[colname])
+        score = np.mean(preds)
+
     xxx
     arr = np.concatenate((arr_baseline, arr_highlight))
     n_baseline = arr_baseline.shape[0]
