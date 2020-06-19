@@ -20,7 +20,8 @@ from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
 import stumpy
-from adtk.detector import InterQuartileRangeAD as Detector
+from adtk.detector import InterQuartileRangeAD
+from adtk.detector import InterQuartileRangeAD as ADTKDefault
 
 
 log = logging.getLogger(__name__)
@@ -111,7 +112,10 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
     for colname in df_baseline.columns:
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-        clf = Detector()
+        if model == 'iqr':
+            clf = InterQuartileRangeAD()
+        else:
+            clf = ADTKDefault()
         clf.fit(df_baseline[colname])
         preds = clf.detect(df_highlight[colname])
         score = np.mean(preds)
