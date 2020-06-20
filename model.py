@@ -61,7 +61,7 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
     elif model['type'] in ['mp', 'mp_approx']:
         results = do_mp(colnames, arr_baseline, arr_highlight, model=model['type'])
     elif model['type'] in supported_adtk_models:
-        results = do_adtk(colnames, arr_baseline, arr_highlight, model=model['type'])
+        results = do_adtk(model, colnames, arr_baseline, arr_highlight)
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
     return results
@@ -112,8 +112,9 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     return results
 
 
-def do_adtk(model, colnames, arr_baseline, arr_highlight, model='iqr'):
+def do_adtk(model, colnames, arr_baseline, arr_highlight):
     n_lags = model.get('n_lags', 0)
+    model = model.get('type', 'iqr')
     df_baseline = pd.DataFrame(arr_baseline, columns=colnames)
     df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s'), freq='1s'))
     df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
