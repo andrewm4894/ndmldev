@@ -151,10 +151,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
         else:
 
-            #df_baseline_dim = df_baseline[[colname]]
-            #df_highlight_dim = df_highlight[[colname]]
-            df_baseline_dim = df_baseline[colname]
-            df_highlight_dim = df_highlight[colname]
+            df_baseline_dim = df_baseline[[colname]]
+            df_highlight_dim = df_highlight[[colname]]
 
             if model in adtk_models_lags_allowed:
 
