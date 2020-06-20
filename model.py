@@ -125,6 +125,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
+
         log.info(f'... chart = {chart}')
         log.info(f'... dimension = {dimension}')
 
@@ -137,13 +138,15 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         if highlight_dim_na_pct >= 0.1:
             bad_data = True
 
+        # skip if bad data
         if bad_data:
+
             log.info(f'... skipping due to bad data')
+
         else:
 
             df_baseline_dim = df_baseline[[colname]]
             df_highlight_dim = df_highlight[[colname]]
-
 
             log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
             log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
