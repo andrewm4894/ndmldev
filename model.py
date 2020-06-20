@@ -26,7 +26,7 @@ from adtk.detector import (
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
-from sklearn.cluster import KMeans, DBSCAN
+from sklearn.cluster import KMeans, Birch
 from sklearn.covariance import EllipticEnvelope
 from sklearn.linear_model import LinearRegression
 
@@ -38,11 +38,11 @@ pyod_models_supported = [
     'pca', 'sod', 'vae', 'xgbod'
 ]
 adtk_models_supported = [
-    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan', 'eliptic',
+    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
     'pcaad', 'linear'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'dbscan'
+    'kmeans', 'birch'
 ]
 
 
@@ -190,8 +190,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 clf = VolatilityShiftAD(15)
             elif model == 'kmeans':
                 clf = MinClusterDetector(KMeans(n_clusters=2))
-            elif model == 'dbscan':
-                clf = MinClusterDetector(DBSCAN())
+            elif model == 'birch':
+                clf = MinClusterDetector(Birch())
             elif model == 'eliptic':
                 clf = OutlierDetector(EllipticEnvelope)
             elif model == 'pcaad':
