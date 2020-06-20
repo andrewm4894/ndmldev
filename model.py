@@ -43,7 +43,7 @@ adtk_models_supported = [
     'pcaad', 'linear', 'meanshift', 'gmm'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'meanshift', 'gmm'
+    'kmeans', 'birch', 'meanshift', 'gmm', 'eliptic'
 ]
 
 
