@@ -151,14 +151,14 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
             clf = RegressionAD(LinearRegression, target=colname)
         else:
             clf = ADTKDefault()
-        clf.fit(df_baseline[colname])
+        clf.fit(df_baseline[[colname]])
         #try:
         #    clf.fit(df_baseline[colname])
         #except Exception as e:
         #    log.warning(e)
         #    clf = ADTKDefault()
         #    clf.fit(df_baseline[colname])
-        preds = clf.predict(df_highlight[colname])
+        preds = clf.predict(df_highlight[[colname]])
         score = np.mean(preds)
         if chart in results:
             results[chart].append({dimension: {'score': score}})
