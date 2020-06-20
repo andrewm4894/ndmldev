@@ -27,6 +27,7 @@ from adtk.detector import (
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
 from sklearn.cluster import KMeans, Birch, MeanShift
+from sklearn.mixture import GaussianMixture
 from sklearn.covariance import EllipticEnvelope
 from sklearn.linear_model import LinearRegression
 
@@ -39,10 +40,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'meanshift'
+    'pcaad', 'linear', 'meanshift', 'gmm'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'meanshift'
+    'kmeans', 'birch', 'meanshift', 'gmm'
 ]
 
 
@@ -194,6 +195,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 clf = MinClusterDetector(Birch())
             elif model == 'meanshift':
                 clf = MinClusterDetector(MeanShift())
+            elif model == 'gmm':
+                clf = MinClusterDetector(GaussianMixture())
             elif model == 'eliptic':
                 clf = OutlierDetector(EllipticEnvelope)
             elif model == 'pcaad':
