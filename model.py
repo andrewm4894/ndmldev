@@ -122,6 +122,14 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
     for colname in df_baseline.columns:
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
+
+        log.info(f'... chart = {chart}')
+        log.info(f'... dimension = {dimension}')
+        log.info(f'... df_baseline.shape = {df_baseline[[colname]].shape}')
+        log.info(f'... df_highlight.shape = {df_highlight[[colname]].shape}')
+        log.info(f'... df_baseline = {df_baseline[[colname]]}')
+        log.info(f'... df_highlight = {df_highlight[[colname]]}')
+
         if model == 'iqr':
             clf = InterQuartileRangeAD()
         elif model == 'ar':
