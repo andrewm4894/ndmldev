@@ -198,26 +198,32 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             elif model == 'gmm':
                 clf = MinClusterDetector(GaussianMixture())
             elif model == 'eliptic':
-                clf = OutlierDetector(EllipticEnvelope(support_fraction=0.8))
+                clf = OutlierDetector(EllipticEnvelope())
             elif model == 'pcaad':
                 clf = PcaAD()
             elif model == 'linear':
                 clf = RegressionAD(LinearRegression, target=colname)
             else:
                 clf = ADTKDefault()
-            clf.fit(df_baseline_dim)
-            #try:
-            #    clf.fit(df_baseline[colname])
-            #except Exception as e:
-            #    log.warning(e)
-            #    clf = ADTKDefault()
-            #    clf.fit(df_baseline[colname])
+
+            # fit mode
+            #clf.fit(df_baseline_dim)
+            try:
+                clf.fit(df_baseline_dim)
+            except Exception as e:
+                log.warning(e)
+                log.info(f'... could not fit model for {colname}, trying default')
+                clf = ADTKDefault()
+                clf.fit(df_baseline_dim)
+
+            # get scores
             preds = clf.predict(df_highlight_dim)
             score = preds.mean().mean()
             if chart in results:
                 results[chart].append({dimension: {'score': score}})
             else:
                 results[chart] = [{dimension: {'score': score}}]
+
     return results
 
 
