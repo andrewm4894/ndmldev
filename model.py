@@ -328,7 +328,7 @@ def adtk_init(model):
     elif model == 'gmm':
         from adtk.detector import MinClusterDetector
         from sklearn.mixture import GaussianMixture
-        clf = MinClusterDetector(GaussianMixture(n_components=2, max_iter=50))
+        clf = MinClusterDetector(GaussianMixture(n_components=2, max_iter=50, warm_start=True))
     elif model == 'eliptic':
         from adtk.detector import OutlierDetector
         from sklearn.covariance import EllipticEnvelope
