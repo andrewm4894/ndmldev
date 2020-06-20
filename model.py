@@ -122,85 +122,100 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
     results = {}
     # loop over each col and do the ks test
     for colname in df_baseline.columns:
+
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
-
-        df_baseline_dim = df_baseline[[colname]]
-        df_highlight_dim = df_highlight[[colname]]
-
         log.info(f'... chart = {chart}')
         log.info(f'... dimension = {dimension}')
-        log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-        log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-        log.info(f'... df_baseline_dim = {df_baseline_dim}')
-        log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
-        if n_lags > 0:
-            df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
-            df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
-            colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
-            df_baseline_dim.columns = colnames_updated
-            df_highlight_dim.columns = colnames_updated
+        # check for bad data
+        bad_data = False
+        baseline_dim_na_pct = df_baseline[[colname]].isna().sum() / len(df_baseline)
+        highlight_dim_na_pct = df_highlight[[colname]].isna().sum() / len(df_highlight)
+        if baseline_dim_na_pct >= 0.1:
+            bad_data = True
+        if highlight_dim_na_pct >= 0.1:
+            bad_data = True
 
-        log.info(f'... chart = {chart}')
-        log.info(f'... dimension = {dimension}')
-        log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-        log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-        log.info(f'... df_baseline_dim = {df_baseline_dim}')
-        log.info(f'... df_highlight_dim = {df_highlight_dim}')
-
-        df_baseline_dim = df_baseline_dim.dropna()
-        df_highlight_dim = df_highlight_dim.dropna()
-
-        log.info(f'... chart = {chart}')
-        log.info(f'... dimension = {dimension}')
-        log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-        log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-        log.info(f'... df_baseline_dim = {df_baseline_dim}')
-        log.info(f'... df_highlight_dim = {df_highlight_dim}')
-
-        if model == 'iqr':
-            clf = InterQuartileRangeAD()
-        elif model == 'ar':
-            clf = AutoregressionAD()
-        elif model == 'esd':
-            clf = GeneralizedESDTestAD()
-        elif model == 'level':
-            clf = LevelShiftAD(15)
-        elif model == 'persist':
-            clf = PersistAD(15)
-        elif model == 'quantile':
-            clf = QuantileAD()
-        elif model == 'seasonal':
-            clf = SeasonalAD()
-        elif model == 'volatility':
-            clf = VolatilityShiftAD(15)
-        elif model == 'kmeans':
-            kmeans = KMeans(n_clusters=2).fit(df_baseline_dim)
-            clf = MinClusterDetector(kmeans)
-        elif model == 'dbscan':
-            clf = MinClusterDetector(DBSCAN)
-        elif model == 'eliptic':
-            clf = OutlierDetector(EllipticEnvelope)
-        elif model == 'pcaad':
-            clf = PcaAD()
-        elif model == 'linear':
-            clf = RegressionAD(LinearRegression, target=colname)
+        if bad_data:
+            log.info(f'... skipping due to bad data')
         else:
-            clf = ADTKDefault()
-        clf.fit(df_baseline_dim)
-        #try:
-        #    clf.fit(df_baseline[colname])
-        #except Exception as e:
-        #    log.warning(e)
-        #    clf = ADTKDefault()
-        #    clf.fit(df_baseline[colname])
-        preds = clf.predict(df_highlight_dim)
-        score = np.mean(preds)
-        if chart in results:
-            results[chart].append({dimension: {'score': score}})
-        else:
-            results[chart] = [{dimension: {'score': score}}]
+
+            df_baseline_dim = df_baseline[[colname]]
+            df_highlight_dim = df_highlight[[colname]]
+
+
+            log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+            log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+            log.info(f'... df_baseline_dim = {df_baseline_dim}')
+            log.info(f'... df_highlight_dim = {df_highlight_dim}')
+
+            if n_lags > 0:
+                df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
+                df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
+                colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
+                df_baseline_dim.columns = colnames_updated
+                df_highlight_dim.columns = colnames_updated
+
+            log.info(f'... chart = {chart}')
+            log.info(f'... dimension = {dimension}')
+            log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+            log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+            log.info(f'... df_baseline_dim = {df_baseline_dim}')
+            log.info(f'... df_highlight_dim = {df_highlight_dim}')
+
+            df_baseline_dim = df_baseline_dim.dropna()
+            df_highlight_dim = df_highlight_dim.dropna()
+
+            log.info(f'... chart = {chart}')
+            log.info(f'... dimension = {dimension}')
+            log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+            log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+            log.info(f'... df_baseline_dim = {df_baseline_dim}')
+            log.info(f'... df_highlight_dim = {df_highlight_dim}')
+
+            if model == 'iqr':
+                clf = InterQuartileRangeAD()
+            elif model == 'ar':
+                clf = AutoregressionAD()
+            elif model == 'esd':
+                clf = GeneralizedESDTestAD()
+            elif model == 'level':
+                clf = LevelShiftAD(15)
+            elif model == 'persist':
+                clf = PersistAD(15)
+            elif model == 'quantile':
+                clf = QuantileAD()
+            elif model == 'seasonal':
+                clf = SeasonalAD()
+            elif model == 'volatility':
+                clf = VolatilityShiftAD(15)
+            elif model == 'kmeans':
+                kmeans = KMeans(n_clusters=2).fit(df_baseline_dim)
+                clf = MinClusterDetector(kmeans)
+            elif model == 'dbscan':
+                clf = MinClusterDetector(DBSCAN)
+            elif model == 'eliptic':
+                clf = OutlierDetector(EllipticEnvelope)
+            elif model == 'pcaad':
+                clf = PcaAD()
+            elif model == 'linear':
+                clf = RegressionAD(LinearRegression, target=colname)
+            else:
+                clf = ADTKDefault()
+            clf.fit(df_baseline_dim)
+            #try:
+            #    clf.fit(df_baseline[colname])
+            #except Exception as e:
+            #    log.warning(e)
+            #    clf = ADTKDefault()
+            #    clf.fit(df_baseline[colname])
+            preds = clf.predict(df_highlight_dim)
+            score = np.mean(preds)
+            if chart in results:
+                results[chart].append({dimension: {'score': score}})
+            else:
+                results[chart] = [{dimension: {'score': score}}]
     return results
 
 
