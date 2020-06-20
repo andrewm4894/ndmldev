@@ -26,7 +26,7 @@ from adtk.detector import (
 )
 
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
-from sklearn.cluster import KMeans, Birch, MeanShift
+from sklearn.cluster import KMeans, Birch
 from sklearn.mixture import GaussianMixture
 from sklearn.covariance import EllipticEnvelope
 from sklearn.linear_model import LinearRegression
@@ -40,10 +40,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'meanshift', 'gmm'
+    'pcaad', 'linear', 'gmm'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'meanshift', 'gmm', 'eliptic'
+    'kmeans', 'birch', 'gmm', 'eliptic'
 ]
 
 
@@ -183,9 +183,6 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             #log.info(f'... df_baseline_dim = {df_baseline_dim}')
             #log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
-            # fit mode
-            #clf.fit(df_baseline_dim)
-
             try:
                 clf.fit(df_baseline_dim)
                 fit_success += 1
@@ -205,6 +202,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             else:
                 results[chart] = [{dimension: {'score': score}}]
 
+    # log some summary stats
     bad_data_rate = round(n_bad_data / n_dims, 2)
     success_rate = round(fit_success / n_dims, 2)
     log.info(f'... success_rate={success_rate}, bad_data_rate={bad_data_rate}, dims={n_dims}, bad_data={n_bad_data}, fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}')
@@ -324,8 +322,6 @@ def adtk_init(model):
         clf = MinClusterDetector(KMeans(n_clusters=2))
     elif model == 'birch':
         clf = MinClusterDetector(Birch())
-    elif model == 'meanshift':
-        clf = MinClusterDetector(MeanShift())
     elif model == 'gmm':
         clf = MinClusterDetector(GaussianMixture())
     elif model == 'eliptic':
