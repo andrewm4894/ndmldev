@@ -129,7 +129,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         df_highlight_dim = df_highlight[[colname]]
 
         if n_lags > 0:
-            df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags)], axis=1)
+            df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
             print(df_baseline_dim)
             print(xxx)
 
