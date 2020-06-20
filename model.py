@@ -31,10 +31,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'gmm'
+    'pcaad', 'linear', 'gmm', 'vbgmm'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic'
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm'
 ]
 
 
@@ -329,6 +329,10 @@ def adtk_init(model):
         from adtk.detector import MinClusterDetector
         from sklearn.mixture import GaussianMixture
         clf = MinClusterDetector(GaussianMixture(n_components=2, max_iter=50))
+    elif model == 'vbgmm':
+        from adtk.detector import MinClusterDetector
+        from sklearn.mixture import BayesianGaussianMixture
+        clf = MinClusterDetector(BayesianGaussianMixture(n_components=2, max_iter=50))
     elif model == 'eliptic':
         from adtk.detector import OutlierDetector
         from sklearn.covariance import EllipticEnvelope
