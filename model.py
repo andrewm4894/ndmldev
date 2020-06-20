@@ -210,6 +210,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 results[chart].append({dimension: {'score': score}})
             else:
                 results[chart] = [{dimension: {'score': score}}]
+    print(results)
+    print(xxx)
     return results
 
 
