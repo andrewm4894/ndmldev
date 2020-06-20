@@ -205,7 +205,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             #    clf = ADTKDefault()
             #    clf.fit(df_baseline[colname])
             preds = clf.predict(df_highlight_dim)
-            score = np.mean(preds)
+            score = preds.mean().mean()
             if chart in results:
                 results[chart].append({dimension: {'score': score}})
             else:
