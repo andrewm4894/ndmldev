@@ -31,10 +31,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof'
+    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof'
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad'
 ]
 
 
@@ -341,6 +341,10 @@ def adtk_init(model):
         from adtk.detector import OutlierDetector
         from sklearn.ensemble import IsolationForest
         clf = OutlierDetector(IsolationForest())
+    elif model == 'lofad':
+        from adtk.detector import OutlierDetector
+        from sklearn.neighbors import LocalOutlierFactor
+        clf = OutlierDetector(LocalOutlierFactor())
     elif model == 'pcaad':
         from adtk.detector import PcaAD
         clf = PcaAD()
