@@ -125,6 +125,13 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
     df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
     df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s'), freq='1s'))
 
+    clf = adtk_init(model)
+    n_dims = len(colnames)
+    n_bad_data = 0
+    fit_success = 0
+    fit_fail = 0
+    fit_default = 0
+
     results = {}
 
     # loop over each col and do the ks test
@@ -148,6 +155,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         # skip if bad data
         if bad_data:
 
+            n_bad_data += 1
             log.info(f'... skipping due to bad data')
 
         else:
@@ -156,7 +164,9 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             df_highlight_dim = df_highlight[[colname]]
 
             if model in adtk_models_lags_allowed:
+
                 if n_lags > 0:
+
                     df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
                     df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
                     colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
@@ -173,48 +183,19 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             #log.info(f'... df_baseline_dim = {df_baseline_dim}')
             #log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
-            if model == 'iqr':
-                clf = InterQuartileRangeAD()
-            elif model == 'ar':
-                clf = AutoregressionAD()
-            elif model == 'esd':
-                clf = GeneralizedESDTestAD()
-            elif model == 'level':
-                clf = LevelShiftAD(15)
-            elif model == 'persist':
-                clf = PersistAD(15)
-            elif model == 'quantile':
-                clf = QuantileAD()
-            elif model == 'seasonal':
-                clf = SeasonalAD()
-            elif model == 'volatility':
-                clf = VolatilityShiftAD(15)
-            elif model == 'kmeans':
-                clf = MinClusterDetector(KMeans(n_clusters=2))
-            elif model == 'birch':
-                clf = MinClusterDetector(Birch())
-            elif model == 'meanshift':
-                clf = MinClusterDetector(MeanShift())
-            elif model == 'gmm':
-                clf = MinClusterDetector(GaussianMixture())
-            elif model == 'eliptic':
-                clf = OutlierDetector(EllipticEnvelope())
-            elif model == 'pcaad':
-                clf = PcaAD()
-            elif model == 'linear':
-                clf = RegressionAD(LinearRegression(), target=colname)
-            else:
-                clf = ADTKDefault()
-
             # fit mode
             #clf.fit(df_baseline_dim)
+
             try:
                 clf.fit(df_baseline_dim)
+                fit_success += 1
             except Exception as e:
+                fit_fail += 1
                 log.warning(e)
                 log.info(f'... could not fit model for {colname}, trying default')
                 clf = ADTKDefault()
                 clf.fit(df_baseline_dim)
+                fit_default += 1
 
             # get scores
             preds = clf.predict(df_highlight_dim)
@@ -224,50 +205,26 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             else:
                 results[chart] = [{dimension: {'score': score}}]
 
+    bad_data_rate = round(n_bad_data / n_dims, 2)
+    success_rate = round(fit_success / n_dims, 2)
+    log.info(f'... success_rate={success_rate}, bad_data_rate={bad_data_rate}, dims={n_dims}, bad_data={n_bad_data}, fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}')
+
     return results
 
 
 def do_pyod(model, colnames, arr_baseline, arr_highlight):
+
     n_lags = model.get('n_lags', 0)
+
     # dict to collect results into
     results = {}
+
     # initial model set up
-    if model['type'] == 'knn':
-        clf = KNN(**model['params'])
-    elif model['type'] == 'abod':
-        clf = ABOD(**model['params'])
-    elif model['type'] == 'auto_encoder':
-        clf = AutoEncoder(**model['params'])
-    elif model['type'] == 'cblof':
-        clf = CBLOF(**model['params'])
-    elif model['type'] == 'hbos':
-        clf = HBOS(**model['params'])
-    elif model['type'] == 'iforest':
-        clf = IForest(**model['params'])
-    elif model['type'] == 'lmdd':
-        clf = LMDD(**model['params'])
-    elif model['type'] == 'loci':
-        clf = LOCI(**model['params'])
-    elif model['type'] == 'loda':
-        clf = LODA(**model['params'])
-    elif model['type'] == 'lof':
-        clf = LOF(**model['params'])
-    elif model['type'] == 'mcd':
-        clf = MCD(**model['params'])
-    elif model['type'] == 'ocsvm':
-        clf = OCSVM(**model['params'])
-    elif model['type'] == 'pca':
-        clf = PCA(**model['params'])
-    elif model['type'] == 'sod':
-        clf = SOD(**model['params'])
-    elif model['type'] == 'vae':
-        clf = VAE(**model['params'])
-    elif model['type'] == 'xgbod':
-        clf = XGBOD(**model['params'])
-    else:
-        clf = DefaultPyODModel(**model['params'])
+    clf = pyod_init(model)
+
     # fit model for each dimension and then use model to score highlighted area
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         arr_baseline_dim = arr_baseline[:, [n]]
@@ -306,4 +263,78 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
         else:
             results[chart] = [{dimension: {'score': score}}]
     return results
+
+
+def pyod_init(model):
+    if model['type'] == 'knn':
+        clf = KNN(**model['params'])
+    elif model['type'] == 'abod':
+        clf = ABOD(**model['params'])
+    elif model['type'] == 'auto_encoder':
+        clf = AutoEncoder(**model['params'])
+    elif model['type'] == 'cblof':
+        clf = CBLOF(**model['params'])
+    elif model['type'] == 'hbos':
+        clf = HBOS(**model['params'])
+    elif model['type'] == 'iforest':
+        clf = IForest(**model['params'])
+    elif model['type'] == 'lmdd':
+        clf = LMDD(**model['params'])
+    elif model['type'] == 'loci':
+        clf = LOCI(**model['params'])
+    elif model['type'] == 'loda':
+        clf = LODA(**model['params'])
+    elif model['type'] == 'lof':
+        clf = LOF(**model['params'])
+    elif model['type'] == 'mcd':
+        clf = MCD(**model['params'])
+    elif model['type'] == 'ocsvm':
+        clf = OCSVM(**model['params'])
+    elif model['type'] == 'pca':
+        clf = PCA(**model['params'])
+    elif model['type'] == 'sod':
+        clf = SOD(**model['params'])
+    elif model['type'] == 'vae':
+        clf = VAE(**model['params'])
+    elif model['type'] == 'xgbod':
+        clf = XGBOD(**model['params'])
+    else:
+        clf = DefaultPyODModel(**model['params'])
+    return clf
+
+
+def adtk_init(model):
+    if model == 'iqr':
+        clf = InterQuartileRangeAD()
+    elif model == 'ar':
+        clf = AutoregressionAD()
+    elif model == 'esd':
+        clf = GeneralizedESDTestAD()
+    elif model == 'level':
+        clf = LevelShiftAD(15)
+    elif model == 'persist':
+        clf = PersistAD(15)
+    elif model == 'quantile':
+        clf = QuantileAD()
+    elif model == 'seasonal':
+        clf = SeasonalAD()
+    elif model == 'volatility':
+        clf = VolatilityShiftAD(15)
+    elif model == 'kmeans':
+        clf = MinClusterDetector(KMeans(n_clusters=2))
+    elif model == 'birch':
+        clf = MinClusterDetector(Birch())
+    elif model == 'meanshift':
+        clf = MinClusterDetector(MeanShift())
+    elif model == 'gmm':
+        clf = MinClusterDetector(GaussianMixture())
+    elif model == 'eliptic':
+        clf = OutlierDetector(EllipticEnvelope())
+    elif model == 'pcaad':
+        clf = PcaAD()
+    elif model == 'linear':
+        clf = RegressionAD(LinearRegression())
+    else:
+        clf = ADTKDefault()
+    return clf
 
