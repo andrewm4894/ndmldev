@@ -115,21 +115,25 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
 
 def do_adtk(model, colnames, arr_baseline, arr_highlight):
+
     n_lags = model.get('n_lags', 0)
     model = model.get('type', 'iqr')
+
     df_baseline = pd.DataFrame(arr_baseline, columns=colnames)
     df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s'), freq='1s'))
     df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
     df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s'), freq='1s'))
+
     results = {}
+
     # loop over each col and do the ks test
     for colname in df_baseline.columns:
 
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
 
-        log.info(f'... chart = {chart}')
-        log.info(f'... dimension = {dimension}')
+        #log.info(f'... chart = {chart}')
+        #log.info(f'... dimension = {dimension}')
 
         # check for bad data
         bad_data = False
@@ -161,12 +165,12 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             df_baseline_dim = df_baseline_dim.dropna()
             df_highlight_dim = df_highlight_dim.dropna()
 
-            log.info(f'... chart = {chart}')
-            log.info(f'... dimension = {dimension}')
-            log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-            log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-            log.info(f'... df_baseline_dim = {df_baseline_dim}')
-            log.info(f'... df_highlight_dim = {df_highlight_dim}')
+            #log.info(f'... chart = {chart}')
+            #log.info(f'... dimension = {dimension}')
+            #log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+            #log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+            #log.info(f'... df_baseline_dim = {df_baseline_dim}')
+            #log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
             if model == 'iqr':
                 clf = InterQuartileRangeAD()
