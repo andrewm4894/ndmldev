@@ -174,6 +174,9 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             #log.info(f'... df_baseline_dim = {df_baseline_dim}')
             #log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
+            if model == 'linear':
+                clf = RegressionAD(LinearRegression(), target=colname)
+
             try:
                 clf.fit(df_baseline_dim)
                 fit_success += 1
