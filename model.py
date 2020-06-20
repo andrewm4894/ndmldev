@@ -20,16 +20,7 @@ from pyod.models.sod import SOD
 from pyod.models.vae import VAE
 from pyod.models.xgbod import XGBOD
 import stumpy
-from adtk.detector import (
-    InterQuartileRangeAD, AutoregressionAD, GeneralizedESDTestAD, LevelShiftAD, PersistAD, QuantileAD, SeasonalAD,
-    VolatilityShiftAD, MinClusterDetector, OutlierDetector, PcaAD, RegressionAD
-)
-
 from adtk.detector import InterQuartileRangeAD as ADTKDefault
-from sklearn.cluster import KMeans, Birch
-from sklearn.mixture import GaussianMixture
-from sklearn.covariance import EllipticEnvelope
-from sklearn.linear_model import LinearRegression
 
 
 log = logging.getLogger(__name__)
@@ -303,32 +294,51 @@ def pyod_init(model):
 
 def adtk_init(model):
     if model == 'iqr':
+        from adtk.detector import InterQuartileRangeAD
         clf = InterQuartileRangeAD()
     elif model == 'ar':
+        from adtk.detector import AutoregressionAD
         clf = AutoregressionAD()
     elif model == 'esd':
+        from adtk.detector import GeneralizedESDTestAD
         clf = GeneralizedESDTestAD()
     elif model == 'level':
+        from adtk.detector import LevelShiftAD
         clf = LevelShiftAD(15)
     elif model == 'persist':
+        from adtk.detector import PersistAD
         clf = PersistAD(15)
     elif model == 'quantile':
+        from adtk.detector import QuantileAD
         clf = QuantileAD()
     elif model == 'seasonal':
+        from adtk.detector import SeasonalAD
         clf = SeasonalAD()
     elif model == 'volatility':
+        from adtk.detector import VolatilityShiftAD
         clf = VolatilityShiftAD(15)
     elif model == 'kmeans':
+        from adtk.detector import MinClusterDetector
+        from sklearn.cluster import KMeans
         clf = MinClusterDetector(KMeans(n_clusters=2))
     elif model == 'birch':
+        from adtk.detector import MinClusterDetector
+        from sklearn.cluster import Birch
         clf = MinClusterDetector(Birch())
     elif model == 'gmm':
+        from adtk.detector import MinClusterDetector
+        from sklearn.mixture import GaussianMixture
         clf = MinClusterDetector(GaussianMixture())
     elif model == 'eliptic':
+        from adtk.detector import OutlierDetector
+        from sklearn.covariance import EllipticEnvelope
         clf = OutlierDetector(EllipticEnvelope())
     elif model == 'pcaad':
+        from adtk.detector import PcaAD
         clf = PcaAD()
     elif model == 'linear':
+        from adtk.detector import RegressionAD
+        from sklearn.linear_model import LinearRegression
         clf = RegressionAD(LinearRegression())
     else:
         clf = ADTKDefault()
