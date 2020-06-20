@@ -34,7 +34,7 @@ adtk_models_supported = [
     'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad'
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear'
 ]
 
 
