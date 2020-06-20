@@ -31,10 +31,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad'
+    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear'
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf'
 ]
 
 
@@ -178,10 +178,10 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 from adtk.detector import RegressionAD
                 from sklearn.linear_model import LinearRegression
                 clf = RegressionAD(LinearRegression(), target=colname)
-
-
-            #clf.fit(df_baseline_dim)
-            #fit_success += 1
+            elif model == 'rf':
+                from adtk.detector import RegressionAD
+                from sklearn.ensemble import RandomForestRegressor
+                clf = RegressionAD(RandomForestRegressor(), target=colname)
 
             try:
                 clf.fit(df_baseline_dim)
