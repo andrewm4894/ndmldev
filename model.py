@@ -202,7 +202,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             elif model == 'pcaad':
                 clf = PcaAD()
             elif model == 'linear':
-                clf = RegressionAD(LinearRegression, target=colname)
+                clf = RegressionAD(LinearRegression(), target=colname)
             else:
                 clf = ADTKDefault()
 
