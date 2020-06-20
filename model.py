@@ -112,7 +112,8 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     return results
 
 
-def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
+def do_adtk(model, colnames, arr_baseline, arr_highlight, model='iqr'):
+    n_lags = model.get('n_lags', 0)
     df_baseline = pd.DataFrame(arr_baseline, columns=colnames)
     df_baseline = df_baseline.set_index(pd.DatetimeIndex(pd.to_datetime(df_baseline.index, unit='s'), freq='1s'))
     df_highlight = pd.DataFrame(arr_highlight, columns=colnames)
@@ -123,12 +124,20 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
 
+        df_baseline_dim = df_baseline[[colname]]
+        df_highlight_dim = df_highlight[[colname]]
+
+        if n_lags > 0:
+            df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags)], axis=1)
+            print(df_baseline_dim)
+            print(xxx)
+
         log.info(f'... chart = {chart}')
         log.info(f'... dimension = {dimension}')
-        log.info(f'... df_baseline.shape = {df_baseline[[colname]].shape}')
-        log.info(f'... df_highlight.shape = {df_highlight[[colname]].shape}')
-        log.info(f'... df_baseline = {df_baseline[[colname]]}')
-        log.info(f'... df_highlight = {df_highlight[[colname]]}')
+        log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+        log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+        log.info(f'... df_baseline_dim = {df_baseline_dim}')
+        log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
         if model == 'iqr':
             clf = InterQuartileRangeAD()
