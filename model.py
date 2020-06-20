@@ -179,18 +179,20 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 from sklearn.linear_model import LinearRegression
                 clf = RegressionAD(LinearRegression(), target=colname)
 
-            clf.fit(df_baseline_dim)
 
-            #try:
-            #    clf.fit(df_baseline_dim)
-            #    fit_success += 1
-            #except Exception as e:
-            #    fit_fail += 1
-            #    log.warning(e)
-            #    log.info(f'... could not fit model for {colname}, trying default')
-            #    clf = ADTKDefault()
-            #    clf.fit(df_baseline_dim)
-            #    fit_default += 1
+            #clf.fit(df_baseline_dim)
+            #fit_success += 1
+
+            try:
+                clf.fit(df_baseline_dim)
+                fit_success += 1
+            except Exception as e:
+                fit_fail += 1
+                log.warning(e)
+                log.info(f'... could not fit model for {colname}, trying default')
+                clf = ADTKDefault()
+                clf.fit(df_baseline_dim)
+                fit_default += 1
 
             # get scores
             preds = clf.predict(df_highlight_dim)
