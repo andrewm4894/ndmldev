@@ -139,7 +139,7 @@ def do_adtk(colnames, arr_baseline, arr_highlight, model='iqr'):
         elif model == 'volatility':
             clf = VolatilityShiftAD(15)
         elif model == 'kmeans':
-            kmeans = KMeans(n_clusters=2).fit(df_baseline[[colname]])
+            kmeans = KMeans(n_clusters=2).fit(df_baseline[colname].values)
             clf = MinClusterDetector(kmeans)
         elif model == 'dbscan':
             clf = MinClusterDetector(DBSCAN)
