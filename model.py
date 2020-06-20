@@ -42,7 +42,7 @@ adtk_models_supported = [
     'pcaad', 'linear'
 ]
 adtk_models_lags_allowed = [
-    'kmeans'
+    'kmeans', 'dbscan'
 ]
 
 
@@ -192,7 +192,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 kmeans = KMeans(n_clusters=2).fit(df_baseline_dim)
                 clf = MinClusterDetector(kmeans)
             elif model == 'dbscan':
-                clf = MinClusterDetector(DBSCAN)
+                dbscan = DBSCAN().fit(df_baseline_dim)
+                clf = MinClusterDetector(dbscan)
             elif model == 'eliptic':
                 clf = OutlierDetector(EllipticEnvelope)
             elif model == 'pcaad':
