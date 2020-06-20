@@ -175,6 +175,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             #log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
             if model == 'linear':
+                from adtk.detector import RegressionAD
+                from sklearn.linear_model import LinearRegression
                 clf = RegressionAD(LinearRegression(), target=colname)
 
             try:
@@ -355,10 +357,10 @@ def adtk_init(model):
     elif model == 'pcaad':
         from adtk.detector import PcaAD
         clf = PcaAD()
-    elif model == 'linear':
-        from adtk.detector import RegressionAD
-        from sklearn.linear_model import LinearRegression
-        clf = RegressionAD(LinearRegression())
+    #elif model == 'linear':
+    #    from adtk.detector import RegressionAD
+    #    from sklearn.linear_model import LinearRegression
+    #    clf = RegressionAD(LinearRegression())
     else:
         clf = ADTKDefault()
     return clf
