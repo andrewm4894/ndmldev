@@ -31,10 +31,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf', 'huber'
+    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf', 'huber', 'knnad'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber'
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad'
 ]
 
 
@@ -186,6 +186,10 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 from adtk.detector import RegressionAD
                 from sklearn.linear_model import HuberRegressor
                 clf = RegressionAD(HuberRegressor(), target=colname)
+            elif model == 'knnad':
+                from adtk.detector import RegressionAD
+                from sklearn.neighbors import KNeighborsRegressor
+                clf = RegressionAD(KNeighborsRegressor(), target=colname)
 
             try:
                 clf.fit(df_baseline_dim)
