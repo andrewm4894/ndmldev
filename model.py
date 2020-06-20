@@ -198,7 +198,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             elif model == 'gmm':
                 clf = MinClusterDetector(GaussianMixture())
             elif model == 'eliptic':
-                clf = OutlierDetector(EllipticEnvelope())
+                clf = OutlierDetector(EllipticEnvelope(support_fraction=0.5))
             elif model == 'pcaad':
                 clf = PcaAD()
             elif model == 'linear':
