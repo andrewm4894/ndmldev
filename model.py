@@ -33,14 +33,16 @@ from sklearn.linear_model import LinearRegression
 
 log = logging.getLogger(__name__)
 
-supported_pyod_models = [
+pyod_models_supported = [
     'abod', 'auto_encoder', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'ocsvm',
     'pca', 'sod', 'vae', 'xgbod'
 ]
-
-supported_adtk_models = [
+adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'dbscan', 'eliptic',
     'pcaad', 'linear'
+]
+adtk_models_lags_allowed = [
+    'kmeans'
 ]
 
 
@@ -56,11 +58,11 @@ def add_lags(arr, n_lags=1):
 def run_model(model, colnames, arr_baseline, arr_highlight):
     """Function to take in data and some config and decide what model to run.
     """
-    if model['type'] in supported_pyod_models:
+    if model['type'] in pyod_models_supported:
         results = do_pyod(model, colnames, arr_baseline, arr_highlight)
     elif model['type'] in ['mp', 'mp_approx']:
         results = do_mp(colnames, arr_baseline, arr_highlight, model=model['type'])
-    elif model['type'] in supported_adtk_models:
+    elif model['type'] in adtk_models_supported:
         results = do_adtk(model, colnames, arr_baseline, arr_highlight)
     else:
         results = do_ks(colnames, arr_baseline, arr_highlight)
@@ -148,24 +150,13 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             df_baseline_dim = df_baseline[[colname]]
             df_highlight_dim = df_highlight[[colname]]
 
-            log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-            log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-            log.info(f'... df_baseline_dim = {df_baseline_dim}')
-            log.info(f'... df_highlight_dim = {df_highlight_dim}')
-
-            if n_lags > 0:
-                df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
-                df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
-                colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
-                df_baseline_dim.columns = colnames_updated
-                df_highlight_dim.columns = colnames_updated
-
-            log.info(f'... chart = {chart}')
-            log.info(f'... dimension = {dimension}')
-            log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-            log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-            log.info(f'... df_baseline_dim = {df_baseline_dim}')
-            log.info(f'... df_highlight_dim = {df_highlight_dim}')
+            if model in adtk_models_lags_allowed:
+                if n_lags > 0:
+                    df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
+                    df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
+                    colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
+                    df_baseline_dim.columns = colnames_updated
+                    df_highlight_dim.columns = colnames_updated
 
             df_baseline_dim = df_baseline_dim.dropna()
             df_highlight_dim = df_highlight_dim.dropna()
