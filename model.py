@@ -130,8 +130,10 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
         if n_lags > 0:
             df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
-            print(df_baseline_dim)
-            print(xxx)
+            df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
+
+        df_baseline_dim = df_baseline_dim.dropna()
+        df_highlight_dim = df_highlight_dim.dropna()
 
         log.info(f'... chart = {chart}')
         log.info(f'... dimension = {dimension}')
@@ -157,7 +159,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         elif model == 'volatility':
             clf = VolatilityShiftAD(15)
         elif model == 'kmeans':
-            kmeans = KMeans(n_clusters=2).fit(df_baseline[[colname]])
+            kmeans = KMeans(n_clusters=2).fit(df_baseline_dim)
             clf = MinClusterDetector(kmeans)
         elif model == 'dbscan':
             clf = MinClusterDetector(DBSCAN)
@@ -169,14 +171,14 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             clf = RegressionAD(LinearRegression, target=colname)
         else:
             clf = ADTKDefault()
-        clf.fit(df_baseline[[colname]])
+        clf.fit(df_baseline_dim)
         #try:
         #    clf.fit(df_baseline[colname])
         #except Exception as e:
         #    log.warning(e)
         #    clf = ADTKDefault()
         #    clf.fit(df_baseline[colname])
-        preds = clf.predict(df_highlight[[colname]])
+        preds = clf.predict(df_highlight_dim)
         score = np.mean(preds)
         if chart in results:
             results[chart].append({dimension: {'score': score}})
