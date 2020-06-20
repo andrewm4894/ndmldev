@@ -324,7 +324,7 @@ def adtk_init(model):
     elif model == 'birch':
         from adtk.detector import MinClusterDetector
         from sklearn.cluster import Birch
-        clf = MinClusterDetector(Birch())
+        clf = MinClusterDetector(Birch(threshold=0.25, branching_factor=25))
     elif model == 'gmm':
         from adtk.detector import MinClusterDetector
         from sklearn.mixture import GaussianMixture
