@@ -128,12 +128,26 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         df_baseline_dim = df_baseline[[colname]]
         df_highlight_dim = df_highlight[[colname]]
 
+        log.info(f'... chart = {chart}')
+        log.info(f'... dimension = {dimension}')
+        log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+        log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+        log.info(f'... df_baseline_dim = {df_baseline_dim}')
+        log.info(f'... df_highlight_dim = {df_highlight_dim}')
+
         if n_lags > 0:
             df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
             df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
             colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
             df_baseline_dim.columns = colnames_updated
             df_highlight_dim.columns = colnames_updated
+
+        log.info(f'... chart = {chart}')
+        log.info(f'... dimension = {dimension}')
+        log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+        log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+        log.info(f'... df_baseline_dim = {df_baseline_dim}')
+        log.info(f'... df_highlight_dim = {df_highlight_dim}')
 
         df_baseline_dim = df_baseline_dim.dropna()
         df_highlight_dim = df_highlight_dim.dropna()
