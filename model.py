@@ -31,10 +31,10 @@ pyod_models_supported = [
 ]
 adtk_models_supported = [
     'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf'
+    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf', 'huber'
 ]
 adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf'
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber'
 ]
 
 
@@ -182,6 +182,10 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 from adtk.detector import RegressionAD
                 from sklearn.ensemble import RandomForestRegressor
                 clf = RegressionAD(RandomForestRegressor(), target=colname)
+            elif model == 'huber':
+                from adtk.detector import RegressionAD
+                from sklearn.linear_model import HuberRegressor
+                clf = RegressionAD(HuberRegressor(), target=colname)
 
             try:
                 clf.fit(df_baseline_dim)
