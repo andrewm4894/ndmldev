@@ -131,8 +131,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
         # check for bad data
         bad_data = False
-        baseline_dim_na_pct = df_baseline[[colname]].isna().sum() / len(df_baseline)
-        highlight_dim_na_pct = df_highlight[[colname]].isna().sum() / len(df_highlight)
+        baseline_dim_na_pct = df_baseline[colname].isna().sum() / len(df_baseline)
+        highlight_dim_na_pct = df_highlight[colname].isna().sum() / len(df_highlight)
         if baseline_dim_na_pct >= 0.1:
             bad_data = True
         if highlight_dim_na_pct >= 0.1:
