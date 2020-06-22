@@ -22,7 +22,8 @@ def parse_params(request):
         "model": {
             "type": "ks",
             "params": {},
-            "n_lags": 0
+            "n_lags": 0,
+            "model_level": "dim"
         },
         "return_type": "html",
         "baseline_window_multiplier": 2,
@@ -33,7 +34,8 @@ def parse_params(request):
         "model": {
             "type": "hbos",
             "params": {"contamination": 0.1},
-            "n_lags": 2
+            "n_lags": 2,
+            "model_level": "dim"
         },
         "return_type": "html",
         "baseline_window_multiplier": 2,
@@ -82,7 +84,7 @@ def parse_params(request):
         "local_host": local_host,
         "model": config.get('model'),
         "return_type": config.get('return_type', 'html'),
-        "score_thold": config.get('score_thold', 0)
+        "score_thold": config.get('score_thold', 0),
     }
     return params
 
