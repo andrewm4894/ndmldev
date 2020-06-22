@@ -50,6 +50,11 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
 
     arr = np.concatenate((arr_baseline, arr_highlight))
     n_highlight = arr_highlight.shape[0]
+    n_dims = len(colnames)
+    n_bad_data = 0
+    fit_success = 0
+    fit_fail = 0
+    fit_default = 0
 
     # dict to collect results into
     results = {}
@@ -71,6 +76,7 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
         else:
             raise ValueError(f"... unknown model '{model}'")
 
+        fit_success += 1
         mp_highlight = mp[0:n_highlight]
         mp_thold = np.percentile(mp, 90)
 
@@ -79,6 +85,9 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
             results[chart].append({dimension: {'score': score}})
         else:
             results[chart] = [{dimension: {'score': score}}]
+
+    # log some summary stats
+    log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
 
     return results
 
