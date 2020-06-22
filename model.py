@@ -47,17 +47,13 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp', model_level='dim'):
 
     arr = np.concatenate((arr_baseline, arr_highlight))
     n_highlight = arr_highlight.shape[0]
-    n_charts = len(set([colname.split('|')[0] for colname in colnames]))
-    n_dims = len(colnames)
-    n_bad_data = 0
-    fit_success = 0
-    fit_fail = 0
-    fit_default = 0
+    n_charts, n_dims = len(set([colname.split('|')[0] for colname in colnames])), len(colnames)
+    n_bad_data, fit_success, fit_default, fit_fail = 0, 0, 0, 0
 
     # dict to collect results into
     results = {}
 
-    # loop over each col and do the ks test
+    # loop over each col and build mp model
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
 
         chart = colname.split('|')[0]
@@ -75,7 +71,7 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp', model_level='dim'):
             raise ValueError(f"... unknown model '{model}'")
 
         fit_success += 1
-        mp_highlight = mp[0:n_highlight]
+        mp_highlight = mp[-n_highlight:]
         mp_thold = np.percentile(mp, 90)
 
         score = np.mean(np.where(mp_highlight >= mp_thold, 1, 0))
