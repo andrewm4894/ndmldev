@@ -303,7 +303,7 @@ def summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default):
     # log some summary stats
     bad_data_rate = round(n_bad_data / n_dims, 2)
     success_rate = round(fit_success / n_dims, 2)
-    msg = f'... success_rate={success_rate}, bad_data_rate={bad_data_rate}, dims={n_dims}, bad_data={n_bad_data}"
+    msg = f"... success_rate={success_rate}, bad_data_rate={bad_data_rate}, dims={n_dims}, bad_data={n_bad_data}"
     msg += f", fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}'"
     return msg
 
@@ -314,7 +314,7 @@ def pyod_init(model, n_features=None):
         from pyod.models.abod import ABOD
         clf = ABOD()
     elif model == 'auto_encoder':
-        import os
+        #import os
         #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
         from pyod.models.auto_encoder import AutoEncoder
         clf = AutoEncoder(
