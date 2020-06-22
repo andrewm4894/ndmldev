@@ -7,8 +7,6 @@ from model_pyod import pyod_models_supported, do_pyod
 
 log = logging.getLogger(__name__)
 
-chart_level_models = pyod_models_supported + adtk_models_supported
-
 
 def run_model(model, colnames, arr_baseline, arr_highlight):
     """Function to take in data and some config and decide what model to run.
