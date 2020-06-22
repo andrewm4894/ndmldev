@@ -361,7 +361,7 @@ def add_lags(data, n_lags=1, type='np'):
     elif type == 'df':
         colname = data.columns[0]
         data = pd.concat([data.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
-        data.columns = [f'{colname}_lag{n_lag}' for colname in df.columns for n_lag in range(0, n_lags + 1)]
+        data.columns = [f'{colname}_lag{n_lag}' for colname in data.columns for n_lag in range(0, n_lags + 1)]
     print(data.head())
     XXX
     log.debug(f'... (add_lags) n_lags = {n_lags} arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
