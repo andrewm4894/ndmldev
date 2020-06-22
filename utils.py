@@ -134,7 +134,7 @@ def get_col_map(colnames, model, model_level):
     return col_map
 
 
-def summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level):
+def summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level='dim'):
     # log some summary stats
     if model_level == 'chart':
         success_rate = round(fit_success / n_charts, 2)
