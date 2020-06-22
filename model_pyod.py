@@ -1,4 +1,13 @@
+import logging
+
 from utils import summary_info
+
+log = logging.getLogger(__name__)
+
+pyod_models_supported = [
+    'abod', 'auto_encoder', 'cblof', 'hbos', 'iforest', 'knn', 'lmdd', 'loci', 'loda', 'lof', 'mcd', 'ocsvm',
+    'pca', 'sod', 'vae', 'xgbod'
+]
 
 
 def do_pyod(model, colnames, arr_baseline, arr_highlight):
