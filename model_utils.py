@@ -1,11 +1,6 @@
 import logging
 
-from model import adtk_models_supported
-from model_pyod import pyod_models_supported
-
 log = logging.getLogger(__name__)
-
-chart_level_models = pyod_models_supported + adtk_models_supported
 
 
 def try_fit(clf, colname, data, default_model):
@@ -27,9 +22,9 @@ def init_counters(colnames):
     return n_charts, n_dims, n_bad_data, fit_success, fit_default, fit_fail
 
 
-def get_col_map(colnames, model, model_level):
+def get_col_map(colnames, model_level):
     col_map = {}
-    if model_level == 'chart' and model in chart_level_models:
+    if model_level == 'chart':
         charts_list = list(set([colname.split('|')[0] for colname in colnames]))
         for chart in charts_list:
             col_map[chart] = [colnames.index(colname) for colname in colnames if colname.startswith(f'{chart}|')]

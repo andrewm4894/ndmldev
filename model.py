@@ -7,20 +7,6 @@ from model_pyod import pyod_models_supported, do_pyod
 
 log = logging.getLogger(__name__)
 
-adtk_models_supported = [
-    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
-    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf', 'huber', 'knnad', 'kernridge'
-]
-adtk_models_lags_allowed = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
-    'kernridge'
-]
-adtk_models_chart_level = [
-    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
-    'kernridge'
-]
-adtk_meta_models = ['linear', 'rf', 'huber', 'knnad', 'kernridge']
-
 
 def run_model(model, colnames, arr_baseline, arr_highlight):
     """Function to take in data and some config and decide what model to run.

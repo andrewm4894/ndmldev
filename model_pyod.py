@@ -30,7 +30,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     clf = pyod_init(model)
 
     # get map of cols to loop over
-    col_map = get_col_map(colnames, model, model_level)
+    col_map = get_col_map(colnames, model_level)
 
     # build each model
     for colname in col_map:

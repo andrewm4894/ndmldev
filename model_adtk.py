@@ -8,6 +8,20 @@ from utils import add_lags
 
 log = logging.getLogger(__name__)
 
+adtk_models_supported = [
+    'iqr', 'ar', 'esd', 'level', 'persist', 'quantile', 'seasonal', 'volatility', 'kmeans', 'birch', 'eliptic',
+    'pcaad', 'linear', 'gmm', 'vbgmm', 'isof', 'lofad', 'mcdad', 'rf', 'huber', 'knnad', 'kernridge'
+]
+adtk_models_lags_allowed = [
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
+    'kernridge'
+]
+adtk_models_chart_level = [
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
+    'kernridge'
+]
+adtk_meta_models = ['linear', 'rf', 'huber', 'knnad', 'kernridge']
+
 
 def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
@@ -30,7 +44,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
     clf = adtk_init(model)
 
     # get map of cols to loop over
-    col_map = get_col_map(colnames, model, model_level)
+    col_map = get_col_map(colnames, model_level)
 
     # build each model
     for colname in col_map:
