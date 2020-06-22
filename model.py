@@ -77,10 +77,13 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
 
 
 def do_ks(colnames, arr_baseline, arr_highlight):
+
     # dict to collect results into
     results = {}
+
     # loop over each col and do the ks test
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
+
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
         score, _ = ks_2samp(arr_baseline[:, n], arr_highlight[:, n], mode='asymp')
@@ -88,6 +91,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
             results[chart].append({dimension: {'score': score}})
         else:
             results[chart] = [{dimension: {'score': score}}]
+
     return results
 
 
@@ -116,8 +120,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         chart = colname.split('|')[0]
         dimension = colname.split('|')[1]
 
-        #log.info(f'... chart = {chart}')
-        #log.info(f'... dimension = {dimension}')
+        log.debug(f'... chart = {chart}')
+        log.debug(f'... dimension = {dimension}')
 
         # check for bad data
         bad_data = False
@@ -132,7 +136,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
         if bad_data:
 
             n_bad_data += 1
-            log.info(f'... skipping due to bad data')
+            log.info(f'... skipping {colname} due to bad data')
 
         else:
 
@@ -152,12 +156,12 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             df_baseline_dim = df_baseline_dim.dropna()
             df_highlight_dim = df_highlight_dim.dropna()
 
-            #log.info(f'... chart = {chart}')
-            #log.info(f'... dimension = {dimension}')
-            #log.info(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
-            #log.info(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
-            #log.info(f'... df_baseline_dim = {df_baseline_dim}')
-            #log.info(f'... df_highlight_dim = {df_highlight_dim}')
+            log.debug(f'... chart = {chart}')
+            log.debug(f'... dimension = {dimension}')
+            log.debug(f'... df_baseline_dim.shape = {df_baseline_dim.shape}')
+            log.debug(f'... df_highlight_dim.shape = {df_highlight_dim.shape}')
+            log.debug(f'... df_baseline_dim = {df_baseline_dim}')
+            log.debug(f'... df_highlight_dim = {df_highlight_dim}')
 
             if model == 'linear':
                 from adtk.detector import RegressionAD
@@ -233,50 +237,61 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
         arr_baseline_dim = arr_baseline[:, [n]]
         arr_highlight_dim = arr_highlight[:, [n]]
 
-        if n_lags > 0:
-            arr_baseline_dim = add_lags(arr_baseline_dim, n_lags=n_lags)
-            arr_highlight_dim = add_lags(arr_highlight_dim, n_lags=n_lags)
+        # check for bad data
+        bad_data = False
 
-        # remove any nan rows
-        arr_baseline_dim = arr_baseline_dim[~np.isnan(arr_baseline_dim).any(axis=1)]
-        arr_highlight_dim = arr_highlight_dim[~np.isnan(arr_highlight_dim).any(axis=1)]
+        # skip if bad data
+        if bad_data:
 
-        log.debug(f'... chart = {chart}')
-        log.debug(f'... dimension = {dimension}')
-        log.debug(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
-        log.debug(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
-        log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
-        log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
+            n_bad_data += 1
+            log.info(f'... skipping {colname} due to bad data')
 
-        try:
-            clf.fit(arr_baseline_dim)
-            fit_success += 1
-        except Exception as e:
-            fit_fail += 1
-            log.warning(e)
-            log.info(f'... could not fit model for {colname}, trying default')
-            clf = DefaultPyODModel()
-            clf.fit(arr_baseline_dim)
-            fit_default += 1
-
-        # 0/1 anomaly predictions
-        preds = clf.predict(arr_highlight_dim)
-
-        log.debug(f'... preds.shape = {preds.shape}')
-        log.debug(f'... preds = {preds}')
-
-        # anomaly probability scores
-        probs = clf.predict_proba(arr_highlight_dim)[:, 1]
-
-        log.debug(f'... probs.shape = {probs.shape}')
-        log.debug(f'... probs = {probs}')
-
-        # save results
-        score = (np.mean(probs) + np.mean(preds))/2
-        if chart in results:
-            results[chart].append({dimension: {'score': score}})
         else:
-            results[chart] = [{dimension: {'score': score}}]
+
+            if n_lags > 0:
+                arr_baseline_dim = add_lags(arr_baseline_dim, n_lags=n_lags)
+                arr_highlight_dim = add_lags(arr_highlight_dim, n_lags=n_lags)
+
+            # remove any nan rows
+            arr_baseline_dim = arr_baseline_dim[~np.isnan(arr_baseline_dim).any(axis=1)]
+            arr_highlight_dim = arr_highlight_dim[~np.isnan(arr_highlight_dim).any(axis=1)]
+
+            log.debug(f'... chart = {chart}')
+            log.debug(f'... dimension = {dimension}')
+            log.debug(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
+            log.debug(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
+            log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
+            log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
+
+            try:
+                clf.fit(arr_baseline_dim)
+                fit_success += 1
+            except Exception as e:
+                fit_fail += 1
+                log.warning(e)
+                log.info(f'... could not fit model for {colname}, trying default')
+                clf = DefaultPyODModel()
+                clf.fit(arr_baseline_dim)
+                fit_default += 1
+
+            # 0/1 anomaly predictions
+            preds = clf.predict(arr_highlight_dim)
+
+            log.debug(f'... preds.shape = {preds.shape}')
+            log.debug(f'... preds = {preds}')
+
+            # anomaly probability scores
+            probs = clf.predict_proba(arr_highlight_dim)[:, 1]
+
+            log.debug(f'... probs.shape = {probs.shape}')
+            log.debug(f'... probs = {probs}')
+
+            # save results
+            score = (np.mean(probs) + np.mean(preds))/2
+            if chart in results:
+                results[chart].append({dimension: {'score': score}})
+            else:
+                results[chart] = [{dimension: {'score': score}}]
 
     # log some summary stats
     log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
