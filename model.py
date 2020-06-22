@@ -257,24 +257,9 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     for colname in col_map:
 
         chart = colname.split('|')[0]
-        dimension = colname.split('|')[1] if '|' in colname else 'ALL'
+        dimension = colname.split('|')[1] if '|' in colname else '_ALL_'
         arr_baseline_dim = arr_baseline[:, col_map[colname]]
         arr_highlight_dim = arr_highlight[:, col_map[colname]]
-
-        log.info(f'... chart = {chart}')
-        log.info(f'... dimension = {dimension}')
-        log.info(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
-        log.info(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
-
-    xxx
-
-    # fit model for each dimension and then use model to score highlighted area
-    for colname, n in zip(colnames, range(arr_baseline.shape[1])):
-
-        chart = colname.split('|')[0]
-        dimension = colname.split('|')[1]
-        arr_baseline_dim = arr_baseline[:, [n]]
-        arr_highlight_dim = arr_highlight[:, [n]]
 
         # check for bad data
         bad_data = False
@@ -334,6 +319,9 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
 
     # log some summary stats
     log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
+
+    print(results)
+    print(xxx)
 
     return results
 
