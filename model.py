@@ -21,7 +21,11 @@ adtk_models_lags_allowed = [
     'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
     'kernridge'
 ]
-chart_level_models = ['hbos', 'pca', 'kmeans', 'pcaad']
+adtk_models_chart_level = [
+    'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
+    'kernridge'
+]
+chart_level_models = pyod_models_supported + adtk_models_chart_level
 
 
 def run_model(model, colnames, arr_baseline, arr_highlight):
