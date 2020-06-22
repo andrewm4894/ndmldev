@@ -103,7 +103,7 @@ def pyod_init(model, n_features=None):
     if model == 'abod':
         from pyod.models.abod import ABOD
         clf = ABOD()
-    elif model == 'auto_encoder':
+    elif model == 'auto_encoder' and n_features:
         #import os
         #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
         from pyod.models.auto_encoder import AutoEncoder
