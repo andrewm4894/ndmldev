@@ -261,12 +261,10 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
         arr_baseline_dim = arr_baseline[:, col_map[colname]]
         arr_highlight_dim = arr_highlight[:, col_map[colname]]
 
-        log.debug(f'... chart = {chart}')
-        log.debug(f'... dimension = {dimension}')
-        log.debug(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
-        log.debug(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
-        log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
-        log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
+        log.info(f'... chart = {chart}')
+        log.info(f'... dimension = {dimension}')
+        log.info(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
+        log.info(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
 
     xxx
 
