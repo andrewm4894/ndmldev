@@ -21,7 +21,7 @@ adtk_models_lags_allowed = [
     'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
     'kernridge'
 ]
-chart_level_models = ['hbos', 'pca', 'kmeans']
+chart_level_models = ['hbos', 'pca', 'kmeans', 'pcaad']
 
 
 def run_model(model, colnames, arr_baseline, arr_highlight):
@@ -115,6 +115,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
     n_lags = model.get('n_lags', 0)
+    model_level = model.get('model_level', 'dim')
     model = model.get('type', 'iqr')
 
     df_baseline = pd.DataFrame(arr_baseline, columns=colnames)
@@ -131,19 +132,24 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
     results = {}
 
-    # loop over each col and do the ks test
-    for colname in df_baseline.columns:
+    col_map = get_col_map(colnames, model, model_level)
+
+    # build each model
+    for colname in col_map:
 
         chart = colname.split('|')[0]
-        dimension = colname.split('|')[1]
+        dimension = colname.split('|')[1] if '|' in colname else '*'
 
         log.debug(f'... chart = {chart}')
         log.debug(f'... dimension = {dimension}')
 
+        df_baseline_dim = df_baseline.iloc[:, col_map[colname]]
+        df_highlight_dim = df_highlight.iloc[:, col_map[colname]]
+
         # check for bad data
         bad_data = False
-        baseline_dim_na_pct = df_baseline[colname].isna().sum() / len(df_baseline)
-        highlight_dim_na_pct = df_highlight[colname].isna().sum() / len(df_highlight)
+        baseline_dim_na_pct = max(df_baseline_dim.isna().sum() / len(df_baseline))
+        highlight_dim_na_pct = max(df_highlight_dim.isna().sum() / len(df_highlight))
         if baseline_dim_na_pct >= 0.1:
             bad_data = True
         if highlight_dim_na_pct >= 0.1:
@@ -156,9 +162,6 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             log.info(f'... skipping {colname} due to bad data')
 
         else:
-
-            df_baseline_dim = df_baseline[[colname]]
-            df_highlight_dim = df_highlight[[colname]]
 
             if model in adtk_models_lags_allowed:
 
@@ -244,16 +247,9 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     fit_fail = 0
     fit_default = 0
 
-    #print(colnames)
-    col_map = {}
-    if model_level == 'chart':
-        charts_list = list(set([colname.split('|')[0] for colname in colnames]))
-        for chart in charts_list:
-            col_map[chart] = [colnames.index(colname) for colname in colnames if colname.startswith(f'{chart}|')]
-    else:
-        for col in colnames:
-            col_map[col] = [colnames.index(colname) for colname in colnames if colname == col]
+    col_map = get_col_map(colnames, model, model_level)
 
+    # build each model
     for colname in col_map:
 
         chart = colname.split('|')[0]
@@ -321,6 +317,18 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
 
     return results
+
+
+def get_col_map(colnames, model, model_level):
+    col_map = {}
+    if model_level == 'chart' and model in chart_level_models:
+        charts_list = list(set([colname.split('|')[0] for colname in colnames]))
+        for chart in charts_list:
+            col_map[chart] = [colnames.index(colname) for colname in colnames if colname.startswith(f'{chart}|')]
+    else:
+        for col in colnames:
+            col_map[col] = [colnames.index(colname) for colname in colnames if colname == col]
+    return col_map
 
 
 def summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default):
