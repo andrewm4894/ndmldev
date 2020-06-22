@@ -154,5 +154,7 @@ def pyod_init(model, n_features=None):
         from pyod.models.xgbod import XGBOD
         clf = XGBOD()
     else:
-        raise ValueError(f"unknown model {model}")
+        #raise ValueError(f"unknown model {model}")
+        clf = PyODDefaultModel()
     return clf
+
