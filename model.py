@@ -244,7 +244,8 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     fit_fail = 0
     fit_default = 0
 
-    print(colnames)
+    #print(colnames)
+    print([(colname.split('|')[0], colnames.index(colname)) for colname in colnames])
     xxx
 
     # fit model for each dimension and then use model to score highlighted area
