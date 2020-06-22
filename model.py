@@ -1,9 +1,9 @@
 import logging
 
-from model_adtk import do_adtk
+from model_adtk import do_adtk, adtk_models_supported
 from model_ks import do_ks
 from model_mp import do_mp, mp_models_supported
-from model_pyod import pyod_models_supported, do_pyod
+from model_pyod import do_pyod, pyod_models_supported
 
 log = logging.getLogger(__name__)
 
