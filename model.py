@@ -320,9 +320,6 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     # log some summary stats
     log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
 
-    print(results)
-    print(xxx)
-
     return results
 
 
