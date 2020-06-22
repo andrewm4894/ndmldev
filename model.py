@@ -23,15 +23,6 @@ adtk_models_lags_allowed = [
 ]
 
 
-def add_lags(arr, n_lags=1):
-    arr_orig = np.copy(arr)
-    for n_lag in range(1, n_lags + 1):
-        arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
-    arr = arr[n_lags:]
-    #log.info(f'... (add_lags) n_lags = {n_lags} arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
-    return arr
-
-
 def run_model(model, colnames, arr_baseline, arr_highlight):
     """Function to take in data and some config and decide what model to run.
     """
@@ -331,6 +322,15 @@ def summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default):
     msg = f"... success_rate={success_rate}, bad_data_rate={bad_data_rate}, dims={n_dims}, bad_data={n_bad_data}"
     msg += f", fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}'"
     return msg
+
+
+def add_lags(arr, n_lags=1):
+    arr_orig = np.copy(arr)
+    for n_lag in range(1, n_lags + 1):
+        arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
+    arr = arr[n_lags:]
+    log.debug(f'... (add_lags) n_lags = {n_lags} arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
+    return arr
 
 
 def pyod_init(model, n_features=None):
