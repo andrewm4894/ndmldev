@@ -4,7 +4,7 @@ from datetime import datetime
 from urllib.parse import parse_qs, urlparse
 
 import pandas as pd
-
+import numpy as np
 
 log = logging.getLogger(__name__)
 
