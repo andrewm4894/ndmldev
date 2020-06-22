@@ -253,7 +253,21 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     else:
         for col in colnames:
             col_map[col] = [colnames.index(colname) for colname in colnames if colname == col]
-    print(col_map)
+
+    for colname in col_map:
+
+        chart = colname.split('|')[0]
+        dimension = colname.split('|')[1]
+        arr_baseline_dim = arr_baseline[:, col_map[colname]]
+        arr_highlight_dim = arr_highlight[:, col_map[colname]]
+
+        log.debug(f'... chart = {chart}')
+        log.debug(f'... dimension = {dimension}')
+        log.debug(f'... arr_baseline_dim.shape = {arr_baseline_dim.shape}')
+        log.debug(f'... arr_highlight_dim.shape = {arr_highlight_dim.shape}')
+        log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
+        log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
+
     xxx
 
     # fit model for each dimension and then use model to score highlighted area
