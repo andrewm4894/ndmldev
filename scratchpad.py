@@ -1,17 +1,10 @@
 #%%
 
-results = {
-    'chart.a': [
-        {'dim.a': {'score': 0.167}},
-        {'sent': {'score': 0.15}},
-        {'delivered': {'score': 0.1678}}
-    ],
-    'chart.b': [
-        {'dim.a': {'score': 0.14394685039}},
-        {'dim.b': {'score': 0.22}}
-    ]
-}
-print(results)
+n_lags = 2
+cols = ['cola', 'colb']
+
+
+[f"{col}_lag{n_lag}" for n_lag in range(n_lags) for col in cols]
 
 #%%
 

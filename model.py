@@ -360,7 +360,7 @@ def add_lags(data, n_lags=1, type='np'):
         data = data[n_lags:]
     elif type == 'df':
         data = pd.concat([data.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
-        print([f"{col}_lag{n_lag}" for n_lag in range(0, n_lags + 1) for col in data.columns])
+        print([f"{col}_lag{n_lag}" for n_lag in range(n_lags) for col in data.columns])
         print(data.head())
         XXX
         data.columns = [f'{colname}_lag{n_lag}' for colname in data.columns for n_lag in range(0, n_lags + 1)]
