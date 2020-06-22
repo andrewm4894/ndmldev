@@ -163,11 +163,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 
                 if n_lags > 0:
 
-                    df_baseline_dim = pd.concat([df_baseline_dim.shift(n_lag) for n_lag in range(n_lags+1)], axis=1)
-                    df_highlight_dim = pd.concat([df_highlight_dim.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
-                    colnames_updated = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags+1)]
-                    df_baseline_dim.columns = colnames_updated
-                    df_highlight_dim.columns = colnames_updated
+                    df_baseline_dim = add_lags(df_baseline_dim, n_lags, 'df')
+                    df_highlight_dim = add_lags(df_highlight_dim, n_lags, 'df')
 
             df_baseline_dim = df_baseline_dim.dropna()
             df_highlight_dim = df_highlight_dim.dropna()
@@ -324,13 +321,18 @@ def summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default):
     return msg
 
 
-def add_lags(arr, n_lags=1):
-    arr_orig = np.copy(arr)
-    for n_lag in range(1, n_lags + 1):
-        arr = np.concatenate((arr, np.roll(arr_orig, n_lag, axis=0)), axis=1)
-    arr = arr[n_lags:]
+def add_lags(data, n_lags=1, type='np'):
+    data_orig = np.copy(data)
+    if type == 'np':
+        for n_lag in range(1, n_lags + 1):
+            data = np.concatenate((data, np.roll(data_orig, n_lag, axis=0)), axis=1)
+        data = data[n_lags:]
+    elif type == 'df':
+        colname = data.columns[0]
+        data = pd.concat([data.shift(n_lag) for n_lag in range(n_lags + 1)], axis=1)
+        data.columns = [colname] + [f'{colname}_lag{n_lag}' for n_lag in range(1, n_lags + 1)]
     log.debug(f'... (add_lags) n_lags = {n_lags} arr_orig.shape = {arr_orig.shape}  arr.shape = {arr.shape}')
-    return arr
+    return data
 
 
 def pyod_init(model, n_features=None):
