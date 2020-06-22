@@ -6,8 +6,6 @@ from urllib.parse import parse_qs, urlparse
 import pandas as pd
 import numpy as np
 
-from model import chart_level_models
-
 log = logging.getLogger(__name__)
 
 
