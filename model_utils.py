@@ -1,6 +1,6 @@
 import logging
 
-from model_adtk import adtk_models_supported
+from model import adtk_models_supported
 from model_pyod import pyod_models_supported
 
 log = logging.getLogger(__name__)
