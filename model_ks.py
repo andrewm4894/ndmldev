@@ -1,3 +1,8 @@
+import logging
+
+from scipy.stats import ks_2samp
+
+from model_utils import init_counters
 from utils import summary_info
 
 log = logging.getLogger(__name__)
@@ -27,3 +32,4 @@ def do_ks(colnames, arr_baseline, arr_highlight):
     log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default))
 
     return results
+
