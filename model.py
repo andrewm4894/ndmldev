@@ -209,16 +209,9 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 from sklearn.kernel_ridge import KernelRidge
                 clf = RegressionAD(KernelRidge(), target=colname)
 
-            try:
-                clf.fit(df_baseline_dim)
-                fit_success += 1
-            except Exception as e:
-                fit_fail += 1
-                log.warning(e)
-                log.info(f'... could not fit model for {colname}, trying default')
-                clf = ADTKDefault()
-                clf.fit(df_baseline_dim)
-                fit_default += 1
+            clf, result = try_fit(clf, colname, df_baseline_dim, ADTKDefault)
+            fit_success += 1 if result == 'success' else 0
+            fit_default += 1 if result == 'default' else 0
 
             # get scores
             preds = clf.predict(df_highlight_dim)
@@ -292,16 +285,9 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
             log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
             log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
 
-            try:
-                clf.fit(arr_baseline_dim)
-                fit_success += 1
-            except Exception as e:
-                fit_fail += 1
-                log.warning(e)
-                log.info(f'... could not fit model for {colname}, trying default')
-                clf = DefaultPyODModel()
-                clf.fit(arr_baseline_dim)
-                fit_default += 1
+            clf, result = try_fit(clf, colname, arr_baseline_dim, DefaultPyODModel)
+            fit_success += 1 if result == 'success' else 0
+            fit_default += 1 if result == 'default' else 0
 
             # 0/1 anomaly predictions
             preds = clf.predict(arr_highlight_dim)
@@ -326,6 +312,19 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level))
 
     return results
+
+
+def try_fit(clf, colname, data, default_model):
+    try:
+        clf.fit(data)
+        result = 'success'
+    except Exception as e:
+        log.warning(e)
+        log.info(f'... could not fit model for {colname}, trying default')
+        clf = default_model()
+        clf.fit(data)
+        result = 'default'
+    return clf, result
 
 
 def pyod_init(model, n_features=None):
