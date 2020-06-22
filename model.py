@@ -21,7 +21,7 @@ adtk_models_lags_allowed = [
     'kmeans', 'birch', 'gmm', 'eliptic', 'vbgmm', 'isof', 'lofad', 'mcdad', 'linear', 'rf', 'huber', 'knnad',
     'kernridge'
 ]
-chart_level_models = ['pca', 'kmeans']
+chart_level_models = ['hbos', 'pca', 'kmeans']
 
 
 def run_model(model, colnames, arr_baseline, arr_highlight):
@@ -231,6 +231,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
 
     n_lags = model.get('n_lags', 0)
     model = model.get('type', 'hbos')
+    model_level = model.get('model_level', 'dim')
 
     # dict to collect results into
     results = {}
@@ -242,6 +243,9 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     fit_success = 0
     fit_fail = 0
     fit_default = 0
+
+    print(colnames)
+    xxx
 
     # fit model for each dimension and then use model to score highlighted area
     for colname, n in zip(colnames, range(arr_baseline.shape[1])):
