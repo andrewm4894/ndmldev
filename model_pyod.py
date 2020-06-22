@@ -66,6 +66,9 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
             log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
             log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
 
+            if model == ['auto_encoder']:
+                clf = pyod_init(model, n_features=arr_baseline_dim.shape[1])
+
             clf, result = try_fit(clf, colname, arr_baseline_dim, PyODDefaultModel)
             fit_success += 1 if result == 'success' else 0
             fit_default += 1 if result == 'default' else 0
@@ -105,8 +108,8 @@ def pyod_init(model, n_features=None):
         #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
         from pyod.models.auto_encoder import AutoEncoder
         clf = AutoEncoder(
-            hidden_neurons=[n_features, n_features*5, n_features*5, n_features], epochs=5,
-            batch_size=64, preprocessing=False
+            hidden_neurons=[n_features, n_features*5, n_features*5, n_features],
+            epochs=5, batch_size=64, preprocessing=False
         )
     elif model == 'cblof':
         from pyod.models.cblof import CBLOF
