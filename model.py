@@ -38,10 +38,11 @@ def run_model(model, colnames, arr_baseline, arr_highlight):
     return results
 
 
-def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
+def do_mp(colnames, arr_baseline, arr_highlight, model='mp', model_level='dim'):
 
     arr = np.concatenate((arr_baseline, arr_highlight))
     n_highlight = arr_highlight.shape[0]
+    n_charts = len(set([colname.split('|')[0] for colname in colnames]))
     n_dims = len(colnames)
     n_bad_data = 0
     fit_success = 0
@@ -79,7 +80,7 @@ def do_mp(colnames, arr_baseline, arr_highlight, model='mp'):
             results[chart] = [{dimension: {'score': score}}]
 
     # log some summary stats
-    log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
+    log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level))
 
     return results
 
@@ -88,6 +89,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
 
     # dict to collect results into
     results = {}
+    n_charts = len(set([colname.split('|')[0] for colname in colnames]))
     n_dims = len(colnames)
     n_bad_data = 0
     fit_success = 0
@@ -107,7 +109,7 @@ def do_ks(colnames, arr_baseline, arr_highlight):
             results[chart] = [{dimension: {'score': score}}]
 
     # log some summary stats
-    log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
+    log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level))
 
     return results
 
@@ -124,6 +126,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
     df_highlight = df_highlight.set_index(pd.DatetimeIndex(pd.to_datetime(df_highlight.index, unit='s'), freq='1s'))
 
     clf = adtk_init(model)
+    n_charts = len(set([colname.split('|')[0] for colname in colnames]))
     n_dims = len(colnames)
     n_bad_data = 0
     fit_success = 0
@@ -225,7 +228,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
                 results[chart] = [{dimension: {'score': score}}]
 
     # log some summary stats
-    log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
+    log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level))
 
     return results
 
@@ -241,6 +244,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
 
     # initial model set up
     clf = pyod_init(model)
+    n_charts = len(set([colname.split('|')[0] for colname in colnames]))
     n_dims = len(colnames)
     n_bad_data = 0
     fit_success = 0
@@ -314,7 +318,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
                 results[chart] = [{dimension: {'score': score}}]
 
     # log some summary stats
-    log.info(summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default))
+    log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level))
 
     return results
 
@@ -331,10 +335,14 @@ def get_col_map(colnames, model, model_level):
     return col_map
 
 
-def summary_info(n_bad_data, n_dims, fit_success, fit_fail, fit_default):
+def summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default, model_level):
     # log some summary stats
-    bad_data_rate = round(n_bad_data / n_dims, 2)
-    success_rate = round(fit_success / n_dims, 2)
+    if model_level == 'chart':
+        success_rate = round(fit_success / n_charts, 2)
+        bad_data_rate = round(n_bad_data / n_charts, 2)
+    else:
+        bad_data_rate = round(n_bad_data / n_dims, 2)
+        success_rate = round(fit_success / n_dims, 2)
     msg = f"... success_rate={success_rate}, bad_data_rate={bad_data_rate}, dims={n_dims}, bad_data={n_bad_data}"
     msg += f", fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}'"
     return msg
