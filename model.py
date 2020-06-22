@@ -257,7 +257,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     for colname in col_map:
 
         chart = colname.split('|')[0]
-        dimension = colname.split('|')[1] if '|' in colname else '_ALL_'
+        dimension = colname.split('|')[1] if '|' in colname else '*'
         arr_baseline_dim = arr_baseline[:, col_map[colname]]
         arr_highlight_dim = arr_highlight[:, col_map[colname]]
 
