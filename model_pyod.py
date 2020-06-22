@@ -1,6 +1,10 @@
 import logging
 
-from utils import summary_info
+import numpy as np
+from pyod.models.hbos import HBOS as PyODDefaultModel
+
+from model_utils import init_counters, try_fit
+from utils import summary_info, get_col_map, add_lags
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +66,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
             log.debug(f'... arr_baseline_dim = {arr_baseline_dim}')
             log.debug(f'... arr_highlight_dim = {arr_highlight_dim}')
 
-            clf, result = try_fit(clf, colname, arr_baseline_dim, DefaultPyODModel)
+            clf, result = try_fit(clf, colname, arr_baseline_dim, PyODDefaultModel)
             fit_success += 1 if result == 'success' else 0
             fit_default += 1 if result == 'default' else 0
 

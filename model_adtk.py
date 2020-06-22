@@ -1,7 +1,7 @@
 import logging
 
 import pandas as pd
-from adtk.detector import InterQuartileRangeAD as ADTKDefault
+from adtk.detector import InterQuartileRangeAD as ADTKDefaultModel
 
 from model_utils import init_counters, try_fit
 from utils import summary_info, get_col_map, add_lags
@@ -96,7 +96,7 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
             if model in adtk_meta_models:
                 clf = adtk_init(model, colname)
 
-            clf, result = try_fit(clf, colname, df_baseline_dim, ADTKDefault)
+            clf, result = try_fit(clf, colname, df_baseline_dim, ADTKDefaultModel)
             fit_success += 1 if result == 'success' else 0
             fit_default += 1 if result == 'default' else 0
 

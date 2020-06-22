@@ -2,6 +2,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 def try_fit(clf, colname, data, default_model):
     try:
         clf.fit(data)
