@@ -251,7 +251,7 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
         for chart in charts_list:
             col_map[chart] = [colnames.index(colname) for colname in colnames if colname.startswith(f'{chart}|')]
     else:
-        col_map = {{colname: [colnames.index(colname)]} for colname in colnames}
+        col_map = {dict(colname=[colnames.index(colname)]) for colname in colnames}
     print(col_map)
     xxx
 
