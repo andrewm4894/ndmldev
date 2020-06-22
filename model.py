@@ -245,7 +245,11 @@ def do_pyod(model, colnames, arr_baseline, arr_highlight):
     fit_default = 0
 
     #print(colnames)
-    print([(colname.split('|')[0], colnames.index(colname)) for colname in colnames])
+    charts_map = {}
+    charts_list = list(set([colname.split('|')[0] for colname in colnames]))
+    for chart in charts_list:
+        charts_map[chart] = [colnames.index(colname) for colname in colnames if colnames.startswith(f'{chart}|')]
+    print(charts_map)
     xxx
 
     # fit model for each dimension and then use model to score highlighted area
