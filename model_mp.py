@@ -1,3 +1,9 @@
+import logging
+
+import numpy as np
+import stumpy
+
+from model_utils import init_counters
 from utils import summary_info
 
 log = logging.getLogger(__name__)
@@ -5,7 +11,6 @@ log = logging.getLogger(__name__)
 mp_models_supported = [
     'mp', 'mp_approx'
 ]
-
 
 
 def do_mp(model, colnames, arr_baseline, arr_highlight):
@@ -50,3 +55,4 @@ def do_mp(model, colnames, arr_baseline, arr_highlight):
     log.info(summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_default))
 
     return results
+
