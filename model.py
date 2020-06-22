@@ -230,8 +230,8 @@ def do_adtk(model, colnames, arr_baseline, arr_highlight):
 def do_pyod(model, colnames, arr_baseline, arr_highlight):
 
     n_lags = model.get('n_lags', 0)
-    model = model.get('type', 'hbos')
     model_level = model.get('model_level', 'dim')
+    model = model.get('type', 'hbos')
 
     # dict to collect results into
     results = {}
