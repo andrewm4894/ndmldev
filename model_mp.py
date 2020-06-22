@@ -3,8 +3,7 @@ import logging
 import numpy as np
 import stumpy
 
-from model_utils import init_counters
-from utils import summary_info
+from model_utils import init_counters, summary_info
 
 log = logging.getLogger(__name__)
 

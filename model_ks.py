@@ -2,8 +2,7 @@ import logging
 
 from scipy.stats import ks_2samp
 
-from model_utils import init_counters
-from utils import summary_info
+from model_utils import init_counters, summary_info
 
 log = logging.getLogger(__name__)
 
