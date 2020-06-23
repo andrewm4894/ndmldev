@@ -43,5 +43,5 @@ def summary_info(n_charts, n_dims, n_bad_data, fit_success, fit_fail, fit_defaul
         bad_data_rate = round(n_bad_data / n_dims, 2)
         success_rate = round(fit_success / n_dims, 2)
     msg = f"... success_rate={success_rate}, bad_data_rate={bad_data_rate}, charts={n_charts}, dims={n_dims}"
-    msg += f", bad_data={n_bad_data}, fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}'"
+    msg += f", bad_data={n_bad_data}, fit_success={fit_success}, fit_fail={fit_fail}, fit_default={fit_default}"
     return msg
