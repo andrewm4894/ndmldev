@@ -1,6 +1,8 @@
 # ndmldev
 
-to run:
+Assumes you run the app from its own venv and have done `pip install -r requirements.txt`
+
+Run:
 
 ```
 # activate your venv 
